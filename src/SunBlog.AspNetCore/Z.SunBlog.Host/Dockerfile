@@ -1,9 +1,8 @@
 #See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-RUN apt-get update && apt-get install -y libgdiplus
 WORKDIR /app
-# ���õ����˿�
+# 暴露80端口
 EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
@@ -34,8 +33,13 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 
-#��װfontconfig
+
+RUN sed -i "s@/archive.ubuntu.com/@/mirrors.163.com/@g" /etc/apt/sources.list \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get update --fix-missing -o Acquire::http::No-Cache=True
+
+#安装字体װfontconfig
 RUN apt-get clean
-RUN apt-get update && apt-get install -y fontconfig
+RUN apt-get install -y fontconfig
 
 ENTRYPOINT ["dotnet", "Z.SunBlog.Host.dll"]
