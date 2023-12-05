@@ -1,6 +1,20 @@
 name: build
 
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+    inputs:
+      run_build_env:
+        description: "Run build_host true or false"
+        required: true
+        default: "true"
+      build_admin:
+        description: "Run build_admin true or false"
+        required: true
+        default: "true"
+      build_vue:
+        description: "Run build_vue true or false"
+        required: true
+        default: "true"
 
 jobs:
   build_env:
