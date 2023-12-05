@@ -1,6 +1,20 @@
 name: deploy
 
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+    inputs:
+      run_deploy_host:
+        description: "Run deploy_host true or false"
+        required: true
+        default: "true"
+      run_deploy_vue:
+        description: "Run deploy_vue true or false"
+        required: true
+        default: "true"
+      run_deploy_admin:
+        description: "Run deploy_admin true or false"
+        required: true
+        default: "true"
 
 jobs:
   deploy:
@@ -16,6 +30,7 @@ jobs:
     strategy:
       matrix:
         jobName: [deploy_host]
+    if: github.event.inputs.run_deploy_host == 'true'
     steps:
       - name: login aliyun 登录阿里云
         run: |
@@ -49,6 +64,7 @@ jobs:
     strategy:
       matrix:
         jobName: [deploy_vue]
+    if: github.event.inputs.run_deploy_vue == 'true'
     steps:
       - name: login aliyun 登录阿里云
         run: |
@@ -82,6 +98,7 @@ jobs:
     strategy:
       matrix:
         jobName: [deploy_admin]
+    if: github.event.inputs.run_deploy_admin == 'true'
     steps:
       - name: login aliyun 登录阿里云
         run: |

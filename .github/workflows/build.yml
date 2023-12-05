@@ -3,15 +3,15 @@ name: build
 on:
   workflow_dispatch:
     inputs:
-      run_build_env:
+      run_build_host:
         description: "Run build_host true or false"
         required: true
         default: "true"
-      build_admin:
+      run_build_admin:
         description: "Run build_admin true or false"
         required: true
         default: "true"
-      build_vue:
+      run_build_vue:
         description: "Run build_vue true or false"
         required: true
         default: "true"
@@ -30,7 +30,7 @@ jobs:
     strategy:
       matrix:
         jobName: [build_host]
-    if: github.event.inputs.run_build_env == 'true'
+    if: github.event.inputs.run_build_host == 'true'
     steps:
       - name: login aliyun 登录阿里云
         run: |
@@ -64,7 +64,7 @@ jobs:
     strategy:
       matrix:
         jobName: [build_admin]
-    if: github.event.inputs.build_admin == 'true'
+    if: github.event.inputs.run_build_admin == 'true'
     steps:
       - name: login aliyun 登录阿里云
         run: |
@@ -95,7 +95,7 @@ jobs:
     strategy:
       matrix:
         jobName: [build_vue]
-    if: github.event.inputs.build_vue == 'true'
+    if: github.event.inputs.run_build_vue == 'true'
     steps:
       - name: login aliyun 登录阿里云
         run: |
