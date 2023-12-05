@@ -8,6 +8,8 @@
     <PackageIcon>85232349.png</PackageIcon>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <PackageProjectUrl>https://github.com/Fantasy-Ke/Z.SunBlog/tree/main/src/SunBlog.AspNetCore/src/Z.EventBus</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Fantasy-Ke/Z.SunBlog/tree/main/src/SunBlog.AspNetCore/src/Z.EventBus</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>

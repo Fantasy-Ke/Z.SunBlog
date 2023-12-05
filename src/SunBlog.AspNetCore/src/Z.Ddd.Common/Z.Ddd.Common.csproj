@@ -36,4 +36,8 @@
 	<PackageReference Include="Z.Module" Version="1.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Z.EventBus\Z.EventBus.csproj" />
+  </ItemGroup>
+
 </Project>

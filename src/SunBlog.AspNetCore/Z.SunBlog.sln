@@ -34,7 +34,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "resource", "resource", "{48
 		..\..\README.md = ..\..\README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Z.EventBus", "src\Z.EventBus\Z.EventBus.csproj", "{FC78A233-9E97-4978-A9C1-805E2BF4521C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Z.EventBus", "src\Z.EventBus\Z.EventBus.csproj", "{FC78A233-9E97-4978-A9C1-805E2BF4521C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -86,8 +86,8 @@ Global
 		{90DF7A42-9EAE-446C-97AF-BC7FFFC1C60E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{90DF7A42-9EAE-446C-97AF-BC7FFFC1C60E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{90DF7A42-9EAE-446C-97AF-BC7FFFC1C60E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FC78A233-9E97-4978-A9C1-805E2BF4521C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FC78A233-9E97-4978-A9C1-805E2BF4521C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC78A233-9E97-4978-A9C1-805E2BF4521C}.Debug|Any CPU.ActiveCfg = Release|Any CPU
+		{FC78A233-9E97-4978-A9C1-805E2BF4521C}.Debug|Any CPU.Build.0 = Release|Any CPU
 		{FC78A233-9E97-4978-A9C1-805E2BF4521C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FC78A233-9E97-4978-A9C1-805E2BF4521C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
