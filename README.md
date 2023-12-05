@@ -2,7 +2,6 @@
 
 #### 该项目已通过阿里云仓库、GithubAction持续集成与部署（[Fantasy-Ke -Z.SunBlog.Blog](http://123.56.30.198:5100/)）
 
-
 ## 🎃.NET 8 后端框架
 ### 👕SunBlog.AspNetCore/src 后端自己搭建的框架
 
@@ -21,6 +20,11 @@
 - SignalR实时通信(待实现)
 - MongoDb(待实现)
 - RabbitMQ(待实现)
+
+| Build | NuGet |
+|---|--|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![](https://github.com/Fantasy-Ke/Z.SunBlog/workflows/build_action/badge.svg)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[![](https://img.shields.io/badge/Z.Module-1.0.1-orange.svg)](https://www.nuget.org/packages/Z.Module)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+
 
 ![image](https://github.com/Fantasy-Ke/Z.SunBlog/assets/85232349/e6dce492-c4c5-4501-a888-af823b4e406a)
 
