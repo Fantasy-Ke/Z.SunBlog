@@ -1,5 +1,4 @@
-﻿using JetBrains.Annotations;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,7 +10,7 @@ namespace Z.Module.Extensions
     {
 
         
-        public static bool AddIfNotContains<T>([NotNull] this ICollection<T> source, T item)
+        public static bool AddIfNotContains<T>(this ICollection<T> source, T item)
         {
             //Check.NotNull(source, nameof(source));
 

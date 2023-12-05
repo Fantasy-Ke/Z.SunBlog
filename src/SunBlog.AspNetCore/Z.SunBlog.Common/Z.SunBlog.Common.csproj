@@ -17,7 +17,6 @@
     <ProjectReference Include="..\src\efcore\Z.EntityFrameworkCore.Mysql\Z.EntityFrameworkCore.Mysql.csproj" />
     <ProjectReference Include="..\src\efcore\Z.EntityFrameworkCore.SqlServer\Z.EntityFrameworkCore.SqlServer.csproj" />
     <ProjectReference Include="..\src\Z.Ddd.Common\Z.Ddd.Common.csproj" />
-    <ProjectReference Include="..\src\Z.Module\Z.Module.csproj" />
   </ItemGroup>
 
 </Project>

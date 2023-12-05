@@ -1,5 +1,4 @@
-﻿using JetBrains.Annotations;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using System.Reflection;
 using Z.Module.Extensions;
@@ -76,7 +75,8 @@ namespace Z.Module.DependencyInjection
             return type.GetCustomAttribute<RegisterLifeAttribute>(true);
         }
 
-        protected ServiceLifetime? GetLifeTimeOrNull(Type type, [CanBeNull] RegisterLifeAttribute registerLifeAttribute)
+
+        protected ServiceLifetime? GetLifeTimeOrNull(Type type,  RegisterLifeAttribute registerLifeAttribute)
         {
             return registerLifeAttribute?.Lifetime ?? GetServiceLifetime(type);
         }
