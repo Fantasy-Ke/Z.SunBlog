@@ -19,7 +19,6 @@ namespace Z.Ddd.Common.UserSession
 
         Claim? FindClaim(string claimType);
 
-        [NotNull]
         Claim[] FindClaims(string claimType);
     }
 }

@@ -20,7 +20,7 @@ namespace Z.Module
             }
         }
 
-        public ServiceConfigerContext([NotNull] IServiceCollection services)
+        public ServiceConfigerContext(IServiceCollection services)
         {
             Services = services;
         }

@@ -9,6 +9,6 @@ namespace Z.Module.Modules.interfaces
 {
     public interface IModuleManager
     {
-        void InitializeModules([NotNull] InitApplicationContext context);
+        void InitializeModules(InitApplicationContext context);
     }
 }

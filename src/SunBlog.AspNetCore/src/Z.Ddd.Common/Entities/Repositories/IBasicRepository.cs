@@ -15,8 +15,7 @@ public interface IBasicRepository<TEntity> : IReadOnlyBasicRepository<TEntity>
     /// </param>
     /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
     /// <param name="entity">Inserted entity</param>
-    [NotNull]
-    Task<TEntity> InsertAsync([NotNull] TEntity entity,  CancellationToken cancellationToken = default);
+    Task<TEntity> InsertAsync(TEntity entity,  CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Inserts multiple new entities.
@@ -28,7 +27,7 @@ public interface IBasicRepository<TEntity> : IReadOnlyBasicRepository<TEntity>
     /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
     /// <param name="entities">Entities to be inserted.</param>
     /// <returns>Awaitable <see cref="Task"/>.</returns>
-    Task InsertManyAsync([NotNull] IEnumerable<TEntity> entities,  CancellationToken cancellationToken = default);
+    Task InsertManyAsync(IEnumerable<TEntity> entities,  CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Updates an existing entity.
@@ -39,8 +38,8 @@ public interface IBasicRepository<TEntity> : IReadOnlyBasicRepository<TEntity>
     /// </param>
     /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
     /// <param name="entity">Entity</param>
-    [NotNull]
-    Task<TEntity> UpdateAsync([NotNull] TEntity entity);
+    
+    Task<TEntity> UpdateAsync(TEntity entity);
 
     /// <summary>
     /// Updates multiple entities.
@@ -51,7 +50,7 @@ public interface IBasicRepository<TEntity> : IReadOnlyBasicRepository<TEntity>
     /// This is useful for ORMs / database APIs those only save changes with an explicit method call, but you need to immediately save changes to the database.</param>
     /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
     /// <returns>Awaitable <see cref="Task"/>.</returns>
-    Task UpdateManyAsync([NotNull] IEnumerable<TEntity> entities);
+    Task UpdateManyAsync(IEnumerable<TEntity> entities);
 
     /// <summary>
     /// Deletes an entity.
@@ -62,7 +61,7 @@ public interface IBasicRepository<TEntity> : IReadOnlyBasicRepository<TEntity>
     /// This is useful for ORMs / database APIs those only save changes with an explicit method call, but you need to immediately save changes to the database.
     /// </param>
     /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
-    Task DeleteAsync([NotNull] TEntity entity,  CancellationToken cancellationToken = default);
+    Task DeleteAsync(TEntity entity,  CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Deletes an entity.
@@ -85,7 +84,7 @@ public interface IBasicRepository<TEntity> : IReadOnlyBasicRepository<TEntity>
     /// </param>
     /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
     /// <returns>Awaitable <see cref="Task"/>.</returns>
-    Task DeleteManyAsync([NotNull] IEnumerable<TEntity> entities,  CancellationToken cancellationToken = default);
+    Task DeleteManyAsync(IEnumerable<TEntity> entities,  CancellationToken cancellationToken = default);
 
     /// <summary>
     /// 获取到IQueryable

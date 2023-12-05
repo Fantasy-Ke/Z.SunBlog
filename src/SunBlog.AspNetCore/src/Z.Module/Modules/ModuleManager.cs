@@ -30,7 +30,7 @@ namespace Z.Module.Modules
                 .ToArray();
         }
 
-        public void InitializeModules([NotNull] InitApplicationContext context)
+        public void InitializeModules(InitApplicationContext context)
         {
 
             foreach (var contributor in _moduleLifecycleContributors)

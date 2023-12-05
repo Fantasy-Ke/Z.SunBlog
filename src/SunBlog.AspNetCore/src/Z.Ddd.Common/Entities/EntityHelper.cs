@@ -11,7 +11,7 @@ namespace Z.Ddd.Common.Entities;
 /// </summary>
 public static class EntityHelper
 {
-    public static bool IsEntity([NotNull] Type type)
+    public static bool IsEntity(Type type)
     {
         return typeof(IEntity).IsAssignableFrom(type);
     }
@@ -22,7 +22,7 @@ public static class EntityHelper
         return obj != null && IsValueObject(obj.GetType());
     }
 
-    public static void CheckEntity([NotNull] Type type)
+    public static void CheckEntity(Type type)
     {
         if (!IsEntity(type))
         {
@@ -30,7 +30,7 @@ public static class EntityHelper
         }
     }
 
-    public static bool IsEntityWithId([NotNull] Type type)
+    public static bool IsEntityWithId(Type type)
     {
         foreach (var interfaceType in type.GetInterfaces())
         {

@@ -9,14 +9,10 @@
     <PackageIcon>85232349.png</PackageIcon>
     <PackageProjectUrl>https://github.com/Fantasy-Ke/Z.SunBlog/tree/main/src/SunBlog.AspNetCore/src/Z.Module</PackageProjectUrl>
     <Authors>Fantasy_ke</Authors>
+    <Version>1.0.1</Version>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Include="C:\Users\Administrator\Desktop\85232349.png">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
@@ -29,6 +25,17 @@
 	<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
 	<PackageReference Include="Microsoft.AspNetCore.Authorization" Version="8.0.0" />
 	  
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="85232349.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Update="LICENSE">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
