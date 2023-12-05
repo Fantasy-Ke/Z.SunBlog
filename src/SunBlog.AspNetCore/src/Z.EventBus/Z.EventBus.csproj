@@ -3,7 +3,6 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
     <Authors>Fantasy_ke</Authors>
     <PackageIcon>85232349.png</PackageIcon>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>

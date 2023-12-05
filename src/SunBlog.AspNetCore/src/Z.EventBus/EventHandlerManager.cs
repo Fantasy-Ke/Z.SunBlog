@@ -3,7 +3,6 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System.Collections.Concurrent;
 using System.Reflection;
-using System.Reflection.PortableExecutable;
 using System.Threading.Channels;
 
 namespace Z.EventBus
