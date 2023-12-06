@@ -1,7 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Concurrent;
+using Z.EventBus.Handlers;
 
-namespace Z.EventBus
+namespace Z.EventBus.EventContainer
 {
     public class EventHandlerContainer : IEventHandlerContainer
     {

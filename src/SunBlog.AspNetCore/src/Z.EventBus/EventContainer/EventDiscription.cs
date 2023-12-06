@@ -1,12 +1,12 @@
-﻿namespace Z.EventBus
+﻿namespace Z.EventBus.EventContainer
 {
     public class EventDiscription
     {
         public Type EtoType { get; private set; }
 
-        public Type? HandlerType { get; private set; }
+        public Type HandlerType { get; private set; }
 
-        public EventDiscription(Type etoType, Type? handlerType = null)
+        public EventDiscription(Type etoType, Type handlerType = null)
         {
             EtoType = etoType;
             HandlerType = handlerType;

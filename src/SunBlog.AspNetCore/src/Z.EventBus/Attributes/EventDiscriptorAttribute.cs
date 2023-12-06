@@ -1,4 +1,4 @@
-﻿namespace Z.EventBus
+﻿namespace Z.EventBus.Attributes
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
     public class EventDiscriptorAttribute : Attribute

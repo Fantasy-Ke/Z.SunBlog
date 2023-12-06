@@ -1,4 +1,4 @@
-﻿namespace Z.EventBus
+﻿namespace Z.EventBus.Handlers
 {
     public interface IEventHandler<TEto> where TEto : class
     {

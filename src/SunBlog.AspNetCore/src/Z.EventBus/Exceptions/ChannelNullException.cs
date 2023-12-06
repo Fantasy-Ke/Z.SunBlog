@@ -1,4 +1,4 @@
-﻿namespace Z.EventBus
+﻿namespace Z.EventBus.Exceptions
 {
     public class ChannelNullException : Exception
     {

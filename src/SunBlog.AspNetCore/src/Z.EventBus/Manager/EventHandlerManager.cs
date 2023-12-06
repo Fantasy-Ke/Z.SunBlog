@@ -4,10 +4,14 @@ using Newtonsoft.Json;
 using System.Collections.Concurrent;
 using System.Reflection;
 using System.Threading.Channels;
+using Z.EventBus.Attributes;
+using Z.EventBus.EventContainer;
+using Z.EventBus.Exceptions;
+using Z.EventBus.Handlers;
 
-namespace Z.EventBus
+namespace Z.EventBus.Manager
 {
-    public class EventHandlerManager : IEventHandlerManager, IDisposable
+    public class EventHandlerManager: IEventHandlerManager, IDisposable 
     {
         private ConcurrentDictionary<string, Channel<string>> Channels;
 
@@ -63,9 +67,9 @@ namespace Z.EventBus
                     new BoundedChannelOptions(attribute.Capacity)
                     {
                         SingleWriter = true,
-                        SingleReader = false,
-                        AllowSynchronousContinuations = false,
-                        FullMode = BoundedChannelFullMode.Wait
+                        SingleReader = attribute.SigleReader,
+                        AllowSynchronousContinuations = false, // 异步方式执行
+                        FullMode = BoundedChannelFullMode.Wait // 等待存在空间进行写入
                     }
                 );
 
@@ -125,9 +129,16 @@ namespace Z.EventBus
             }
         }
 
-        public async Task ExecuteAsync<TEto>(TEto eto) where TEto : class
+        /// <summary>
+        /// 消费者
+        /// </summary>
+        /// <typeparam name="TEto"></typeparam>
+        /// <param name="eto"></param>
+        /// <returns></returns>
+        public async Task ExecuteAsync<TEto>(TEto eto)
+            where TEto : class
         {
-            var channel = Check(typeof(TEto));
+            Check(typeof(TEto));
 
             var scope = ServiceProvider.CreateAsyncScope();
 
@@ -137,7 +148,7 @@ namespace Z.EventBus
         }
 
         /// <summary>
-        /// 消费者
+        /// 后台消费者
         /// </summary>
         /// <returns></returns>
         public async Task StartConsumer()
@@ -150,45 +161,40 @@ namespace Z.EventBus
             foreach (var item in _eventHandlerContainer.Events)
             {
                 _ = Task.Factory.StartNew(async () =>
-                 {
-                     var attribute = item.EtoType
-                         .GetCustomAttributes()
-                         .OfType<EventDiscriptorAttribute>()
-                         .FirstOrDefault();
+                {
 
-                     var scope = ServiceProvider.CreateAsyncScope();
 
-                     var channel = Check(item.EtoType);
+                    var channel = Check(item.EtoType);
 
-                     var handlerType = typeof(IEventHandler<>).MakeGenericType(item.EtoType);
+                    var handlerType = typeof(IEventHandler<>).MakeGenericType(item.EtoType);
+                    var scope = ServiceProvider.CreateAsyncScope();
+                    var handler = scope.ServiceProvider.GetRequiredService(handlerType);
 
-                     var handler = scope.ServiceProvider.GetRequiredService(handlerType);
+                    var reader = channel.Reader;
 
-                     var reader = channel.Reader;
+                    try
+                    {
+                        while (await channel.Reader.WaitToReadAsync())
+                        {
+                            while (reader.TryRead(out string str))
+                            {
+                                var data = JsonConvert.DeserializeObject(str, item.EtoType);
 
-                     try
-                     {
-                         while (await channel.Reader.WaitToReadAsync())
-                         {
-                             while (reader.TryRead(out string str))
-                             {
-                                 var data = JsonConvert.DeserializeObject(str, item.EtoType);
+                                _logger.LogInformation(str);
 
-                                 _logger.LogInformation(str);
-
-                                 await (Task)
-                                     handlerType
-                                         .GetMethod("HandelrAsync")
-                                         .Invoke(handler, new object[] { data });
-                             }
-                         }
-                     }
-                     catch (Exception e)
-                     {
-                         _logger.LogInformation($"本地事件总线异常{e.Source}--{e.Message}--{e.Data}");
-                         throw;
-                     }
-                 });
+                                await (Task)
+                                    handlerType
+                                        .GetMethod("HandelrAsync")
+                                        .Invoke(handler, new object[] { data });
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        _logger.LogInformation($"本地事件总线异常{e.Source}--{e.Message}--{e.Data}");
+                        throw;
+                    }
+                });
             }
             IsInitConsumer = false;
             await Task.CompletedTask;

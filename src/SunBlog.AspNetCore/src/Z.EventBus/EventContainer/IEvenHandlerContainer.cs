@@ -1,6 +1,6 @@
 ﻿using System.Collections.Concurrent;
 
-namespace Z.EventBus
+namespace Z.EventBus.EventContainer
 {
     public interface IEventHandlerContainer
     {

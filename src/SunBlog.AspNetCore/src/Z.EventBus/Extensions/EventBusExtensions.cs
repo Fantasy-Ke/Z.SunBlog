@@ -1,6 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Z.EventBus.EventBus;
+using Z.EventBus.EventContainer;
+using Z.EventBus.Manager;
 
-namespace Z.EventBus
+namespace Z.EventBus.Extensions
 {
     public static class EventBusExtensions
     {
