@@ -42,8 +42,10 @@ namespace Z.EventBus.EventContainer
             {
                 return;
             }
-
+            //Services.AddTransient(handler, handlertype);
             Services.AddTransient(handlertype, handler);
+           
+
         }
 
         public void Subscribe<TEto, THandler>()

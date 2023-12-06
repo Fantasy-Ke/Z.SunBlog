@@ -1,7 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using System.Reactive.Linq;
 using Z.Ddd.Application;
 using Z.Ddd.Common.Authorization.Authorize;
 using Z.Ddd.Common.AutoMapper;
+using Z.EventBus.Extensions;
 using Z.Module;
 using Z.Module.Modules;
 using Z.SunBlog.Application.AlbumsModule.BlogServer.MapperConfig;
@@ -36,7 +38,7 @@ namespace Z.SunBlog.Application
 
         public override void OnInitApplication(InitApplicationContext context)
         {
-           
+
         }
 
         public override void PostInitApplication(InitApplicationContext context)

@@ -13,9 +13,11 @@ using Z.Ddd.Common.DomainServiceRegister;
 using Z.Ddd.Common.Entities.Files;
 using Z.Ddd.Common.Entities.Repositories;
 using Z.Ddd.Common.Minio;
+using Z.EventBus.EventBus;
 using Z.Module.DependencyInjection;
 using Z.SunBlog.Application.FileModule.Dto;
 using Z.SunBlog.Core.Const;
+using Z.SunBlog.Core.Handlers.FileHandlers;
 using Z.SunBlog.Core.MinioFileModule.DomainManager;
 
 namespace Z.SunBlog.Application.FileModule;
@@ -33,6 +35,7 @@ public class FileAppService : ApplicationService, IFileAppService
     private readonly IWebHostEnvironment _webHostEnvironment;
     private readonly IMinioFileManager _minioFileManager;
     private readonly IBasicRepository<ZFileInfo> _fileRepository;
+    private readonly ILocalEventBus _localEvent;
     private readonly MinioConfig _minioOptions;
 
     public FileAppService(IServiceProvider serviceProvider,
@@ -40,13 +43,15 @@ public class FileAppService : ApplicationService, IFileAppService
         IWebHostEnvironment webHostEnvironment,
         IMinioFileManager minioFileManager,
          IOptions<MinioConfig> minioOptions,
-         IBasicRepository<ZFileInfo> fileRepository) : base(serviceProvider)
+         IBasicRepository<ZFileInfo> fileRepository,
+         ILocalEventBus localEvent) : base(serviceProvider)
     {
         _httpContextAccessor = httpContextAccessor;
         _webHostEnvironment = webHostEnvironment;
         _minioFileManager = minioFileManager;
         _minioOptions = minioOptions.Value;
         _fileRepository = fileRepository;
+        _localEvent = localEvent;
     }
 
     /// <summary>
@@ -109,7 +114,8 @@ public class FileAppService : ApplicationService, IFileAppService
             };
         }
         await _fileRepository.InsertAsync(fileinfo);
-        await _minioFileManager.UploadMinio(file.OpenReadStream(), fileUrl, file.ContentType);
+        await _localEvent.PushAsync(new FileEventDto(file.OpenReadStream(), fileUrl, file.ContentType));
+        //await _minioFileManager.UploadMinio(file.OpenReadStream(), fileUrl, file.ContentType);
         return new List<UploadFileOutput>()
         {
             new()

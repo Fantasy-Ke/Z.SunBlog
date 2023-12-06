@@ -7,7 +7,12 @@ namespace Z.EventBus.Extensions
 {
     public static class EventBusExtensions
     {
-        //添加事件总线并且添加channle管道
+        /// <summary>
+        /// 添加事件总线并且添加<code>EventHandlerContainer</code>
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="action"></param>
+        /// <returns></returns>
         public static IServiceCollection AddEventBusAndSubscribes(this IServiceCollection services, Action<EventHandlerContainer> action)
         {
             services.AddSingleton<IEventHandlerManager, EventHandlerManager>();
@@ -23,19 +28,41 @@ namespace Z.EventBus.Extensions
             return services;
         }
 
-        //创建通信管道
-        public static async Task InitChannles(this IServiceProvider serviceProvider, Action<IEventHandlerManager> action)
+        /// <summary>
+        /// 创建通信管道
+        /// </summary>
+        /// <param name="serviceProvider"></param>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        public static async Task InitChannlesAsync(this IServiceProvider serviceProvider)
         {
             var scope = serviceProvider.CreateAsyncScope();
 
             var eventhandlerManager = scope.ServiceProvider.GetRequiredService<IEventHandlerManager>();
 
             await eventhandlerManager.CreateChannles();
-
-            action.Invoke(eventhandlerManager);
         }
 
-        //添加本地事件总线
+        /// <summary>
+        /// 创建通信管道
+        /// </summary>
+        /// <param name="serviceProvider"></param>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        public static void InitChannles(this IServiceProvider serviceProvider)
+        {
+            var scope = serviceProvider.CreateScope();
+
+            var eventhandlerManager = scope.ServiceProvider.GetRequiredService<IEventHandlerManager>();
+
+            eventhandlerManager.CreateChannles().Wait();
+        }
+
+        /// <summary>
+        /// 添加本地事件总线
+        /// </summary>
+        /// <param name="services"></param>
+        /// <returns></returns>
         public static IServiceCollection AddEventBus(this IServiceCollection services)
         {
             services.AddSingleton<IEventHandlerManager, EventHandlerManager>();
@@ -47,8 +74,13 @@ namespace Z.EventBus.Extensions
             return services;
         }
 
-        //添加通信管道
-        public static IServiceCollection Subscribes(this IServiceCollection services, Action<EventHandlerContainer> action)
+        /// <summary>
+        /// 添加通信管道
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        public static IServiceCollection EventBusSubscribes(this IServiceCollection services, Action<EventHandlerContainer> action)
         {
             EventHandlerContainer eventHandlerContainer = new EventHandlerContainer(services);
 

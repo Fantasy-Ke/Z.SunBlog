@@ -28,6 +28,7 @@ using Microsoft.Extensions.DependencyInjection;
 using MrHuo.OAuth.Github;
 using Z.Ddd.Common.Helper;
 using Z.Ddd.Common.DynamicWebAPI;
+using Z.EventBus.Extensions;
 
 namespace Z.SunBlog.Host;
 

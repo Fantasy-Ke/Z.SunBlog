@@ -2,6 +2,6 @@
 {
     public interface IEventHandler<TEto> where TEto : class
     {
-        Task HandelrAsync(TEto eto);
+       Task HandelrAsync(TEto eto);
     }
 }
