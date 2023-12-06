@@ -33,11 +33,8 @@
 	<PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
 	<PackageReference Include="System.Linq.Dynamic.Core" Version="1.3.7" />
 	<PackageReference Include="Yitter.IdGenerator" Version="1.0.14" />
+	<PackageReference Include="Z.EventBus" Version="1.0.1" />
 	<PackageReference Include="Z.Module" Version="1.0.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Z.EventBus\Z.EventBus.csproj" />
   </ItemGroup>
 
 </Project>
