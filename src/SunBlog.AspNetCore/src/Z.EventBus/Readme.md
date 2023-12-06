@@ -133,7 +133,8 @@ public class TestEventHandler : IEventHandler<TestDto>, ITransientDependency
             Log.Warning("我什么时候开始得");
         }
         ```
-    
+    - ![image](https://github.com/Fantasy-Ke/Z.SunBlog/assets/85232349/a4514fa1-939d-4809-a7c4-288e402634c1)
+
 - 队列消费事件
      - ```csharp
         /// <summary>
@@ -156,4 +157,6 @@ public class TestEventHandler : IEventHandler<TestDto>, ITransientDependency
             Log.Warning("我什么时候开始得");
         }
         ```
+    - ![image](https://github.com/Fantasy-Ke/Z.SunBlog/assets/85232349/1ac53955-de66-4d9f-83f8-7c2003f0fec6)
+
 
