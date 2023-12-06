@@ -25,6 +25,7 @@ using Z.Ddd.Common.Helper;
 using Z.Ddd.Common.DynamicWebAPI;
 using Z.Ddd.Common.OAuth.Gitee;
 using Z.Ddd.Common.OAuth.GitHub;
+using Z.Ddd.Common.Hubs;
 
 namespace Z.SunBlog.Host;
 

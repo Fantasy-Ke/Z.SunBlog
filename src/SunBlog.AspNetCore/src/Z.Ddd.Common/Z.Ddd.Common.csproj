@@ -13,6 +13,8 @@
 	<PackageReference Include="CSRedisCore" Version="3.8.802" />
 	<PackageReference Include="Cuemon.Extensions.AspNetCore.Mvc.Formatters.Newtonsoft.Json" Version="8.0.0" />
 	<PackageReference Include="Hashids.net" Version="1.7.0" />
+	<PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.MessagePack" Version="8.0.0" />
+	<PackageReference Include="Microsoft.AspNetCore.SignalR.StackExchangeRedis" Version="8.0.0" />
 	<PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.0" />
 	<PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="7.0.3" />
 	<PackageReference Include="Microsoft.IdentityModel.Tokens" Version="7.0.3" />

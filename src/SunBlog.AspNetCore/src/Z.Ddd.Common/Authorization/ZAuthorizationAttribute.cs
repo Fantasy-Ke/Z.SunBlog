@@ -2,7 +2,7 @@
 
 namespace Z.Ddd.Common.Authorization;
 
-[AttributeUsage(AttributeTargets.Method)]
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
 public class ZAuthorizationAttribute : AuthorizeAttribute
 {
     public virtual string[] AuthorizeName { get; private set; }
