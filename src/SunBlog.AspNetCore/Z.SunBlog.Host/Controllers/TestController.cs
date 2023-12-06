@@ -66,7 +66,7 @@ namespace Z.SunBlog.Host.Controllers
 
             Response.Cookies.Append("access-token", token.AccessToken, new CookieOptions()
             {
-                Expires = DateTimeOffset.UtcNow.AddMinutes(20)
+                Expires = DateTimeOffset.UtcNow.AddMinutes(tokenConfig.AccessTokenExpirationMinutes)
              });
 
             Log.Logger.Information("登录成功");
