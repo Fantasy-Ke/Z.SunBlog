@@ -13,7 +13,7 @@ using Z.Module.DependencyInjection;
 
 namespace Z.SunBlog.Core.Handlers.FileHandlers
 {
-    public class FileEventHandler : IEventHandler<FileEventDto>
+    public class FileEventHandler : IEventHandler<FileEventDto>, ITransientDependency
     {
         private readonly IMinioService _minioService;
         private readonly MinioConfig _minioOptions;
