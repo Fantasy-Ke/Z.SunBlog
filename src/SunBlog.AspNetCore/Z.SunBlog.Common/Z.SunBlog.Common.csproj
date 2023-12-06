@@ -7,9 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MrHuo.OAuth.Core" Version="1.1.1" />
-    <PackageReference Include="MrHuo.OAuth.Gitee" Version="1.1.1" />
-    <PackageReference Include="MrHuo.OAuth.Github" Version="1.1.1" />
     <PackageReference Include="MrHuo.OAuth.QQ" Version="1.1.1" />
   </ItemGroup>
 

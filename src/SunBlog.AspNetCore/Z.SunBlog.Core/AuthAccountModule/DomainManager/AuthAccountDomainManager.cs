@@ -1,17 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MrHuo.OAuth.Gitee;
-using MrHuo.OAuth.Github;
 using MrHuo.OAuth.QQ;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Dynamic.Core.Tokenizer;
-using System.Text;
-using System.Threading.Tasks;
 using Z.Ddd.Common.DomainServiceRegister;
 using Z.Ddd.Common.Entities.Enum;
-using Z.Ddd.Common.Entities.Users;
-using Z.Ddd.Common.Exceptions;
+using Z.Ddd.Common.OAuth.Gitee;
+using Z.Ddd.Common.OAuth.GitHub;
 
 namespace Z.SunBlog.Core.AuthAccountModule.DomainManager
 {
@@ -57,9 +49,9 @@ namespace Z.SunBlog.Core.AuthAccountModule.DomainManager
             return account;
         }
 
-        public async Task<AuthAccount> CreateGiteeAccount(GiteeUserModel giteeInfo)
+        public async Task<AuthAccount> CreateGiteeAccount(ZGiteeUserModel giteeInfo)
         {
-            var  account = await QueryAsNoTracking.FirstOrDefaultAsync(x => x.OAuthId == giteeInfo.Name && x.Type.ToLower() == "gitee");
+            var  account = await QueryAsNoTracking.FirstOrDefaultAsync(x => x.OAuthId == giteeInfo.Id.ToString() && x.Type.ToLower() == "gitee");
             if (account != null)
             {
                 await UpdateAsync(new AuthAccount()
@@ -69,7 +61,7 @@ namespace Z.SunBlog.Core.AuthAccountModule.DomainManager
                     IsBlogger = account.IsBlogger,
                     Gender = Gender.Unknown
                 },
-                    x => x.OAuthId == giteeInfo.Name && x.Type.ToLower() == "gitee");
+                    x => x.OAuthId == giteeInfo.Id.ToString() && x.Type.ToLower() == "gitee");
             }
             else
             {
@@ -78,7 +70,7 @@ namespace Z.SunBlog.Core.AuthAccountModule.DomainManager
                     Gender = Gender.Unknown,
                     Avatar = giteeInfo.Avatar,
                     Name = giteeInfo.Name,
-                    OAuthId = giteeInfo.Name,
+                    OAuthId = giteeInfo.Id.ToString(),
                     Type = "Gitee"
                 });
             }
@@ -86,9 +78,9 @@ namespace Z.SunBlog.Core.AuthAccountModule.DomainManager
             return account;
         }
 
-        public async Task<AuthAccount> CreateGitHubAccount(GithubUserModel githubInfo)
+        public async Task<AuthAccount> CreateGitHubAccount(ZGitHubUserModel githubInfo)
         {
-            var account = await QueryAsNoTracking.FirstOrDefaultAsync(x => x.OAuthId == githubInfo.Name && x.Type.ToLower() == "github");
+            var account = await QueryAsNoTracking.FirstOrDefaultAsync(x => x.OAuthId == githubInfo.Id.ToString() && x.Type.ToLower() == "github");
             if (account != null)
             {
                 await UpdateAsync(new AuthAccount()
@@ -98,7 +90,7 @@ namespace Z.SunBlog.Core.AuthAccountModule.DomainManager
                     IsBlogger = account.IsBlogger,
                     Gender = Gender.Unknown
                 },
-                    x => x.OAuthId == githubInfo.Name && x.Type.ToLower() == "github");
+                    x => x.OAuthId == githubInfo.Id.ToString() && x.Type.ToLower() == "github");
             }
             else
             {
@@ -107,7 +99,7 @@ namespace Z.SunBlog.Core.AuthAccountModule.DomainManager
                     Gender = Gender.Unknown,
                     Avatar = githubInfo.Avatar,
                     Name = githubInfo.Name,
-                    OAuthId = githubInfo.Name,
+                    OAuthId = githubInfo.Id.ToString(),
                     Type = "GitHub"
                 });
             }

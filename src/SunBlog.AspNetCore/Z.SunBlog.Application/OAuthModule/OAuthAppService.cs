@@ -22,13 +22,12 @@ using Z.SunBlog.Core.PicturesModule.DomainManager;
 using Z.Ddd.Common.Entities.Enum;
 using Z.SunBlog.Application.ConfigModule;
 using Serilog;
-using MrHuo.OAuth;
 using MrHuo.OAuth.QQ;
-using MrHuo.OAuth.Gitee;
 using Z.Ddd.Common.Attributes;
 using Z.Ddd.Common.Authorization.Dtos;
-using MrHuo.OAuth.Github;
 using Z.Ddd.Common.Helper;
+using Z.Ddd.Common.OAuth.Gitee;
+using Z.Ddd.Common.OAuth.GitHub;
 
 namespace Z.SunBlog.Application.OAuthModule
 {
@@ -46,8 +45,8 @@ namespace Z.SunBlog.Application.OAuthModule
         /// </summary>
         private const string OAuthRedirectKey = "oauth.redirect.";
         private readonly QQOAuth _qqoAuth;
-        private readonly GiteeOAuth _giteeoAuth;
-        private readonly GithubOAuth _githuboAuth;
+        private readonly ZGiteeOAuth _giteeoAuth;
+        private readonly ZGitHubOAuth _githuboAuth;
         private readonly IAuthAccountDomainManager _authAccountDomainManager;
         private readonly IFriendLinkManager _friendLinkManager;
         private readonly IIdGenerator _idGenerator;
@@ -67,8 +66,8 @@ namespace Z.SunBlog.Application.OAuthModule
             ICustomConfigAppService customConfigAppService,
             IAlbumsManager albumsManager,
             IPicturesManager picturesManager,
-            GiteeOAuth giteeoAuth,
-            GithubOAuth githuboAuth) : base(serviceProvider)
+            ZGiteeOAuth giteeoAuth,
+            ZGitHubOAuth githuboAuth) : base(serviceProvider)
         {
             _qqoAuth = qqoAuth;
             _authAccountDomainManager = authAccountDomainManager;

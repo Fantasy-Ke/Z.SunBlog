@@ -21,14 +21,10 @@ using Z.Module.Extensions;
 using Z.Module.Modules;
 using Z.SunBlog.Application;
 using Z.SunBlog.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Minio.DataModel;
-using MrHuo.OAuth.Gitee;
-using Microsoft.Extensions.DependencyInjection;
-using MrHuo.OAuth.Github;
 using Z.Ddd.Common.Helper;
 using Z.Ddd.Common.DynamicWebAPI;
-using Z.EventBus.Extensions;
+using Z.Ddd.Common.OAuth.Gitee;
+using Z.Ddd.Common.OAuth.GitHub;
 
 namespace Z.SunBlog.Host;
 
@@ -76,9 +72,9 @@ public class SunBlogHostModule : ZModule
         //雪花id 文档：https://github.com/yitter/IdGenerator
         context.Services.AddIdGenerator(AppSettings.AppOption<IdGeneratorOptions>("SnowId"));
 
-        context.Services.AddSingleton(new GiteeOAuth(OAuthConfig.LoadFrom(configuration, "oauth:gitee")));
+        context.Services.AddSingleton(new ZGiteeOAuth(OAuthConfig.LoadFrom(configuration, "oauth:gitee")));
         context.Services.AddSingleton(new QQOAuth(OAuthConfig.LoadFrom(configuration, "oauth:qq")));
-        context.Services.AddSingleton(new GithubOAuth(OAuthConfig.LoadFrom(configuration, "oauth:github")));
+        context.Services.AddSingleton(new ZGitHubOAuth(OAuthConfig.LoadFrom(configuration, "oauth:github")));
 
         #region 图形验证码
 
