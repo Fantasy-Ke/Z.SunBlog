@@ -11,6 +11,8 @@ using Z.SunBlog.Application.UserModule.Dto;
 using Z.Ddd.Common.Exceptions;
 using Z.Ddd.Common;
 using Z.Ddd.Common.Helper;
+using Z.EventBus.EventBus;
+using Z.SunBlog.Core.Handlers.TestHandlers;
 
 namespace Z.SunBlog.Host.Controllers
 {
@@ -25,12 +27,14 @@ namespace Z.SunBlog.Host.Controllers
         private readonly IUserSession _userSession;
         private readonly IUserAppService _userAppService;
         private ICacheManager _cacheManager;
-        public TestController(IJwtTokenProvider jwtTokenProvider, IUserSession userSession, IUserAppService userAppService, ICacheManager cacheManager)
+        private readonly ILocalEventBus _localEvent;
+        public TestController(IJwtTokenProvider jwtTokenProvider, IUserSession userSession, IUserAppService userAppService, ICacheManager cacheManager, ILocalEventBus localEvent)
         {
             _jwtTokenProvider = jwtTokenProvider;
             _userSession = userSession;
             _userAppService = userAppService;
             _cacheManager = cacheManager;
+            _localEvent = localEvent;
         }
 
 
@@ -133,6 +137,47 @@ namespace Z.SunBlog.Host.Controllers
             var user = await _cacheManager.GetCacheAsync<List<ZUserInfoDto>>("user1");
 
             return user;
+        }
+
+
+        /// <summary>
+        /// 同步消费事件
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task EventCache()
+        {
+            for (var i = 0; i < 100; i++)
+            {
+                TestDto eto = new TestDto()
+                {
+                    Name = "LocalEventBus" + i.ToString(),
+                    Description = "zzzz" + i.ToString(),
+                };
+                await _localEvent.PushAsync(eto);
+            }
+
+            Log.Warning("我什么时候开始得");
+        }
+
+        /// <summary>
+        /// 后台消费事件
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task EventChnnalCache()
+        {
+            for (var i = 0; i < 100; i++)
+            {
+                TestDto eto = new TestDto()
+                {
+                    Name = "LocalEventBus" + i.ToString(),
+                    Description = "zzzz" + i.ToString(),
+                };
+                await _localEvent.EnqueueAsync(eto);
+            }
+
+            Log.Warning("我什么时候开始得");
         }
 
     }

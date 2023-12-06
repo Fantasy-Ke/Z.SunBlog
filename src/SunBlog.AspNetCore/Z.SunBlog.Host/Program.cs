@@ -1,5 +1,6 @@
 using Z.Ddd.Common.Helper;
 using Z.Ddd.Common.Serilog;
+using Z.EventBus.Extensions;
 using Z.Module.Extensions;
 using Z.SunBlog.Host;
 

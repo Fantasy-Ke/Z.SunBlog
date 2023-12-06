@@ -3,6 +3,7 @@ using Z.Module;
 using Z.Module.Modules;
 using Z.SunBlog.Common;
 using Z.SunBlog.Core.Handlers.FileHandlers;
+using Z.SunBlog.Core.Handlers.TestHandlers;
 
 namespace Z.SunBlog.Core
 {
@@ -18,6 +19,8 @@ namespace Z.SunBlog.Core
             context.Services.EventBusSubscribes(c =>
             {
                 c.Subscribe<FileEventDto, FileEventHandler>();
+                c.Subscribe<TestDto, TestEventHandler>();
+
             });
         }
 
