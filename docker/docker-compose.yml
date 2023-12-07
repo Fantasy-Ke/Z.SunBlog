@@ -27,6 +27,7 @@ services:
     environment:
       - App__DbType=Mysql
       - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_HTTP_PORTS=80
       - App__ConnectionString__Mysql=Server=123.56.30.198;Port=3306;Database=SunBlog;Uid=root;Pwd=zhouke210;CharSet=utf8;SslMode=none;AllowPublicKeyRetrieval=True;
       - App__ConnectionString__SqlServer=Server=123.56.30.198;Port=3306;Database=SunBlog;Uid=root;Pwd=zhouke210;CharSet=utf8;SslMode=none;AllowPublicKeyRetrieval=True;
       - App__CorsOrigins=http://localhost:8081,http://localhost:4200
