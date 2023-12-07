@@ -37,7 +37,7 @@
 	<PackageReference Include="Yitter.IdGenerator" Version="1.0.14" />
 	<PackageReference Include="MrHuo.OAuth.Core" Version="1.1.1" />
 	<PackageReference Include="Z.EventBus" Version="1.0.1" />
-	<PackageReference Include="Z.Module" Version="1.0.1" />
+	<PackageReference Include="Z.Module" Version="1.0.2" />
   </ItemGroup>
 
 </Project>

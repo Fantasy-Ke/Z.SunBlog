@@ -1,5 +1,38 @@
 ﻿### 🎨模块化类库，参照AbpVnext实现，现已正常使用
 
+- Z.Module`1.0.2`
+    - 添加异步管道加载
+    ``` C#
+    var app = builder.Build();
+
+    await app.InitApplicationAsync();
+
+    app.Run();
+
+    ```
+    - 重写`OnInitApplicationAsync` `PostInitApplicationAsync`
+    ``` C#
+    public virtual Task OnInitApplicationAsync(InitApplicationContext context)
+    {
+        return Task.CompletedTask;
+    }
+
+    public virtual Task PostInitApplicationAsync(InitApplicationContext context)
+    {
+        return Task.CompletedTask;
+    }
+    ```
+
+    - 之前的同步管道加载
+    ``` C#
+    var app = builder.Build();
+
+    await app.InitApplication();
+
+    app.Run();
+
+    ```
+
 - abp vnext 模块依赖（已完成）
 
   - ``````C#
