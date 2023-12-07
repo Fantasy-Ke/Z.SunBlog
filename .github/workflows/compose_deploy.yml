@@ -6,7 +6,7 @@ jobs:
   deploy:
     runs-on: self-hosted
     env:
-      DOTNET_VERSION: "3.1"
+      DOTNET_VERSION: hostblog
     steps:
       - name: login aliyun 登录阿里云
         run: |
@@ -19,11 +19,11 @@ jobs:
           # 检查服务是否存在
           docker compose -f docker-compose.yml config
           echo "DOTNET_VERSION=${DOTNET_VERSION}" >> $GITHUB_ENV
-          if docker compose -f docker-compose.yml ps -q sunblog > /dev/null 2>&1; then
-              # 服务存在，停止并删除
-              docker compose -f docker-compose.yml stop sunblog
-              docker compose -f docker-compose.yml rm -f sunblog
-              echo "Service sunblog removed."
-              sleep 10
-          fi
+          # if docker compose -f docker-compose.yml ps -q sunblog > /dev/null 2>&1; then
+          #     # 服务存在，停止并删除
+          #     docker compose -f docker-compose.yml stop sunblog
+          #     docker compose -f docker-compose.yml rm -f sunblog
+          #     echo "Service sunblog removed."
+          #     sleep 10
+          # fi
           sudo docker compose -f docker-compose.yml -p sunblog up -d
