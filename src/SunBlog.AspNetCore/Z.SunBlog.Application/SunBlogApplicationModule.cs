@@ -47,7 +47,7 @@ namespace Z.SunBlog.Application
             var authorizeManager = scope.ServiceProvider.GetRequiredService<IAuthorizeManager>();
 
             IAuthorizePermissionContext permissionContext = new AuthorizePermissionContext();
-            authorizeManager.AddAuthorizeRegiester(permissionContext).Wait();
+            //authorizeManager.AddAuthorizeRegiester(permissionContext).Wait();
         }
 
         private void PermissionProvider()

@@ -1,0 +1,48 @@
+﻿{
+  "Serilog": {
+    // 配置日志的最小记录等级
+    "MinimumLevel": {
+      // 默认记录等级
+      "Default": "Information",
+      // 重写各类包的日志记录等级
+      "Override": {
+        "Microsoft": "Information",
+        "System": "Warning",
+        "Microsoft.AspNetCore": "Warning",
+        "Microsoft.EntityFrameworkCore": "Warning"
+      }
+    },
+    "Properties": {
+      "ApplicationName": "Z.SunBlog"
+    },
+    "Enrich": [
+      "FromLogContext",
+      "WithMachineName",
+      "WithProcessId",
+      "WithThreadId",
+      "ApplicationContext"
+    ],
+    "Using": [
+      "Serilog.Sinks.Console",
+      "Serilog.Sinks.File"
+
+    ],
+    "WriteTo": [
+      {
+        "Name": "Console",
+        "Args": {
+          "outputTemplate": "[{Timestamp:HH:mm:ss:fffff} {Level:u3}] {Message:lj}{NewLine}{Exception}"
+        }
+      },
+      {
+        "Name": "File",
+        "Args": {
+          "path": "App_Data/Logs/log.txt",
+          "rollingInterval": "Day",
+          "retainedFileCountLimit": 31,
+          "outputTemplate": "[{Timestamp:HH:mm:ss:fffff} {Level:u3}] {Message:lj}{NewLine}{Exception}"
+        }
+      }
+    ]
+  }
+}

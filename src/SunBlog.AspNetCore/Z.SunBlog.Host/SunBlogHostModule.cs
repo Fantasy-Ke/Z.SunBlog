@@ -136,6 +136,9 @@ public class SunBlogHostModule : ZModule
         app.UseMiddleware<ExceptionMiddleware>();
 
         app.UseRouting();
+
+        UseSwagger(app);
+
         //鉴权中间件
         app.UseAuthentication();
 
@@ -144,8 +147,6 @@ public class SunBlogHostModule : ZModule
         app.UseAuthorization();
 
         app.UseUnitOfWorkMiddleware();
-
-        UseSwagger(app);
 
         app.UseEndpoints(endpoints =>
         {

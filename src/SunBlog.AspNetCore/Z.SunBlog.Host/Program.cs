@@ -1,5 +1,4 @@
 using Z.Ddd.Common.Helper;
-using Z.Ddd.Common.Hubs;
 using Z.Ddd.Common.Serilog;
 using Z.EventBus.Extensions;
 using Z.Module.Extensions;
@@ -30,7 +29,5 @@ builder.Services.AddApplication<SunBlogHostModule>();
 var app = builder.Build();
 
 app.InitApplication();
-
-app.MapHub<ChatHub>("/chatHub");
 
 app.Run();
