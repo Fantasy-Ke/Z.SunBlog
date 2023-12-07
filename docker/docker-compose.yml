@@ -18,7 +18,7 @@ networks:
 services:
   # hostbolg
   hostbolg:
-    image: registry.cn-hangzhou.aliyuncs.com/learn-zhou/zhou-learn:${DOTNET_VERSION}
+    image: registry.cn-hangzhou.aliyuncs.com/learn-zhou/zhou-learn:$DOTNET_VERSION
     restart: always
     networks:
       - fantasy_net

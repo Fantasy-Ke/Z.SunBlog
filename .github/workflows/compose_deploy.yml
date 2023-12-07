@@ -16,8 +16,6 @@ jobs:
       - name: run docker compose
         run: |
           cd docker
-          # 检查服务是否存在
-          echo "DOTNET_VERSION=${DOTNET_VERSION}"
           # if docker compose -f docker-compose.yml ps -q sunblog > /dev/null 2>&1; then
           #     # 服务存在，停止并删除
           #     docker compose -f docker-compose.yml stop sunblog
@@ -25,4 +23,4 @@ jobs:
           #     echo "Service sunblog removed."
           #     sleep 10
           # fi
-          sudo docker compose -f docker-compose.yml -p sunblog up -d
+          sudo docker compose -f docker-compose.yml pull -p sunblog up -d
