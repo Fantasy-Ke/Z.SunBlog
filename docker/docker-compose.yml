@@ -31,9 +31,9 @@ services:
       - "hostapi_sysfiles:/app/wwwroot/SysFiles"
       - "hostapi_fastreport:/app/wwwroot/FastReport"
     environment:
-      - App__WebHostPort=80
+      - App__DbType=Mysql
       - ASPNETCORE_ENVIRONMENT=Production
-      - App__ConnectionString__Default=Server=124.71.15.19;Database=NetWiki;MultipleActiveResultSets=true;Uid=sa;Pwd=wyg154511LHL;TrustServerCertificate=true;
+      - App__ConnectionString__Mysql=Server=124.71.15.19;Database=NetWiki;MultipleActiveResultSets=true;Uid=sa;Pwd=wyg154511LHL;TrustServerCertificate=true;
       - App__CorsOrigins=http://localhost:8081,http://localhost:4200
 
   vueblog:
