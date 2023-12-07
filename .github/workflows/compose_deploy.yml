@@ -5,6 +5,8 @@ on: workflow_dispatch
 jobs:
   deploy:
     runs-on: self-hosted
+    env:
+      DOTNET_VERSION: "3.1"
     steps:
       - name: login aliyun 登录阿里云
         run: |
@@ -14,10 +16,6 @@ jobs:
       - name: run docker compose
         run: |
           cd docker
-          echo ${{ env.First_Name }}
-          echo " ${{ env.First_Name }}. Today is"
-          echo ${{ env.CONNECTIONSTRINGMYSQL }}
-          echo " ${{ env.CONNECTIONSTRINGMYSQL }}. Today is"
           # 检查服务是否存在
           if docker-compose -f docker-compose.yml ps -q sunblog > /dev/null 2>&1; then
               # 服务存在，停止并删除
