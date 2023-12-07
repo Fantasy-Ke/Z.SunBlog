@@ -40,14 +40,10 @@ namespace Z.Module.Extensions
         private static void InitBaseSetting(IApplicationBuilder app)
         {
             app.CheckNull();
-
-            //InitApplicationContext context = new InitApplicationContext(app.ApplicationServices);
-
             app.ApplicationServices.GetRequiredService<ObjectAccessor<IApplicationBuilder>>().Value = app;
             app.ApplicationServices.GetRequiredService<IObjectAccessor<IApplicationBuilder>>().Value = app;
 
-            //app.ApplicationServices.GetRequiredService<ObjectAccessor<InitApplicationContext>>().Value = context;
-            //app.ApplicationServices.GetRequiredService<IObjectAccessor<InitApplicationContext>>().Value = context;
+            
         }
     }
 }

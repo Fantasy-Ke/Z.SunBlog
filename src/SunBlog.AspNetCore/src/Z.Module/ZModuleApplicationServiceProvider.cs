@@ -25,7 +25,7 @@ namespace Z.Module
         public void Initialize(IServiceProvider serviceProvider)
         {
             SetServiceProvider(serviceProvider);
-            InitializeModules();
+            InitializeModules(serviceProvider);
         }
     }
 }

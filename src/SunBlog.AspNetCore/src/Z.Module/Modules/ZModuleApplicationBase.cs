@@ -29,6 +29,7 @@ namespace Z.Module.Modules
             StartupModuleType = startupModuleType;
             services.AddSingleton<IModuleLoader>(moduleLoader);
             services.AddObjectAccessor<IServiceProvider>();
+            services.AddObjectAccessor<InitApplicationContext>();
             Services.AddSingleton<IModuleContainer>(this);
             Services.AddAssemblyOf<IZModuleApplication>();
             services.Configure<ZModuleLifecycleOptions>(options =>
@@ -115,14 +116,15 @@ namespace Z.Module.Modules
         /// <summary>
         /// 应用程序的生命周期
         /// </summary>
-        public void InitializeModules()
+        public void InitializeModules(IServiceProvider serviceProvider)
         {
-            using (var scope = ServiceProvider.CreateScope())
-            {
-                scope.ServiceProvider
-                    .GetRequiredService<IModuleManager>()
-                    .InitializeModules(new InitApplicationContext(scope.ServiceProvider));
-            }
+            using var scope = serviceProvider.CreateScope();
+            ServiceProvider.GetRequiredService<IObjectAccessor<InitApplicationContext>>().Value = 
+                new InitApplicationContext(scope.ServiceProvider);
+
+            scope.ServiceProvider
+                .GetRequiredService<IModuleManager>()
+                .InitializeModules();
         }
 
 

@@ -10,10 +10,12 @@ using Z.Module.Modules;
 using Z.SunBlog.EntityFrameworkCore.EntityFrameworkCore.Seed;
 using Microsoft.Extensions.Configuration;
 using Z.Ddd.Common.Exceptions;
+using Z.EntityFrameworkCore.Mysql;
 
 namespace Z.SunBlog.EntityFrameworkCore
 {
-    [DependOn(typeof(ZSqlServerEntityFrameworkCoreModule))]
+    [DependOn(typeof(ZSqlServerEntityFrameworkCoreModule),
+    typeof(ZMysqlEntityFrameworkCoreModule))]
     public class SunBlogEntityFrameworkCoreModule : ZModule
     {
         public override void ConfigureServices(ServiceConfigerContext context)

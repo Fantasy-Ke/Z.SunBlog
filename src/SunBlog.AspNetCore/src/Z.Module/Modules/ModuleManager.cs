@@ -12,34 +12,33 @@ namespace Z.Module.Modules
 {
     public class ModuleManager : IModuleManager
     {
-
-        private readonly IServiceProvider _serviceProvider;
         private readonly IModuleContainer _moduleContainer;
         private readonly IEnumerable<IModuleLifecycleContributor> _moduleLifecycleContributors;
+        private readonly IObjectAccessor<InitApplicationContext> _applicationContext;
 
         public ModuleManager(IModuleContainer moduleContainer
             , IServiceProvider serviceProvider,
-                IOptions<ZModuleLifecycleOptions> options)
+                IOptions<ZModuleLifecycleOptions> options,
+                IObjectAccessor<InitApplicationContext> applicationContext)
         {
-            _serviceProvider = serviceProvider;
             _moduleContainer = moduleContainer;
             _moduleLifecycleContributors = options.Value
                .Contributors
                 .Select(serviceProvider.GetRequiredService)
                 .Cast<IModuleLifecycleContributor>()
                 .ToArray();
+            _applicationContext = applicationContext;
         }
 
-        public void InitializeModules(InitApplicationContext context)
+        public void InitializeModules()
         {
-
             foreach (var contributor in _moduleLifecycleContributors)
             {
                 foreach (var module in _moduleContainer.Modules)
                 {
                     try
                     {
-                        contributor.Initialize(context, module.Instance);
+                        contributor.Initialize(_applicationContext.Value, module.Instance);
                     }
 
                     catch (Exception ex)

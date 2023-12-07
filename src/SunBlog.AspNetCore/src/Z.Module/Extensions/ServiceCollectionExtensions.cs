@@ -14,37 +14,22 @@ namespace Z.Module.Extensions;
 public static class ServiceCollectionExtensions
 {
 
-    public static ObjectAccessor<T> AddObjectAccessor<T>(this IServiceCollection services)
+    public static void AddObjectAccessor<T>(this IServiceCollection services)
     {
-        if (services.Any(s => s.ServiceType == typeof(T)))
+        if (services.Any(s => s.ServiceType == typeof(IObjectAccessor<T>)))
         {
             throw new Exception("该对象已经注册成功过 " + typeof(T).AssemblyQualifiedName);
         }
         var accessor = new ObjectAccessor<T>();
         //Add to the beginning for fast retrieve
-        services.Insert(0, ServiceDescriptor.Singleton(typeof(IObjectAccessor<T>), accessor));
-        services.Insert(0, ServiceDescriptor.Singleton(typeof(ObjectAccessor<T>), accessor));
-        
-
-        return accessor;
-    }
-
-
-    public static ObjectAccessor<T> AddObjectAccessor<T>(this IServiceCollection services, T obj)
-    {
-
-        var accessor = new ObjectAccessor<T>(obj);
+        services.Insert(0, ServiceDescriptor.Singleton<IObjectAccessor<T>>(accessor));
 
         if (services.Any(s => s.ServiceType == typeof(ObjectAccessor<T>)))
         {
             throw new Exception("该对象已经注册成功过: " + typeof(T).AssemblyQualifiedName);
         }
 
-        //Add to the beginning for fast retrieve
-        services.Insert(0, ServiceDescriptor.Singleton(typeof(ObjectAccessor<T>), accessor));
-        services.Insert(0, ServiceDescriptor.Singleton(typeof(IObjectAccessor<T>), accessor));
-
-        return accessor;
+        services.Insert(0, ServiceDescriptor.Singleton(accessor));
     }
 
     public static void CheckNull(this IServiceCollection services)
