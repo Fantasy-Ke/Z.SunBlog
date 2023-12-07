@@ -23,4 +23,4 @@ jobs:
           #     echo "Service sunblog removed."
           #     sleep 10
           # fi
-          sudo docker compose -f docker-compose.yml -p sunblog up -d --pull
+          sudo docker compose -f docker-compose.yml -p sunblog up -d
