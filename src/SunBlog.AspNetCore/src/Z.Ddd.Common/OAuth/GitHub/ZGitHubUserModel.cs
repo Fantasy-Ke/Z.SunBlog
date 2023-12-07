@@ -55,10 +55,6 @@ namespace Z.Ddd.Common.OAuth.GitHub
         public int Stared { get; set; }
         [JsonPropertyName("watched")]
         public int Watched { get; set; }
-        [JsonPropertyName("created_at")]
-        public string Created_At { get; set; }
-        [JsonPropertyName("updated_at")]
-        public string Updated_At { get; set; }
 
         [JsonPropertyName("message")]
         public string ErrorMessage { get; set; }
