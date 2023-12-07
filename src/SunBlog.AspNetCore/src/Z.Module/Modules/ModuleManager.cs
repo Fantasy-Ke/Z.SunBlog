@@ -48,5 +48,27 @@ namespace Z.Module.Modules
                 }
             }
         }
+
+        public async Task InitializeModulesAsync()
+        {
+            foreach (var contributor in _moduleLifecycleContributors)
+            {
+                foreach (var module in _moduleContainer.Modules)
+                {
+                    try
+                    {
+                        contributor.Initialize(_applicationContext.Value, module.Instance);
+
+                        await contributor.InitializeAsync(_applicationContext.Value, module.Instance);
+                        
+                    }
+
+                    catch (Exception ex)
+                    {
+                        throw new ArgumentException($"An error occurred during the initialize {contributor.GetType().FullName} phase of the module {module.Type.AssemblyQualifiedName}: {ex.Message}. See the inner exception for details.", ex);
+                    }
+                }
+            }
+        }
     }
 }

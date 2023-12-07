@@ -19,5 +19,7 @@ namespace Z.Module.Modules.interfaces
 
         void InitializeModules(IServiceProvider serviceProvider);
 
+        Task InitializeModulesAsync(IServiceProvider serviceProvider);
+
     }
 }

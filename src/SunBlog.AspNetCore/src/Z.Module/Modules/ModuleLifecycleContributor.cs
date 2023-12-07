@@ -12,5 +12,10 @@ namespace Z.Module.Modules
         public virtual void Initialize(InitApplicationContext context, IZModule module)
         {
         }
+
+        public virtual Task InitializeAsync(InitApplicationContext context, IZModule module)
+        {
+            return Task.CompletedTask;
+        }
     }
 }

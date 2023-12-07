@@ -10,5 +10,6 @@ namespace Z.Module
     public interface IZApplicationServiceProvider : IZModuleApplication
     {
         void Initialize(IServiceProvider serviceProvider);
+        Task InitializeAsync(IServiceProvider serviceProvider);
     }
 }

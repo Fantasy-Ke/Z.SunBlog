@@ -13,6 +13,11 @@ namespace Z.Module.Modules
         {
             (module as IPostInitApplication)?.PostInitApplication(context);
         }
+
+        public override async Task InitializeAsync(InitApplicationContext context, IZModule module)
+        {
+            await (module as IPostInitApplicationAsync)?.PostInitApplicationAsync(context);
+        }
     }
 
     public class OnInitApplicationModuleLifecycleContributor : ModuleLifecycleContributor
@@ -20,6 +25,11 @@ namespace Z.Module.Modules
         public override void Initialize(InitApplicationContext context, IZModule module)
         {
             (module as IOnInitApplication)?.OnInitApplication(context);
+        }
+
+        public override async Task InitializeAsync(InitApplicationContext context, IZModule module)
+        {
+            await (module as IOnInitApplicationAsync)?.OnInitApplicationAsync(context);
         }
     }
 }

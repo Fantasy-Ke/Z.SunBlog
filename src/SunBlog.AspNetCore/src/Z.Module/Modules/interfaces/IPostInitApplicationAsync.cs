@@ -7,10 +7,8 @@ using System.Threading.Tasks;
 
 namespace Z.Module.Modules.interfaces
 {
-    public interface IModuleManager
+    public interface IPostInitApplicationAsync
     {
-        void InitializeModules();
-
-        Task InitializeModulesAsync();
+        Task PostInitApplicationAsync(InitApplicationContext context);
     }
 }

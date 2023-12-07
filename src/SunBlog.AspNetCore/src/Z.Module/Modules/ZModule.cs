@@ -72,6 +72,14 @@ namespace Z.Module.Modules
             }
         }
 
+        public virtual Task OnInitApplicationAsync(InitApplicationContext context)
+        {
+            return Task.CompletedTask;
+        }
 
+        public virtual Task PostInitApplicationAsync(InitApplicationContext context)
+        {
+            return Task.CompletedTask;
+        }
     }
 }

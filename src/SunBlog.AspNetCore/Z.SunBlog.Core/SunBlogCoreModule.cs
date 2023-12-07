@@ -53,7 +53,7 @@ namespace Z.SunBlog.Core
             });
         }
 
-        public override void OnInitApplication(InitApplicationContext context)
+        public override void PostInitApplication(InitApplicationContext context)
         {
             context.ServiceProvider.InitChannles();
         }

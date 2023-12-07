@@ -33,6 +33,14 @@ namespace Z.Module.Extensions
             runner.Initialize(app.ApplicationServices);
         }
 
+        public static async Task InitApplicationAsync(this IApplicationBuilder app)
+        {
+            InitBaseSetting(app);
+            var runner = app.ApplicationServices.GetRequiredService<IZApplicationServiceProvider>();
+            await runner.InitializeAsync(app.ApplicationServices);
+        }
+
+
         /// <summary>
         /// 初始化基础
         /// </summary>

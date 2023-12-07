@@ -3,7 +3,9 @@
     public interface IZModule :
         IPreConfigureServices,
         IOnInitApplication,
-        IPostInitApplication
+        IPostInitApplication,
+        IOnInitApplicationAsync,
+        IPostInitApplicationAsync
     {
         void ConfigureServices(ServiceConfigerContext context);
     }

@@ -28,6 +28,6 @@ builder.Services.AddApplication<SunBlogHostModule>();
 
 var app = builder.Build();
 
-app.InitApplication();
+await app.InitApplicationAsync();
 
 app.Run();

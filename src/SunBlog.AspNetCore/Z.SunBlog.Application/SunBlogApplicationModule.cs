@@ -26,27 +26,34 @@ using Z.SunBlog.Core;
 
 namespace Z.SunBlog.Application
 {
+    /// <summary>
+    /// SunBlog应用层
+    /// </summary>
     [DependOn(typeof(SunBlogCoreModule), typeof(ZDddApplicationModule))]
     public class SunBlogApplicationModule : ZModule
     {
+        /// <summary>
+        /// 服务注入
+        /// </summary>
+        /// <param name="context"></param>
         public override void ConfigureServices(ServiceConfigerContext context)
         {
             ConfigureAutoMapper();
             AuthorizeRegister.Register.Init(context.Services);
         }
 
-        public override void OnInitApplication(InitApplicationContext context)
-        {
-
-        }
-
-        public override void PostInitApplication(InitApplicationContext context)
+        /// <summary>
+        /// 应用加载
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public override async Task PostInitApplicationAsync(InitApplicationContext context)
         {
             var scope = context.ServiceProvider.CreateScope();
             var authorizeManager = scope.ServiceProvider.GetRequiredService<IAuthorizeManager>();
 
             IAuthorizePermissionContext permissionContext = new AuthorizePermissionContext();
-            //authorizeManager.AddAuthorizeRegiester(permissionContext).Wait();
+            await authorizeManager.AddAuthorizeRegiester(permissionContext);
         }
 
         private void PermissionProvider()

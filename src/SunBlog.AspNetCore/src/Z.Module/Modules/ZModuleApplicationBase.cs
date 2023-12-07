@@ -127,6 +127,20 @@ namespace Z.Module.Modules
                 .InitializeModules();
         }
 
+        /// <summary>
+        /// 应用程序的生命周期
+        /// </summary>
+        public async Task InitializeModulesAsync(IServiceProvider serviceProvider)
+        {
+            using var scope = serviceProvider.CreateScope();
+            ServiceProvider.GetRequiredService<IObjectAccessor<InitApplicationContext>>().Value =
+                new InitApplicationContext(scope.ServiceProvider);
+
+            await scope.ServiceProvider
+                .GetRequiredService<IModuleManager>()
+                .InitializeModulesAsync();
+        }
+
 
         /// <summary>
         /// 模块加载

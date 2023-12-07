@@ -27,5 +27,15 @@ namespace Z.Module
             SetServiceProvider(serviceProvider);
             InitializeModules(serviceProvider);
         }
+
+        /// <summary>
+        /// 初始化
+        /// </summary>
+        /// <param name="serviceProvider"></param>
+        public async Task InitializeAsync(IServiceProvider serviceProvider)
+        {
+            SetServiceProvider(serviceProvider);
+            await InitializeModulesAsync(serviceProvider);
+        }
     }
 }
