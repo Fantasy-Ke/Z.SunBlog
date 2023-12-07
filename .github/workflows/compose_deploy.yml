@@ -17,8 +17,9 @@ jobs:
         run: |
           cd docker
           # 检查服务是否存在
+          echo "DOTNET_VERSION=${DOTNET_VERSION}"
           docker compose -f docker-compose.yml config
-          echo "DOTNET_VERSION=${DOTNET_VERSION}" >> $GITHUB_ENV
+          echo "DOTNET_VERSION=${DOTNET_VERSION}"
           # if docker compose -f docker-compose.yml ps -q sunblog > /dev/null 2>&1; then
           #     # 服务存在，停止并删除
           #     docker compose -f docker-compose.yml stop sunblog
