@@ -19,8 +19,8 @@ jobs:
               # 服务存在，停止并删除
               docker-compose -f docker-compose.yml stop sunblog
               docker-compose -f docker-compose.yml rm -f sunblog
-              echo "Service '$SERVICE_NAME' removed."
-          else
+              echo "Service sunblog removed."
+          fi
           sudo docker compose rm -f sunblog
           sleep 10
           sudo docker compose -f docker-compose.yml -p sunblog up -d
