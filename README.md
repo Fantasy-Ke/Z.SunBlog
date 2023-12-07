@@ -110,7 +110,7 @@
         {
             public override void ConfigureServices(ServiceConfigerContext context)
             {
-              context.AddSqlServerEfCoreEntityFrameworkCore<SunBlogDbContext>();
+              context.AddSqlServerEfCoreEntityFrameworkCore<SunBlogDbContext>(connectionString);
             }
         }
     }
@@ -128,7 +128,7 @@
         {
             public override void ConfigureServices(ServiceConfigerContext context)
             {
-                context.AddMysqlEfCoreEntityFrameworkCore<SunBlogDbContext>();
+                context.AddMysqlEfCoreEntityFrameworkCore<SunBlogDbContext>(new Version(8, 0,21), connectionString);
             }
         }
     }
