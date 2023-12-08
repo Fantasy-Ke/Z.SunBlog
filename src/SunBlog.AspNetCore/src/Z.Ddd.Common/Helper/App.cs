@@ -74,6 +74,7 @@ public static class App
         try
         {
             var httpclient = new HttpClient();
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             //获取ip信息
             string json = httpclient.GetStringAsync($"http://whois.pconline.com.cn/ipJson.jsp?ip={ip}&json=true").GetAwaiter().GetResult();
             //string json = Encoding.UTF8.GetString(bytes);          
@@ -81,7 +82,7 @@ public static class App
         }
         catch
         {
-            return default;
+            return new IpInfoDto();
         }
     }
 
