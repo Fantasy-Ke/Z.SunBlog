@@ -11,6 +11,19 @@ jobs:
           sudo docker login --username=${{ secrets.ALINAME }} --password=${{ secrets.ALIPASSWORD }}  registry.cn-hangzhou.aliyuncs.com
       - name: 检出代码  sunbloghost
         uses: actions/checkout@v2
+      - name: 定义环境变量
+        run: |
+          echo "${{ variables.FIRST_NAME }}"
+          # 检查服务是否存在
+          export HOSTTAG=${{ variables.FIRST_NAME }}
+          echo $HOSTTAG
+          export VUETAG="hostsunblog"
+          export ADMINTAG="hostsunblog"
+          export DBYTPE="hostsunblog"
+          export CORSORIGINS="hostsunblog"
+          export CONNECTIONSTRINGMYSQL="hostsunblog"
+          export CONNECTIONSTRINGSQLSERVER="hostsunblog"
+
       - name: run docker compose
         run: |
           cd docker
