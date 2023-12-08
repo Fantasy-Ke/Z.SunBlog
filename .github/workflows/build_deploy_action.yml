@@ -132,99 +132,16 @@ jobs:
       - name: login aliyun 登录阿里云
         run: |
           sudo docker login --username=${{ secrets.ALINAME }} --password=${{ secrets.ALIPASSWORD }}  registry.cn-hangzhou.aliyuncs.com
-
-  deploy_host:
-    needs: deploy
-    runs-on: self-hosted
-    strategy:
-      matrix:
-        jobName: [deploy_host]
-    steps:
-      - name: login aliyun 登录阿里云
+      - name: 检出代码  sunbloghost
+        uses: actions/checkout@v2
+      - name: run docker compose
         run: |
-          sudo docker login --username=${{ secrets.ALINAME }} --password=${{ secrets.ALIPASSWORD }}  registry.cn-hangzhou.aliyuncs.com
-      - name: check container
-        run: |
-          container_name="hostblog"
-          if docker ps -a | grep $container_name > /dev/null ; then
-            echo "Docker container already exists, removing..."
-            docker rm -f $container_name
+          cd docker
+          # 检查服务是否存在
+          if  docker-compose -p sunblog ps > /dev/null 2>&1; then
+              # 服务存在，停止并删除
+              docker compose -f docker-compose.yml -p sunblog down
+              echo "compose sunblog removed."
+              sleep 10
           fi
-      - name: Pull ALI Image
-        run: |
-          image_name="${{ secrets.ALIREPOSITORY }}"
-          host_tag_name="${{secrets.HOSTIMAGETAG}}"
-          if docker images | grep $image_name:$host_tag_name > /dev/null; then
-           docker rmi $image_name:$host_tag_name
-          fi
-          sudo  docker pull ${{ secrets.ALIREPOSITORY }}:$host_tag_name
-
-      - name: Run Docker container
-        run: |
-          container_name="hostblog"
-          host_tag_name="${{secrets.HOSTIMAGETAG}}"
-          sudo docker run --name $container_name --restart=always -itd -p ${{secrets.PORT}}:80 -e ASPNETCORE_HTTP_PORTS=80 ${{ secrets.ALIREPOSITORY }}:$host_tag_name
-
-  deploy_vue:
-    needs: deploy
-    runs-on: self-hosted
-    strategy:
-      matrix:
-        jobName: [deploy_vue]
-    steps:
-      - name: login aliyun 登录阿里云
-        run: |
-          sudo docker login --username=${{ secrets.ALINAME }} --password=${{ secrets.ALIPASSWORD }}  registry.cn-hangzhou.aliyuncs.com
-      - name: check container
-        run: |
-          container_name="sunblogvue"
-          if docker ps -a | grep $container_name > /dev/null ; then
-            echo "Docker container already exists, removing..."
-            docker rm -f $container_name
-          fi
-      - name: Pull ALI Image
-        run: |
-          image_name="${{ secrets.ALIREPOSITORY }}"
-          vue_tag_name="${{secrets.VUETAG}}"
-          if docker images | grep $image_name:$vue_tag_name > /dev/null; then
-           docker rmi $image_name:$vue_tag_name
-          fi
-          sudo  docker pull ${{ secrets.ALIREPOSITORY }}:$vue_tag_name
-
-      - name: Run Docker container
-        run: |
-          container_name="sunblogvue"
-          vue_tag_name="${{secrets.VUETAG}}"
-          sudo docker run --name $container_name --restart=always -itd -p ${{secrets.VUEPORT}}:80 ${{ secrets.ALIREPOSITORY }}:$vue_tag_name
-
-  deploy_admin:
-    needs: deploy
-    runs-on: self-hosted
-    strategy:
-      matrix:
-        jobName: [deploy_admin]
-    steps:
-      - name: login aliyun 登录阿里云
-        run: |
-          sudo docker login --username=${{ secrets.ALINAME }} --password=${{ secrets.ALIPASSWORD }}  registry.cn-hangzhou.aliyuncs.com
-      - name: check container
-        run: |
-          container_name="sunblogadmin"
-          if docker ps -a | grep $container_name > /dev/null ; then
-            echo "Docker container already exists, removing..."     
-            docker rm -f $container_name
-          fi
-      - name: Pull ALI Image
-        run: |
-          image_name="${{ secrets.ALIREPOSITORY }}"
-          admin_tag_name="${{secrets.ADMINTAG}}"
-          if docker images | grep $image_name:$admin_tag_name > /dev/null; then
-           docker rmi $image_name:$admin_tag_name
-          fi
-          sudo  docker pull ${{ secrets.ALIREPOSITORY }}:$admin_tag_name
-
-      - name: Run Docker container
-        run: |
-          container_name="sunblogadmin"
-          admin_tag_name="${{secrets.ADMINTAG}}"
-          sudo docker run --name $container_name --restart=always -itd -p ${{secrets.ADMINPORT}}:80 -d ${{ secrets.ALIREPOSITORY }}:$admin_tag_name
+          sudo docker compose -f docker-compose.yml -p sunblog pull && docker compose -f docker-compose.yml -p sunblog up -d
