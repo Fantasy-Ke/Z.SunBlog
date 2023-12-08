@@ -11,9 +11,11 @@ jobs:
           sudo docker login --username=${{ secrets.ALINAME }} --password=${{ secrets.ALIPASSWORD }}  registry.cn-hangzhou.aliyuncs.com
       - name: 检出代码  sunbloghost
         uses: actions/checkout@v2
-      - name: 定义环境变量
+      - name: run docker compose
         run: |
-          # 检查服务是否存在
+          cd docker
+          # 定义环境变量
+          echo "compose sunblog ${{ secrets.ALINAME }}."
           export HOSTTAG=${{ secrets.HOSTIMAGETAG }}
           export VUETAG=${{ secrets.VUETAG }}
           export ADMINTAG=${{ secrets.ADMINTAG }}
@@ -21,10 +23,6 @@ jobs:
           export CORSORIGINS=${{ secrets.CORSORIGINS }}
           export CONNECTIONSTRINGMYSQL=${{ secrets.CONNECTIONSTRINGMYSQL }}
           export CONNECTIONSTRINGSQLSERVER=${{ secrets.CONNECTIONSTRINGSQLSERVER }}
-
-      - name: run docker compose
-        run: |
-          cd docker
           # 检查服务是否存在
           if  docker-compose -p sunblog ps > /dev/null 2>&1; then
               # 服务存在，停止并删除
