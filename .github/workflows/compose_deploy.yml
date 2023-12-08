@@ -15,11 +15,10 @@ jobs:
         run: |
           cd docker
           # 检查服务是否存在
-          if docker compose -f docker-compose.yml ps -q sunblog > /dev/null 2>&1; then
+          if  docker-compose -p sunblog ps > /dev/null 2>&1; then
               # 服务存在，停止并删除
-              docker compose -f docker-compose.yml stop sunblog
-              docker compose -f docker-compose.yml rm -f sunblog
-              echo "Service sunblog removed."
+              docker compose -f docker-compose.yml -p sunblog down
+              echo "compose sunblog removed."
               sleep 10
           fi
-          sudo docker compose -f docker-compose.yml -p sunblog up -d
+          sudo docker compose -f docker-compose.yml -p sunblog pull && docker compose -f docker-compose.yml -p sunblog up -d
