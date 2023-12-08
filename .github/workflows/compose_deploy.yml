@@ -6,13 +6,13 @@ jobs:
   deploy:
     runs-on: self-hosted
     env:
-      HOSTTAG: ${{ secrets.HOSTIMAGETAG }}
-      VUETAG: ${{ secrets.VUETAG }}
-      ADMINTAG: ${{ secrets.ADMINTAG }}
-      DBYTPE: ${{ secrets.DBYTPE }}
-      CORSORIGINS: ${{ secrets.CORSORIGINS }}
-      CONNECTIONSTRINGMYSQL: ${{ secrets.CONNECTIONSTRINGMYSQL }}
-      CONNECTIONSTRINGSQLSERVER: ${{ secrets.CONNECTIONSTRINGSQLSERVER }}
+      HOSTTAG1: ${{ secrets.HOSTIMAGETAG }}
+      VUETAG1: ${{ secrets.VUETAG }}
+      ADMINTAG1: ${{ secrets.ADMINTAG }}
+      DBYTPE1: ${{ secrets.DBYTPE }}
+      CORSORIGINS1: ${{ secrets.CORSORIGINS }}
+      CONNECTIONSTRINGMYSQL1: ${{ secrets.CONNECTIONSTRINGMYSQL }}
+      CONNECTIONSTRINGSQLSERVER1: ${{ secrets.CONNECTIONSTRINGSQLSERVER }}
     steps:
       - name: login aliyun 登录阿里云
         run: |
@@ -23,13 +23,14 @@ jobs:
         run: |
           cd docker
           # 定义环境变量
-          export HOSTTAG=$HOSTIMAGETAG
-          export VUETAG=$VUETAG
-          export ADMINTAG=$ADMINTAG
-          export DBYTPE=$DBYTPE
-          export CORSORIGINS=$CORSORIGINS
-          export CONNECTIONSTRINGMYSQL=CONNECTIONSTRINGMYSQL
-          export CONNECTIONSTRINGSQLSERVER=CONNECTIONSTRINGSQLSERVER
+          export HOSTTAG=$HOSTIMAGETAG1
+          export VUETAG=$VUETAG1
+          export ADMINTAG=$ADMINTAG1
+          export DBYTPE=$DBYTPE1
+          export CORSORIGINS=$CORSORIGINS1
+          export CONNECTIONSTRINGMYSQL=CONNECTIONSTRINGMYSQL1
+          export CONNECTIONSTRINGSQLSERVER=CONNECTIONSTRINGSQLSERVER1
+          echo ${CONNECTIONSTRINGSQLSERVER}
           # 检查服务是否存在
           if  docker-compose -p sunblog ps > /dev/null 2>&1; then
               # 服务存在，停止并删除

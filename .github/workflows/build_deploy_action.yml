@@ -1,4 +1,4 @@
-name: build_action
+name: build_deploy_action
 
 on:
   workflow_dispatch:
