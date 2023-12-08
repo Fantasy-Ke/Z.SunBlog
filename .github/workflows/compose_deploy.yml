@@ -5,8 +5,6 @@ on: workflow_dispatch
 jobs:
   deploy:
     runs-on: self-hosted
-    env:
-      FIRST_NAME: ${{ secrets.SunBlog.CONNECTIONSTRINGMYSQL }}
     steps:
       - name: login aliyun 登录阿里云
         run: |
@@ -15,17 +13,14 @@ jobs:
         uses: actions/checkout@v2
       - name: 定义环境变量
         run: |
-          echo ${{ secrets.SunBlog.CONNECTIONSTRINGMYSQL }}
-          echo "大方的发大水发$FIRST_NAME"
           # 检查服务是否存在
-          export HOSTTAG=$FIRST_NAME
-          echo $HOSTTAG
-          export VUETAG="hostsunblog"
-          export ADMINTAG="hostsunblog"
-          export DBYTPE="hostsunblog"
-          export CORSORIGINS="hostsunblog"
-          export CONNECTIONSTRINGMYSQL="hostsunblog"
-          export CONNECTIONSTRINGSQLSERVER="hostsunblog"
+          export HOSTTAG=${{ secrets.HOSTIMAGETAG }}
+          export VUETAG=${{ secrets.VUETAG }}
+          export ADMINTAG=${{ secrets.ADMINTAG }}
+          export DBYTPE=${{ secrets.DBYTPE }}
+          export CORSORIGINS=${{ secrets.CORSORIGINS }}
+          export CONNECTIONSTRINGMYSQL=${{ secrets.CONNECTIONSTRINGMYSQL }}
+          export CONNECTIONSTRINGSQLSERVER=${{ secrets.CONNECTIONSTRINGSQLSERVER }}
 
       - name: run docker compose
         run: |

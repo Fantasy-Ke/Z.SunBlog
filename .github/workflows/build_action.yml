@@ -146,7 +146,6 @@ jobs:
       - name: check container
         run: |
           container_name="hostblog"
-          host_tag_name="${{secrets.HOSTIMAGETAG}}"
           if docker ps -a | grep $container_name > /dev/null ; then
             echo "Docker container already exists, removing..."
             docker rm -f $container_name
@@ -179,7 +178,6 @@ jobs:
       - name: check container
         run: |
           container_name="sunblogvue"
-          vue_tag_name="${{secrets.IMAGETAG}}"
           if docker ps -a | grep $container_name > /dev/null ; then
             echo "Docker container already exists, removing..."
             docker rm -f $container_name
@@ -212,7 +210,6 @@ jobs:
       - name: check container
         run: |
           container_name="sunblogadmin"
-          admin_tag_name="${{secrets.ADMINTAG}}"
           if docker ps -a | grep $container_name > /dev/null ; then
             echo "Docker container already exists, removing..."     
             docker rm -f $container_name

@@ -18,29 +18,29 @@ networks:
 services:
   # hostbolg
   hostbolg:
-    image: registry.cn-hangzhou.aliyuncs.com/learn-zhou/zhou-learn:hostblog
+    image: registry.cn-hangzhou.aliyuncs.com/learn-zhou/zhou-learn:${HOSTTAG}
     restart: always
     networks:
       - fantasy_net
     volumes:
       - "hostbolg_logs:/app/App_Data/Logs"
     environment:
-      - App__DbType=Mysql
+      - App__DbType=${DBYTPE}
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_HTTP_PORTS=80
-      - App__ConnectionString__Mysql=Server=123.56.30.198;Port=3306;Database=SunBlog;Uid=root;Pwd=zhouke210;CharSet=utf8;SslMode=none;AllowPublicKeyRetrieval=True;
-      - App__ConnectionString__SqlServer=Server=123.56.30.198;Port=3306;Database=SunBlog;Uid=root;Pwd=zhouke210;CharSet=utf8;SslMode=none;AllowPublicKeyRetrieval=True;
-      - App__CorsOrigins=http://localhost:5100,http://localhost:5200,http://123.56.30.198:5100,http://123.56.30.198:5200
+      - App__ConnectionString__Mysql=${CONNECTIONSTRINGMYSQL}
+      - App__ConnectionString__SqlServer=${CONNECTIONSTRINGSQLSERVER}
+      - App__CorsOrigins=${CORSORIGINS}
 
   vueblog:
-    image: registry.cn-hangzhou.aliyuncs.com/learn-zhou/zhou-learn:vueblog
+    image: registry.cn-hangzhou.aliyuncs.com/learn-zhou/zhou-learn:${VUETAG}
     networks:
       - fantasy_net
     volumes:
       - vueblog_assets:/usr/share/nginx/html/assets
 
   adminvue:
-    image: registry.cn-hangzhou.aliyuncs.com/learn-zhou/zhou-learn:adminvue
+    image: registry.cn-hangzhou.aliyuncs.com/learn-zhou/zhou-learn:${ADMINTAG}
     networks:
       - fantasy_net
     volumes:
