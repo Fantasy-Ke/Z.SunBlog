@@ -2,9 +2,7 @@ version: "3.9"
 
 volumes:
   nginx_log:
-  hostapi_logs:
-  hostapi_sysfiles:
-  hostapi_fastreport:
+  hostbolg_logs:
   vueblog_assets:
   adminvue_assets:
 
@@ -18,28 +16,26 @@ networks:
     attachable: true
 
 services:
-  # hostapi
-  hostapi:
+  # hostbolg
+  hostbolg:
     image: registry.cn-hangzhou.aliyuncs.com/learn-zhou/zhou-learn:hostblog
     restart: always
     networks:
       - fantasy_net
     volumes:
-      - "hostapi_logs:/app/App_Data/Logs"
-      - "hostapi_sysfiles:/app/wwwroot/SysFiles"
-      - "hostapi_fastreport:/app/wwwroot/FastReport"
+      - "hostbolg_logs:/app/App_Data/Logs"
     environment:
-      - App__DbType=SqlServer
+      - App__DbType=Mysql
       - ASPNETCORE_ENVIRONMENT=Production
-      - App__ConnectionString__Mysql=Server=124.71.15.19;Database=NetWiki;MultipleActiveResultSets=true;Uid=sa;Pwd=wyg154511LHL;TrustServerCertificate=true;
-      - App__CorsOrigins=http://localhost:8081,http://localhost:4200
+      - ASPNETCORE_HTTP_PORTS=80
+      - App__ConnectionString__Mysql=Server=123.56.30.198;Port=3306;Database=SunBlog;Uid=root;Pwd=zhouke210;CharSet=utf8;SslMode=none;AllowPublicKeyRetrieval=True;
+      - App__ConnectionString__SqlServer=Server=123.56.30.198;Port=3306;Database=SunBlog;Uid=root;Pwd=zhouke210;CharSet=utf8;SslMode=none;AllowPublicKeyRetrieval=True;
+      - App__CorsOrigins=http://localhost:5100,http://localhost:5200,http://123.56.30.198:5100,http://123.56.30.198:5200
 
   vueblog:
     image: registry.cn-hangzhou.aliyuncs.com/learn-zhou/zhou-learn:vueblog
     networks:
       - fantasy_net
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Production
     volumes:
       - vueblog_assets:/usr/share/nginx/html/assets
 
@@ -49,8 +45,6 @@ services:
       - fantasy_net
     volumes:
       - adminvue_assets:/usr/share/nginx/html/assets
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Production
 
   nginx:
     image: nginx:1.16.1
