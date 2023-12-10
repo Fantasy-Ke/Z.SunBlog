@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Z.EntityFrameworkCore;
-using Z.EntityFrameworkCore.Attributes;
 using Z.EntityFrameworkCore.Options;
 using Z.SunBlog.Core.AlbumsModule;
 using Z.SunBlog.Core.ArticleCategoryModule;

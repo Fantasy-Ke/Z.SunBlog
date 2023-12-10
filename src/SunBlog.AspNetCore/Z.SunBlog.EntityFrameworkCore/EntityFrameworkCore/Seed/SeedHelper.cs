@@ -1,16 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Transactions;
 using Z.Ddd.Common.Exceptions;
 using Z.Ddd.Common.Helper;
 using Z.Ddd.Common.UnitOfWork;
-using Z.EntityFrameworkCore;
 using Z.SunBlog.EntityFrameworkCore.EntityFrameworkCore.Seed.SeedData;
 
 namespace Z.SunBlog.EntityFrameworkCore.EntityFrameworkCore.Seed;

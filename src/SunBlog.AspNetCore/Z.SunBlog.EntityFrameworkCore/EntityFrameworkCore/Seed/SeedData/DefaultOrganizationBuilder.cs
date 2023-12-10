@@ -1,13 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Z.Ddd.Common;
 using Z.Ddd.Common.Entities.Enum;
 using Z.Ddd.Common.Entities.Organizations;
-using Z.Ddd.Common.Entities.Users;
 
 namespace Z.SunBlog.EntityFrameworkCore.EntityFrameworkCore.Seed.SeedData
 {

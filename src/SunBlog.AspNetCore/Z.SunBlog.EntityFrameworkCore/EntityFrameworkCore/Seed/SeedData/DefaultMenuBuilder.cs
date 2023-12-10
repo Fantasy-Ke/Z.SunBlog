@@ -1,17 +1,5 @@
-﻿using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Z.Ddd.Common;
-using Z.Ddd.Common.Entities.Users;
-using Z.Ddd.Common.Extensions;
-using Z.EntityFrameworkCore;
-using Z.EntityFrameworkCore.SqlServer.Extensions;
 using Z.SunBlog.Core.MenuModule;
 using Z.SunBlog.Core.MenuModule.Dtos;
 
