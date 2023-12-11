@@ -24,8 +24,9 @@ namespace Z.EntityFrameworkCore
         public virtual DbSet<ZRoleInfo> ZRoles { get; set; }
         public virtual DbSet<ZOrganization> ZOrganizations { get; set; }
         public virtual DbSet<ZUserRole> ZUserRoles { get; set; }
-        public virtual DbSet<ZSigninLog> ZSigninLog { get; set; }
+        public virtual DbSet<ZAccessLog> ZAccessLog { get; set; }
         public virtual DbSet<ZOperationLog> ZOperationLog { get; set; }
+        public virtual DbSet<ZRequestLog> ZRequestLog { get; set; }
         public virtual DbSet<ZFileInfo> ZFileInfo { get; set; }
         public virtual DbSet<ZPermissions> ZPermissions { get; set; }
 
