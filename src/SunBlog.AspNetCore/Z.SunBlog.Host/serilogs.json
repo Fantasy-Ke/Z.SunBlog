@@ -24,8 +24,8 @@
     ],
     "Using": [
       "Serilog.Sinks.Console",
-      "Serilog.Sinks.File"
-
+      "Serilog.Sinks.File",
+      "Serilog.Sinks.Seq"
     ],
     "WriteTo": [
       {
@@ -41,6 +41,16 @@
           "rollingInterval": "Day",
           "retainedFileCountLimit": 31,
           "outputTemplate": "[{Timestamp:HH:mm:ss:fffff} {Level:u3}] {Message:lj}{NewLine}{Exception}"
+        }
+      },
+      {
+        "Name": "Seq",
+        "Args": {
+          "serverUrl": "http://123.56.30.198:5341/", // 日志中心收集器的链接地址
+          "restrictedToMinimumLevel": "Verbose",//日志等级
+          "apiKey": "b8ueTcbAyumLam5hfuUu",//密钥key
+          "queueSizeLimit": 100000,//最大删除值
+          "batchPostingLimit": 100//批量最多
         }
       }
     ]

@@ -126,6 +126,8 @@ public class SunBlogHostModule : ZModule
 
         app.UseCors("ZCores");
 
+        app.UseStaticFiles();
+
         app.UseSerilogRequestLogging(options =>
         {
             options.MessageTemplate = SerilogRequestUtility.HttpMessageTemplate;
@@ -141,8 +143,6 @@ public class SunBlogHostModule : ZModule
 
         //鉴权中间件
         app.UseAuthentication();
-
-        app.UseStaticFiles();
 
         app.UseAuthorization();
 

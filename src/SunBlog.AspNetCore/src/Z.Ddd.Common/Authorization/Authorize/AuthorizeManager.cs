@@ -48,10 +48,13 @@ namespace Z.Ddd.Common.Authorization.Authorize
             {
                 using var scope = _serviceProvider.CreateAsyncScope();
                 var baseService = scope.ServiceProvider.GetRequiredService<IBasicRepository<ZPermissions, string>>();
-                await baseService.DeleteManyAsync();
-                await baseService.InsertManyAsync(permissions);
-                await _cacheManager.RemoveCacheAsync(key);
-                await _cacheManager.SetCacheAsync(key, permissions);
+                if (await baseService.CountAsync(p => true) > 0)
+                {
+                    await baseService.DeleteManyAsync();
+                    await baseService.InsertManyAsync(permissions);
+                    await _cacheManager.RemoveCacheAsync(key);
+                    await _cacheManager.SetCacheAsync(key, permissions);
+                }
             }
             catch (Exception ex)
             {
@@ -84,7 +87,7 @@ namespace Z.Ddd.Common.Authorization.Authorize
 
                 childer.Dispose();
             }
-            end:
+        end:
             return permissions;
         }
 

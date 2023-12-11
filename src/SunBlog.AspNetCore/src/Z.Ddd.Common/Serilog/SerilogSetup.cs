@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Debugging;
+using Serilog.Events;
 using Z.Ddd.Common.Helper;
 
 namespace Z.Ddd.Common.Serilog;
