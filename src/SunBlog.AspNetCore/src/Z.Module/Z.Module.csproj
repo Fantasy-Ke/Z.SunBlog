@@ -9,7 +9,7 @@
     <PackageIcon>85232349.png</PackageIcon>
     <PackageProjectUrl>https://github.com/Fantasy-Ke/Z.SunBlog/tree/main/src/SunBlog.AspNetCore/src/Z.Module</PackageProjectUrl>
     <Authors>Fantasy_ke</Authors>
-    <Version>1.0.2</Version>
+    <Version>1.0.3</Version>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageReadmeFile>Readme.md</PackageReadmeFile>

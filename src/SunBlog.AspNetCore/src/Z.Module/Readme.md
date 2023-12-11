@@ -1,5 +1,42 @@
 ﻿### 🎨模块化类库，参照AbpVnext实现，现已正常使用
 
+- Z.Module`1.0.3`
+    - 添加`autofac`禁止注入特性
+        ``` C#
+        namespace Z.Module.Modules;
+
+        [AttributeUsage(AttributeTargets.Class | AttributeTargets.Property)]
+        public class DisablePropertyInjectionAttribute : Attribute
+        {
+
+        }
+
+        ```
+    - 添加Module获取所有Assemblies，Helper类`ZModuleHelper`
+        ``` C#
+        public static Assembly[] GetAllAssemblies(Type moduleType)
+        {
+            var assemblies = new List<Assembly>();
+
+            var additionalAssemblyDescriptors = moduleType
+                .GetCustomAttributes()
+                .OfType<IAdditionalModuleAssemblyProvider>();
+
+            foreach (var descriptor in additionalAssemblyDescriptors)
+            {
+                foreach (var assembly in descriptor.GetAssemblies())
+                {
+                    assemblies.AddIfNotContains(assembly);
+                }
+            }
+
+            assemblies.Add(moduleType.Assembly);
+
+            return assemblies.ToArray();
+        }
+
+        ```
+
 - Z.Module`1.0.2`
     - 添加异步管道加载
     ``` C#

@@ -40,10 +40,7 @@
 	<PackageReference Include="Yitter.IdGenerator" Version="1.0.14" />
 	<PackageReference Include="MrHuo.OAuth.Core" Version="1.1.1" />
 	<PackageReference Include="Z.EventBus" Version="1.0.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Z.Module\Z.Module.csproj" />
+	<PackageReference Include="Z.Module" Version="1.0.3" />
   </ItemGroup>
 
 </Project>
