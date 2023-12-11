@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Autofac.Builder;
 using Autofac.Core;
+using Autofac.Extras.DynamicProxy;
 using Z.Module.Extensions;
 using Z.Module.Modules;
 using Z.Module.Modules.interfaces;
@@ -13,7 +14,7 @@ public static class ZRegistrationBuilderExtensions
 {
     public static IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> ConfigureZConventions<TLimit, TActivatorData, TRegistrationStyle>(
             this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registrationBuilder,
-            IModuleContainer moduleContainer)
+            IModuleContainer moduleContainer, IEnumerable<Type> interceptors)
         where TActivatorData : ReflectionActivatorData
     {
         var serviceType = registrationBuilder.RegistrationData.Services.OfType<IServiceWithType>().FirstOrDefault()?.ServiceType;
@@ -29,10 +30,21 @@ public static class ZRegistrationBuilderExtensions
         }
 
         registrationBuilder = registrationBuilder.EnablePropertyInjection(moduleContainer, implementationType);
+        registrationBuilder = registrationBuilder.AddInterceptors(serviceType,interceptors);
 
         return registrationBuilder;
     }
 
+    /// <summary>
+    /// 属性注入
+    /// </summary>
+    /// <typeparam name="TLimit"></typeparam>
+    /// <typeparam name="TActivatorData"></typeparam>
+    /// <typeparam name="TRegistrationStyle"></typeparam>
+    /// <param name="registrationBuilder"></param>
+    /// <param name="moduleContainer"></param>
+    /// <param name="implementationType"></param>
+    /// <returns></returns>
     private static IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> EnablePropertyInjection<TLimit, TActivatorData, TRegistrationStyle>(
             this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registrationBuilder,
             IModuleContainer moduleContainer,
@@ -45,6 +57,26 @@ public static class ZRegistrationBuilderExtensions
         {
             registrationBuilder = registrationBuilder.PropertiesAutowired(new ZPropertySelector(false));
         }
+
+        return registrationBuilder;
+    }
+
+    private static IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> AddInterceptors<TLimit, TActivatorData, TRegistrationStyle>(
+        this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registrationBuilder,
+        Type serviceType,
+        IEnumerable<Type> interceptors)
+    where TActivatorData : ReflectionActivatorData
+    {
+        if (serviceType.IsInterface)
+        {
+            registrationBuilder = registrationBuilder.EnableInterfaceInterceptors();
+        }
+        else
+        {
+            (registrationBuilder as IRegistrationBuilder<TLimit, ConcreteReflectionActivatorData, TRegistrationStyle>)?.EnableClassInterceptors();
+        }
+
+        registrationBuilder.InterceptedBy(interceptors.ToArray());
 
         return registrationBuilder;
     }

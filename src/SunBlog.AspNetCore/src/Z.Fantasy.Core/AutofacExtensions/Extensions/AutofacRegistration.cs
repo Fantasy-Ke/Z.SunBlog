@@ -6,6 +6,9 @@ using Z.Module.Modules.interfaces;
 using Z.Module.Extensions;
 using System.Reflection;
 using Z.Fantasy.Core.AutofacExtensions.Builder;
+using Z.Fantasy.Core.Helper;
+using Microsoft.EntityFrameworkCore.Diagnostics.Internal;
+using Z.Fantasy.Core.RedisModule.CacheHelper;
 
 namespace Z.Fantasy.Core.AutofacExtensions.Extensions;
 
@@ -24,6 +27,7 @@ public static class AutofacRegistration
     }
 
     /// <summary>
+    /// 抄着abp vnext的
     /// Populates the Autofac container builder with the set of registered service descriptors
     /// and makes <see cref="IServiceProvider"/> and <see cref="IServiceScopeFactory"/>
     /// available in the container. Using this overload is incompatible with the ASP.NET Core
@@ -60,7 +64,7 @@ public static class AutofacRegistration
     }
 
     /// <summary>
-    /// Configures the lifecycle on a service registration.
+    /// 注入生命周期
     /// </summary>
     private static IRegistrationBuilder<object, TActivatorData, TRegistrationStyle> ConfigureLifecycle<TActivatorData, TRegistrationStyle>(
         this IRegistrationBuilder<object, TActivatorData, TRegistrationStyle> registrationBuilder,
@@ -100,19 +104,19 @@ public static class AutofacRegistration
         object lifetimeScopeTagForSingletons)
     {
         var moduleContainer = services.GetSingletonInstance<IModuleContainer>();
-
+        CacheHelper.InterceptedDict.TryGetValue(CacheHelper.InterceptedKey,out IEnumerable<Type> interceptors);
         foreach (var descriptor in services)
         {
             if (descriptor.ImplementationType != null)
             {
                 var serviceTypeInfo = descriptor.ServiceType.GetTypeInfo();
-                if (serviceTypeInfo.IsGenericTypeDefinition)
+                if (serviceTypeInfo.IsGenericTypeDefinition)//泛型Register
                 {
                     builder
                         .RegisterGeneric(descriptor.ImplementationType)
                         .As(descriptor.ServiceType)
                         .ConfigureLifecycle(descriptor.Lifetime, lifetimeScopeTagForSingletons)
-                        .ConfigureZConventions(moduleContainer);
+                        .ConfigureZConventions(moduleContainer, interceptors);
                 }
                 else
                 {
@@ -120,11 +124,12 @@ public static class AutofacRegistration
                         .RegisterType(descriptor.ImplementationType)
                         .As(descriptor.ServiceType)
                         .ConfigureLifecycle(descriptor.Lifetime, lifetimeScopeTagForSingletons)
-                       .ConfigureZConventions(moduleContainer);
+                       .ConfigureZConventions(moduleContainer, interceptors);
                 }
             }
             else if (descriptor.ImplementationFactory != null)
             {
+                // 这里是我不能理解的地方，不知道为啥要这样
                 var registration = RegistrationBuilder.ForDelegate(descriptor.ServiceType, (context, parameters) =>
                 {
                     var serviceProvider = context.Resolve<IServiceProvider>();
