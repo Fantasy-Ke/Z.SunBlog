@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Redis;
 using System.Net;
-using Z.Ddd.Common.RedisModule;
+using Z.Fantasy.Core.RedisModule;
 using Z.EventBus.Extensions;
 using Z.Module;
 using Z.Module.Extensions;

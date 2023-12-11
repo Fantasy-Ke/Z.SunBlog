@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Dynamic.Core;
-using Z.Ddd.Common.DomainServiceRegister;
-using Z.Ddd.Common.Extensions;
-using Z.Ddd.Common.UserSession;
+using Z.Fantasy.Core.DomainServiceRegister;
+using Z.Fantasy.Core.Extensions;
+using Z.Fantasy.Core.UserSession;
 using Z.EntityFrameworkCore;
 using Z.EntityFrameworkCore.Extensions;
 using Z.SunBlog.Application.AlbumsModule.BlogClient.Dto;
@@ -15,8 +15,8 @@ using Z.SunBlog.Core.PicturesModule.DomainManager;
 using Z.SunBlog.Core.PraiseModule;
 using Z.SunBlog.Core.PraiseModule.DomainManager;
 using Z.SunBlog.Core.TalksModule.DomainManager;
-using Z.Ddd.Common.Entities.Enum;
-using Z.Ddd.Common.ResultResponse.Pager;
+using Z.Fantasy.Core.Entities.Enum;
+using Z.Fantasy.Core.ResultResponse.Pager;
 
 namespace Z.SunBlog.Application.TalksModule.BlogClient
 {

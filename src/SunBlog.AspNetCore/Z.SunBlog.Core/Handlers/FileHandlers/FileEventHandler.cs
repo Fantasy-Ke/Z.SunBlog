@@ -7,7 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Z.Ddd.Common.Minio;
+using Z.Fantasy.Core.Minio;
 using Z.EventBus.Handlers;
 using Z.Module.DependencyInjection;
 

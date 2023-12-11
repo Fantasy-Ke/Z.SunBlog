@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Z.SunBlog.Core.AlbumsModule;
-using Z.Ddd.Common.Entities.Enum;
+using Z.Fantasy.Core.Entities.Enum;
 
 namespace Z.SunBlog.Application.AlbumsModule.BlogServer.Dto
 {

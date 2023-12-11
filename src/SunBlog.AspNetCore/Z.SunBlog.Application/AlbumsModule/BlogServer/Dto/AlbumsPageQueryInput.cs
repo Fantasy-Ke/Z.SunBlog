@@ -1,4 +1,4 @@
-﻿using Z.Ddd.Common.ResultResponse.Pager;
+﻿using Z.Fantasy.Core.ResultResponse.Pager;
 using Z.SunBlog.Core.AlbumsModule;
 
 namespace Z.SunBlog.Application.AlbumsModule.BlogServer.Dto;

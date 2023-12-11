@@ -2,21 +2,21 @@
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System.ComponentModel;
-using Z.Ddd.Common.DomainServiceRegister;
+using Z.Fantasy.Core.DomainServiceRegister;
 using Z.SunBlog.Core.Const;
 using Z.SunBlog.Core.CustomConfigModule;
 using System.Collections;
-using Z.Ddd.Common.RedisModule;
+using Z.Fantasy.Core.RedisModule;
 using Z.SunBlog.Core.CustomConfigModule.DomainManager;
 using Microsoft.EntityFrameworkCore;
 using Z.EntityFrameworkCore.Extensions;
-using Z.Ddd.Common.Exceptions;
+using Z.Fantasy.Core.Exceptions;
 using Z.SunBlog.Core.SharedDto;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using System.Text.RegularExpressions;
 using Z.SunBlog.Application.ConfigModule.Dto;
-using Z.Ddd.Common.ResultResponse.Pager;
+using Z.Fantasy.Core.ResultResponse.Pager;
 
 namespace Z.SunBlog.Application.ConfigModule
 {

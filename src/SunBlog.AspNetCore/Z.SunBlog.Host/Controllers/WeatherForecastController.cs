@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using Z.Ddd.Common;
-using Z.Ddd.Common.Authorization;
-using Z.Ddd.Common.Helper;
-using Z.Ddd.Common.UserSession;
+using Z.Fantasy.Core;
+using Z.Fantasy.Core.Authorization;
+using Z.Fantasy.Core.Helper;
+using Z.Fantasy.Core.UserSession;
 
 namespace Z.SunBlog.Host.Controllers
 {

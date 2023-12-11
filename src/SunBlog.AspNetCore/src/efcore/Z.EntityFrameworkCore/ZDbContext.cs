@@ -5,15 +5,15 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Linq.Expressions;
 using System.Reflection;
-using Z.Ddd.Common.Entities.EntityLog;
-using Z.Ddd.Common.Entities.IAuditing;
-using Z.Ddd.Common.Entities.Organizations;
-using Z.Ddd.Common.Entities.Roles;
-using Z.Ddd.Common.Entities.Users;
-using Z.Ddd.Common.Entities.Files;
+using Z.Fantasy.Core.Entities.EntityLog;
+using Z.Fantasy.Core.Entities.IAuditing;
+using Z.Fantasy.Core.Entities.Organizations;
+using Z.Fantasy.Core.Entities.Roles;
+using Z.Fantasy.Core.Entities.Users;
+using Z.Fantasy.Core.Entities.Files;
 using Z.EntityFrameworkCore.Extensions;
 using Z.EntityFrameworkCore.Options;
-using Z.Ddd.Common.Entities.Permission;
+using Z.Fantasy.Core.Entities.Permission;
 
 namespace Z.EntityFrameworkCore
 {

@@ -8,15 +8,15 @@ using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using System.Text;
-using Z.Ddd.Common;
-using Z.Ddd.Common.DynamicWebAPI;
-using Z.Ddd.Common.Extensions;
+using Z.Fantasy.Core;
+using Z.Fantasy.Core.DynamicWebAPI;
+using Z.Fantasy.Core.Extensions;
 using Z.Module;
 using Z.Module.Extensions;
 using Z.EntityFrameworkCore.Extensions;
 using Serilog;
-using Z.Ddd.Application.Middleware;
-using Z.Ddd.Common.Serilog.Utility;
+using Z.Fantasy.Application.Middleware;
+using Z.Fantasy.Core.Serilog.Utility;
 
 namespace Z.SunBlog.Host.Builder
 {

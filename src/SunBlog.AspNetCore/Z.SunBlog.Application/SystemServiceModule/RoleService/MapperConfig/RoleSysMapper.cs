@@ -3,7 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using AutoMapper;
-using Z.Ddd.Common.Entities.Roles;
+using Z.Fantasy.Core.Entities.Roles;
 using Z.SunBlog.Application.SystemServiceModule.RoleService.Dto;
 
 namespace Z.SunBlog.Application.SystemServiceModule.RoleService.MapperConfig

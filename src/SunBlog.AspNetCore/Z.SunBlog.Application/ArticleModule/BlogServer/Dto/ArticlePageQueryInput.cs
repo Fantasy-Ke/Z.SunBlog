@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Z.Ddd.Common.ResultResponse.Pager;
+using Z.Fantasy.Core.ResultResponse.Pager;
 
 namespace Z.SunBlog.Application.ArticleModule.BlogServer.Dto
 {

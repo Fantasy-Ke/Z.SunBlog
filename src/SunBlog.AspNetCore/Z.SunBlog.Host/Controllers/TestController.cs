@@ -2,18 +2,18 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using Z.Ddd.Common.Authorization;
-using Z.Ddd.Common.UserSession;
+using Z.Fantasy.Core.Authorization;
+using Z.Fantasy.Core.UserSession;
 using Z.SunBlog.Application.UserModule;
 using Serilog;
-using Z.Ddd.Common.RedisModule;
+using Z.Fantasy.Core.RedisModule;
 using Z.SunBlog.Application.UserModule.Dto;
-using Z.Ddd.Common.Exceptions;
-using Z.Ddd.Common;
-using Z.Ddd.Common.Helper;
+using Z.Fantasy.Core.Exceptions;
+using Z.Fantasy.Core;
+using Z.Fantasy.Core.Helper;
 using Z.EventBus.EventBus;
 using Z.SunBlog.Core.Handlers.TestHandlers;
-using Z.Ddd.Common.AutofacExtensions;
+using Z.Fantasy.Core.AutofacExtensions;
 using Z.SunBlog.Application.AlbumsModule.BlogServer;
 using Z.SunBlog.Application.MenuModule;
 

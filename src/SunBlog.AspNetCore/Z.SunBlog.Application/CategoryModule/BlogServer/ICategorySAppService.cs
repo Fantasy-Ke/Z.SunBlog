@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Z.Ddd.Common.DomainServiceRegister;
+using Z.Fantasy.Core.DomainServiceRegister;
 using Z.SunBlog.Application.CategoryModule.BlogServer.Dto;
 using Z.SunBlog.Core.SharedDto;
 

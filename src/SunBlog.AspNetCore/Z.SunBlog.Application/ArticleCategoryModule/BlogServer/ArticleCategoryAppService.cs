@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Z.Ddd.Common.DomainServiceRegister;
+using Z.Fantasy.Core.DomainServiceRegister;
 using Z.SunBlog.Application.ArticleCategoryModule.BlogServer.Dto;
 using Z.SunBlog.Core.ArticleCategoryModule;
 using Z.SunBlog.Core.ArticleCategoryModule.DomainManager;

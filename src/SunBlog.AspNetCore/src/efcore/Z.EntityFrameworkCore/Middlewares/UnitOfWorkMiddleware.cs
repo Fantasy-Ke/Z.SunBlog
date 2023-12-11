@@ -6,11 +6,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Z.Ddd.Common.UnitOfWork;
+using Z.Fantasy.Core.UnitOfWork;
 using Z.EntityFrameworkCore.Attributes;
 using Z.EntityFrameworkCore.Options;
 using Microsoft.Extensions.DependencyInjection;
-using Z.Ddd.Common.Exceptions;
+using Z.Fantasy.Core.Exceptions;
 
 namespace Z.EntityFrameworkCore.Middlewares;
 

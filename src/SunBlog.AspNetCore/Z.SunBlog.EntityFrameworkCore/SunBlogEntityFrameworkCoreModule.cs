@@ -9,7 +9,7 @@ using Z.Module.Extensions;
 using Z.Module.Modules;
 using Z.SunBlog.EntityFrameworkCore.EntityFrameworkCore.Seed;
 using Microsoft.Extensions.Configuration;
-using Z.Ddd.Common.Exceptions;
+using Z.Fantasy.Core.Exceptions;
 using Z.EntityFrameworkCore.Mysql;
 
 namespace Z.SunBlog.EntityFrameworkCore

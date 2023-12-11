@@ -1,5 +1,5 @@
-﻿using Z.Ddd.Common.DomainServiceRegister.Domain;
-using Z.Ddd.Common.Minio;
+﻿using Z.Fantasy.Core.DomainServiceRegister.Domain;
+using Z.Fantasy.Core.Minio;
 using Z.Module.DependencyInjection;
 
 namespace Z.SunBlog.Core.MinioFileModule.DomainManager

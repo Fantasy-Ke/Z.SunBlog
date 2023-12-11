@@ -1,4 +1,4 @@
-﻿using Z.Ddd.Common.DomainServiceRegister.Domain;
+﻿using Z.Fantasy.Core.DomainServiceRegister.Domain;
 
 
 namespace Z.SunBlog.Core.CustomConfigModule.DomainManager

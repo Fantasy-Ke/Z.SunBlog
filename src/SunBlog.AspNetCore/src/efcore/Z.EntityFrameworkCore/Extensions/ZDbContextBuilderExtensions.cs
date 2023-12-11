@@ -3,7 +3,7 @@
 
 // ReSharper disable once CheckNamespace
 
-using Z.Ddd.Common.Entities.Repositories;
+using Z.Fantasy.Core.Entities.Repositories;
 using Z.EntityFrameworkCore.Options;
 
 namespace Z.EntityFrameworkCore.Extensions;

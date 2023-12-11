@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
-using Z.Ddd.Common.DomainServiceRegister;
-using Z.Ddd.Common.ResultResponse.Pager;
+using Z.Fantasy.Core.DomainServiceRegister;
+using Z.Fantasy.Core.ResultResponse.Pager;
 using Z.EntityFrameworkCore.Extensions;
 using Z.SunBlog.Application.AlbumsModule.BlogServer.Dto;
 using Z.SunBlog.Core.AlbumsModule;

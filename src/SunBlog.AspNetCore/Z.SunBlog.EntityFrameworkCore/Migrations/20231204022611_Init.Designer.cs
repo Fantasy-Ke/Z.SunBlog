@@ -23,7 +23,7 @@ namespace Z.SunBlog.EntityFrameworkCore.Migrations
                 .HasAnnotation("ProductVersion", "7.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("Z.Ddd.Common.Entities.EntityLog.ZOperationLog", b =>
+            modelBuilder.Entity("Z.Fantasy.Core.Entities.EntityLog.ZOperationLog", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -113,7 +113,7 @@ namespace Z.SunBlog.EntityFrameworkCore.Migrations
                     b.ToTable("ZOperationLog");
                 });
 
-            modelBuilder.Entity("Z.Ddd.Common.Entities.EntityLog.ZSigninLog", b =>
+            modelBuilder.Entity("Z.Fantasy.Core.Entities.EntityLog.ZSigninLog", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -155,7 +155,7 @@ namespace Z.SunBlog.EntityFrameworkCore.Migrations
                     b.ToTable("ZSigninLog");
                 });
 
-            modelBuilder.Entity("Z.Ddd.Common.Entities.Files.ZFileInfo", b =>
+            modelBuilder.Entity("Z.Fantasy.Core.Entities.Files.ZFileInfo", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -213,7 +213,7 @@ namespace Z.SunBlog.EntityFrameworkCore.Migrations
                     b.ToTable("ZFileInfo");
                 });
 
-            modelBuilder.Entity("Z.Ddd.Common.Entities.Organizations.ZOrganization", b =>
+            modelBuilder.Entity("Z.Fantasy.Core.Entities.Organizations.ZOrganization", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
@@ -265,7 +265,7 @@ namespace Z.SunBlog.EntityFrameworkCore.Migrations
                     b.ToTable("ZOrganizations");
                 });
 
-            modelBuilder.Entity("Z.Ddd.Common.Entities.Permission.ZPermissions", b =>
+            modelBuilder.Entity("Z.Fantasy.Core.Entities.Permission.ZPermissions", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
@@ -303,7 +303,7 @@ namespace Z.SunBlog.EntityFrameworkCore.Migrations
                     b.ToTable("ZPermissions");
                 });
 
-            modelBuilder.Entity("Z.Ddd.Common.Entities.Roles.ZRoleInfo", b =>
+            modelBuilder.Entity("Z.Fantasy.Core.Entities.Roles.ZRoleInfo", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
@@ -350,7 +350,7 @@ namespace Z.SunBlog.EntityFrameworkCore.Migrations
                     b.ToTable("ZRoles");
                 });
 
-            modelBuilder.Entity("Z.Ddd.Common.Entities.Users.ZUserInfo", b =>
+            modelBuilder.Entity("Z.Fantasy.Core.Entities.Users.ZUserInfo", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
@@ -425,7 +425,7 @@ namespace Z.SunBlog.EntityFrameworkCore.Migrations
                     b.ToTable("ZUsers", (string)null);
                 });
 
-            modelBuilder.Entity("Z.Ddd.Common.Entities.Users.ZUserRole", b =>
+            modelBuilder.Entity("Z.Fantasy.Core.Entities.Users.ZUserRole", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -1311,16 +1311,16 @@ namespace Z.SunBlog.EntityFrameworkCore.Migrations
                     b.ToTable("Talks");
                 });
 
-            modelBuilder.Entity("Z.Ddd.Common.Entities.Organizations.ZOrganization", b =>
+            modelBuilder.Entity("Z.Fantasy.Core.Entities.Organizations.ZOrganization", b =>
                 {
-                    b.HasOne("Z.Ddd.Common.Entities.Organizations.ZOrganization", "Parent")
+                    b.HasOne("Z.Fantasy.Core.Entities.Organizations.ZOrganization", "Parent")
                         .WithMany("Children")
                         .HasForeignKey("ParentId");
 
                     b.Navigation("Parent");
                 });
 
-            modelBuilder.Entity("Z.Ddd.Common.Entities.Organizations.ZOrganization", b =>
+            modelBuilder.Entity("Z.Fantasy.Core.Entities.Organizations.ZOrganization", b =>
                 {
                     b.Navigation("Children");
                 });

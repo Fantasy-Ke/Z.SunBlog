@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Z.Ddd.Common;
-using Z.Ddd.Common.Entities.Users;
+using Z.Fantasy.Core;
+using Z.Fantasy.Core.Entities.Users;
 
 namespace Z.SunBlog.EntityFrameworkCore.EntityFrameworkCore.Seed.SeedData
 {

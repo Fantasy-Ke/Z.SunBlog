@@ -1,6 +1,6 @@
-using Z.Ddd.Common.AutofacExtensions;
-using Z.Ddd.Common.Helper;
-using Z.Ddd.Common.Serilog;
+using Z.Fantasy.Core.AutofacExtensions;
+using Z.Fantasy.Core.Helper;
+using Z.Fantasy.Core.Serilog;
 using Z.Module.Extensions;
 using Z.SunBlog.Host;
 using Z.SunBlog.Host.Builder;

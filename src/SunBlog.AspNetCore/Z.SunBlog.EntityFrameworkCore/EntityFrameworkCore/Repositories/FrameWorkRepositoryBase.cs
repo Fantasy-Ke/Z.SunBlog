@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Z.Ddd.Common.Entities.Repositories;
-using Z.Ddd.Common.Entities;
+using Z.Fantasy.Core.Entities.Repositories;
+using Z.Fantasy.Core.Entities;
 using Z.EntityFrameworkCore.Core;
 
 namespace Z.SunBlog.EntityFrameworkCore.EntityFrameworkCore.Repositories;

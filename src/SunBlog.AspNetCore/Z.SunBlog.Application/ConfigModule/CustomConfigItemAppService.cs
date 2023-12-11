@@ -1,15 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Z.Ddd.Common.DomainServiceRegister;
+using Z.Fantasy.Core.DomainServiceRegister;
 using Z.EntityFrameworkCore.Extensions;
 using Z.SunBlog.Core.CustomConfigModule.DomainManager;
 using Newtonsoft.Json.Linq;
 using System.ComponentModel;
 using Z.SunBlog.Core.CustomConfigModule;
-using Z.Ddd.Common.RedisModule;
+using Z.Fantasy.Core.RedisModule;
 using Z.SunBlog.Core.Const;
 using Z.SunBlog.Core.SharedDto;
 using Newtonsoft.Json;
-using Z.Ddd.Common.ResultResponse.Pager;
+using Z.Fantasy.Core.ResultResponse.Pager;
 using Z.SunBlog.Application.ConfigModule.Dto;
 
 namespace Z.SunBlog.Application.ConfigModule

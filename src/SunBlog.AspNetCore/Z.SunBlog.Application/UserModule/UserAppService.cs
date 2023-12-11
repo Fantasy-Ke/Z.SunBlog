@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Z.Ddd.Common.DomainServiceRegister;
-using Z.Ddd.Common.Entities.Users;
-using Z.Ddd.Common.Extensions;
+using Z.Fantasy.Core.DomainServiceRegister;
+using Z.Fantasy.Core.Entities.Users;
+using Z.Fantasy.Core.Extensions;
 using Z.SunBlog.Application.UserModule.Dto;
 using Z.SunBlog.Core.UserModule.DomainManager;
 using System.ComponentModel;
-using Z.Ddd.Common.UserSession;
+using Z.Fantasy.Core.UserSession;
 using Yitter.IdGenerator;
 
 namespace Z.SunBlog.Application.UserModule

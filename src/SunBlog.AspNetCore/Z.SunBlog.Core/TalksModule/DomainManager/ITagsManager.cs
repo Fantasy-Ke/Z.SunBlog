@@ -1,4 +1,4 @@
-﻿using Z.Ddd.Common.DomainServiceRegister.Domain;
+﻿using Z.Fantasy.Core.DomainServiceRegister.Domain;
 using Z.SunBlog.Core.TagModule;
 using Z.SunBlog.Core.TalksModule;
 

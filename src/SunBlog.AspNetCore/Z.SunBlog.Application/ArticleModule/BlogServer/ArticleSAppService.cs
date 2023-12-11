@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
-using Z.Ddd.Common.DomainServiceRegister;
-using Z.Ddd.Common.Entities.Enum;
-using Z.Ddd.Common.ResultResponse.Pager;
+using Z.Fantasy.Core.DomainServiceRegister;
+using Z.Fantasy.Core.Entities.Enum;
+using Z.Fantasy.Core.ResultResponse.Pager;
 using Z.EntityFrameworkCore.Extensions;
 using Z.SunBlog.Application.ArticleModule.BlogClient.Dto;
 using Z.SunBlog.Application.ArticleModule.BlogServer.Dto;

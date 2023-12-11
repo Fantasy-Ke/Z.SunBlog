@@ -19,9 +19,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Z.SunBlog.EntityFrameworkCo
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{A19668E2-3307-47C9-9B91-25BF5A1E9CA0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Z.Ddd.Application", "src\Z.Ddd.Application\Z.Ddd.Application.csproj", "{CBF71E5F-244B-4579-985A-35B6F874A51C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Z.Fantasy.Application", "src\Z.Fantasy.Application\Z.Fantasy.Application.csproj", "{CBF71E5F-244B-4579-985A-35B6F874A51C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Z.Ddd.Common", "src\Z.Ddd.Common\Z.Ddd.Common.csproj", "{0A06B0EF-B7E9-491A-B4F5-EE82B5788A78}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Z.Fantasy.Core", "src\Z.Fantasy.Core\Z.Fantasy.Core.csproj", "{0A06B0EF-B7E9-491A-B4F5-EE82B5788A78}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "efcore", "efcore", "{56C84CD2-97DD-415B-B416-DB982F3D5806}"
 EndProject

@@ -1,5 +1,5 @@
-﻿using Z.Ddd.Common.Entities;
-using Z.Ddd.Common.Entities.Enum;
+﻿using Z.Fantasy.Core.Entities;
+using Z.Fantasy.Core.Entities.Enum;
 using Z.SunBlog.Core.SharedDto;
 
 namespace Z.SunBlog.Application.SystemServiceModule.UserService.Dto;

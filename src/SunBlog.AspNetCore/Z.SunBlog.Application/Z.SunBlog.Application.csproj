@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\Z.Ddd.Application\Z.Ddd.Application.csproj" />
+    <ProjectReference Include="..\src\Z.Fantasy.Application\Z.Fantasy.Application.csproj" />
     <ProjectReference Include="..\Z.SunBlog.Core\Z.SunBlog.Core.csproj" />
   </ItemGroup>
 

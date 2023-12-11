@@ -3,23 +3,23 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using Yitter.IdGenerator;
-using Z.Ddd.Common;
-using Z.Ddd.Common.Authorization;
-using Z.Ddd.Common.DomainServiceRegister;
-using Z.Ddd.Common.Exceptions;
-using Z.Ddd.Common.RedisModule;
+using Z.Fantasy.Core;
+using Z.Fantasy.Core.Authorization;
+using Z.Fantasy.Core.DomainServiceRegister;
+using Z.Fantasy.Core.Exceptions;
+using Z.Fantasy.Core.RedisModule;
 using Z.SunBlog.Core.CustomConfigModule;
-using Z.Ddd.Common.Entities.Enum;
+using Z.Fantasy.Core.Entities.Enum;
 using Z.Module.DependencyInjection;
 using Z.SunBlog.Application.UserModule.Dto;
 using Lazy.Captcha.Core;
-using Z.Ddd.Common.Attributes;
+using Z.Fantasy.Core.Attributes;
 using Z.SunBlog.Core.UserModule.DomainManager;
-using Z.Ddd.Common.Extensions;
+using Z.Fantasy.Core.Extensions;
 using Z.SunBlog.Application.ConfigModule;
-using Z.Ddd.Common.Authorization.Dtos;
-using Z.Ddd.Common.UserSession;
-using Z.Ddd.Common.Helper;
+using Z.Fantasy.Core.Authorization.Dtos;
+using Z.Fantasy.Core.UserSession;
+using Z.Fantasy.Core.Helper;
 
 namespace Z.SunBlog.Application.AuthModule
 {

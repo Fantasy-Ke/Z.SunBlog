@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Z.Ddd.Common.Entities.Enum;
+using Z.Fantasy.Core.Entities.Enum;
 
 namespace Z.SunBlog.Application.SystemServiceModule.RoleService.Dto;
 

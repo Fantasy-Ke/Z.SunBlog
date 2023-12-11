@@ -3,7 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using AutoMapper;
-using Z.Ddd.Common.Entities.Users;
+using Z.Fantasy.Core.Entities.Users;
 using Z.SunBlog.Application.UserModule.Dto;
 
 namespace Z.SunBlog.Application.UserModule.MapperConfig

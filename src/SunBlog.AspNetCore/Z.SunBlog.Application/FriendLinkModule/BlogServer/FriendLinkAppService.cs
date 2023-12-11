@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Z.Ddd.Common.DomainServiceRegister;
+using Z.Fantasy.Core.DomainServiceRegister;
 using Z.EntityFrameworkCore.Extensions;
 using Z.SunBlog.Application.FriendLinkModule.BlogServer.Dto;
 using Z.SunBlog.Core.SharedDto;
 using Z.SunBlog.Core.FriendLinkModule.DomainManager;
 using Z.SunBlog.Core.FriendLinkModule;
-using Z.Ddd.Common.ResultResponse.Pager;
+using Z.Fantasy.Core.ResultResponse.Pager;
 
 namespace Z.SunBlog.Application.FriendLinkModule.BlogServer
 {

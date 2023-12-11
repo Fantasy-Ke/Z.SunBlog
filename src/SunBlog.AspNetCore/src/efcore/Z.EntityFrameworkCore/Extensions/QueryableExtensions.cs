@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Cuemon.Text;
 using Microsoft.EntityFrameworkCore;
-using Z.Ddd.Common.ResultResponse.Pager;
+using Z.Fantasy.Core.ResultResponse.Pager;
 
 namespace Z.EntityFrameworkCore.Extensions;
 

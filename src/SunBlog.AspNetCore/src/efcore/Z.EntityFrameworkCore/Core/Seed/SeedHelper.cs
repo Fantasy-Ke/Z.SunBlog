@@ -6,7 +6,7 @@
 //using System.Text;
 //using System.Threading.Tasks;
 //using System.Transactions;
-//using Z.Ddd.Common.UnitOfWork;
+//using Z.Fantasy.Core.UnitOfWork;
 
 //namespace Z.EntityFrameworkCore.Core.Seed;
 

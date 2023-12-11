@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Z.Ddd.Common;
-using Z.Ddd.Common.Entities.Enum;
-using Z.Ddd.Common.Entities.Organizations;
+using Z.Fantasy.Core;
+using Z.Fantasy.Core.Entities.Enum;
+using Z.Fantasy.Core.Entities.Organizations;
 
 namespace Z.SunBlog.EntityFrameworkCore.EntityFrameworkCore.Seed.SeedData
 {

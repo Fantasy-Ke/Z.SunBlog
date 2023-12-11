@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
-using Z.Ddd.Common.DomainServiceRegister;
-using Z.Ddd.Common.Entities.Organizations;
-using Z.Ddd.Common.Entities.Repositories;
-using Z.Ddd.Common.Exceptions;
-using Z.Ddd.Common.RedisModule;
+using Z.Fantasy.Core.DomainServiceRegister;
+using Z.Fantasy.Core.Entities.Organizations;
+using Z.Fantasy.Core.Entities.Repositories;
+using Z.Fantasy.Core.Exceptions;
+using Z.Fantasy.Core.RedisModule;
 using Z.Module.DependencyInjection;
 using Z.SunBlog.Application.SystemServiceModule.OrganizationService.Dto;
 using Z.SunBlog.Core.Const;

@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Z.Ddd.Common.DomainServiceRegister;
+using Z.Fantasy.Core.DomainServiceRegister;
 using Z.EntityFrameworkCore.Extensions;
 using Z.SunBlog.Application.TagsModule.BlogServer.Dto;
 using Z.SunBlog.Core.SharedDto;
 using Z.SunBlog.Core.TagModule;
-using Z.Ddd.Common.Entities.Enum;
-using Z.Ddd.Common.ResultResponse.Pager;
+using Z.Fantasy.Core.Entities.Enum;
+using Z.Fantasy.Core.ResultResponse.Pager;
 using Z.SunBlog.Core.TagModule.DomainManager;
 
 namespace Z.SunBlog.Application.TagsModule.BlogServer

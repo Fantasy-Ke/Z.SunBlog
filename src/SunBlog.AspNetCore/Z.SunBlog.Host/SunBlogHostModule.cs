@@ -11,20 +11,20 @@ using Swashbuckle.AspNetCore.Filters;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using System.Text;
 using Yitter.IdGenerator;
-using Z.Ddd.Application.Middleware;
-using Z.Ddd.Common;
-using Z.Ddd.Common.Extensions;
-using Z.Ddd.Common.Serilog.Utility;
+using Z.Fantasy.Application.Middleware;
+using Z.Fantasy.Core;
+using Z.Fantasy.Core.Extensions;
+using Z.Fantasy.Core.Serilog.Utility;
 using Z.EntityFrameworkCore.Extensions;
 using Z.Module;
 using Z.Module.Extensions;
 using Z.Module.Modules;
 using Z.SunBlog.Application;
 using Z.SunBlog.EntityFrameworkCore;
-using Z.Ddd.Common.Helper;
-using Z.Ddd.Common.DynamicWebAPI;
-using Z.Ddd.Common.OAuth.Gitee;
-using Z.Ddd.Common.OAuth.GitHub;
+using Z.Fantasy.Core.Helper;
+using Z.Fantasy.Core.DynamicWebAPI;
+using Z.Fantasy.Core.OAuth.Gitee;
+using Z.Fantasy.Core.OAuth.GitHub;
 
 namespace Z.SunBlog.Host;
 

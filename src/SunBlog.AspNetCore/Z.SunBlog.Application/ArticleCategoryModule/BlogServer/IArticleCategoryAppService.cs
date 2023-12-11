@@ -1,4 +1,4 @@
-﻿using Z.Ddd.Common.DomainServiceRegister;
+﻿using Z.Fantasy.Core.DomainServiceRegister;
 using Z.SunBlog.Application.ArticleCategoryModule.BlogServer.Dto;
 
 namespace Z.SunBlog.Application.ArticleCategoryModule.BlogServer

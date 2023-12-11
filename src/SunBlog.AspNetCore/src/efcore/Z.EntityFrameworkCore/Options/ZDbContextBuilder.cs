@@ -5,7 +5,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Z.Ddd.Common.Entities.Repositories;
+using Z.Fantasy.Core.Entities.Repositories;
 
 namespace Z.EntityFrameworkCore.Options;
 

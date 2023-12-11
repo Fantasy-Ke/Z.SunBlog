@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Z.Ddd.Common.Entities.Enum;
+using Z.Fantasy.Core.Entities.Enum;
 
 namespace Z.SunBlog.Application.FriendLinkModule.BlogServer.Dto
 {

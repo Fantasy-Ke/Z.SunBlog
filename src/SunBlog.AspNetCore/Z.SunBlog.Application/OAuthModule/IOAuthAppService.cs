@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Z.Ddd.Common.Authorization.Dtos;
-using Z.Ddd.Common.DomainServiceRegister;
+using Z.Fantasy.Core.Authorization.Dtos;
+using Z.Fantasy.Core.DomainServiceRegister;
 using Z.SunBlog.Application.OAuthModule.Dto;
 
 namespace Z.SunBlog.Application.OAuthModule

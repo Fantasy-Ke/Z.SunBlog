@@ -1,8 +1,8 @@
 ﻿
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Z.Ddd.Common.Entities.Auditing;
-using Z.Ddd.Common.Entities.Enum;
+using Z.Fantasy.Core.Entities.Auditing;
+using Z.Fantasy.Core.Entities.Enum;
 
 namespace Z.SunBlog.Core.MenuModule;
 

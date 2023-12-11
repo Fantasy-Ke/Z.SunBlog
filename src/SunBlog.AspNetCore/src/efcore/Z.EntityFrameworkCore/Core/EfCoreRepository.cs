@@ -9,9 +9,9 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Z.Ddd.Common.Entities;
-using Z.Ddd.Common.Entities.Repositories;
-using Z.Ddd.Common.ResultResponse;
+using Z.Fantasy.Core.Entities;
+using Z.Fantasy.Core.Entities.Repositories;
+using Z.Fantasy.Core.ResultResponse;
 using Z.Module.DependencyInjection;
 
 namespace Z.EntityFrameworkCore.Core;

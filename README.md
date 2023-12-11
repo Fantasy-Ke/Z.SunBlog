@@ -135,7 +135,7 @@
     ``````
 
 ### 🧦Serilog配置
-- 引入`Z.Ddd.Common.Serilog`命名空间
+- 引入`Z.Fantasy.Core.Serilog`命名空间
 
 - 在`Program`中使用
 

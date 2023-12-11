@@ -1,4 +1,4 @@
-﻿using Z.Ddd.Common.Entities.Auditing;
+﻿using Z.Fantasy.Core.Entities.Auditing;
 
 namespace Z.SunBlog.Core.ArticleCategoryModule;
 /// <summary>

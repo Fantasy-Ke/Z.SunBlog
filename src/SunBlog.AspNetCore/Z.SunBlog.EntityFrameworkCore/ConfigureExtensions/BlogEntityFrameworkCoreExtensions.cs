@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.Emit;
 using System.Text.Json;
-using Z.Ddd.Common.Helper;
+using Z.Fantasy.Core.Helper;
 
 namespace Z.SunBlog.EntityFrameworkCore.ConfigureExtensions;
 

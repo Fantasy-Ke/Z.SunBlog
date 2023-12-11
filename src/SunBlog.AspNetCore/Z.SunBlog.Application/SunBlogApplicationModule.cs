@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System.Reactive.Linq;
-using Z.Ddd.Application;
-using Z.Ddd.Common.Authorization.Authorize;
-using Z.Ddd.Common.AutoMapper;
+using Z.Fantasy.Application;
+using Z.Fantasy.Core.Authorization.Authorize;
+using Z.Fantasy.Core.AutoMapper;
 using Z.EventBus.Extensions;
 using Z.Module;
 using Z.Module.Modules;

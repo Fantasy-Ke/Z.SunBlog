@@ -1,5 +1,5 @@
 ﻿using Z.SunBlog.Core.ArticleModule;
-using Z.Ddd.Common.Entities.Enum;
+using Z.Fantasy.Core.Entities.Enum;
 
 namespace Z.SunBlog.Application.ArticleModule.BlogServer.Dto;
 

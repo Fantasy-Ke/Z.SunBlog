@@ -1,7 +1,7 @@
 ﻿
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
-using Z.Ddd.Common.DomainServiceRegister;
+using Z.Fantasy.Core.DomainServiceRegister;
 using Z.EntityFrameworkCore.Extensions;
 using Z.Module.DependencyInjection;
 using Z.SunBlog.Application.OAuthModule.Dto;
@@ -9,7 +9,7 @@ using Z.SunBlog.Core.AuthAccountModule.DomainManager;
 using Z.SunBlog.Core.SharedDto;
 using Z.SunBlog.Core.UserModule.DomainManager;
 using Z.SunBlog.Core.AuthAccountModule;
-using Z.Ddd.Common.ResultResponse.Pager;
+using Z.Fantasy.Core.ResultResponse.Pager;
 
 namespace Z.SunBlog.Application.OAuthModule;
 

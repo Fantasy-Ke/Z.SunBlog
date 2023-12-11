@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Z.Ddd.Common.Entities.Auditing;
+using Z.Fantasy.Core.Entities.Auditing;
 
 namespace Z.SunBlog.Core.PraiseModule;
 
