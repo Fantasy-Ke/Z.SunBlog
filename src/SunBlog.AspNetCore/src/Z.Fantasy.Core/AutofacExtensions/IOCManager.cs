@@ -1,15 +1,15 @@
 ﻿using Autofac;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Z.Fantasy.Core.AutofacExtensions
 {
     /// <summary>
-    /// 服务定位器
+    /// 注入的服务容器
     /// </summary>
     public class IOCManager
     {
+        /// <summary>
+        /// autofac容器
+        /// </summary>
         public static IContainer Current { get; set; } = default!;
 
         public static T GetService<T>() => Current.Resolve<T>();
@@ -32,26 +32,7 @@ namespace Z.Fantasy.Core.AutofacExtensions
         public static object GetService(string key, Type type) => Current.ResolveKeyed(key, type);
         public static object GetServiceByName(string serviceName, Type type) => Current.ResolveNamed(serviceName, type);
         public static T GetServiceByName<T>(string serviceName, params NamedParameter[] parameters) => Current.ResolveNamed<T>(serviceName, parameters);
-        public static T GetServiceByName<T>(string serviceName, Dictionary<string, object> paris)
-        {
-            List<NamedParameter> parameters = new();
-            foreach (KeyValuePair<string, object> item in paris)
-            {
-                parameters.Add(new NamedParameter(item.Key, item.Value));
-            }
-            return Current.ResolveNamed<T>(serviceName, parameters);
-        }
-
         public static T GetService<T>(params NamedParameter[] parameters) => Current.Resolve<T>(parameters);
-        public static T GetService<T>(Dictionary<string, object> paris)
-        {
-            List<NamedParameter> parameters = new();
-            foreach (KeyValuePair<string, object> item in paris)
-            {
-                parameters.Add(new NamedParameter(item.Key, item.Value));
-            }
-            return Current.Resolve<T>(parameters);
-        }
 
     }
 }
