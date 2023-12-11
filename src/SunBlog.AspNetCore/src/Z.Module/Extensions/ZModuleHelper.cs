@@ -26,6 +26,27 @@ namespace Z.Module.Extensions
 
         }
 
+        public static Assembly[] GetAllAssemblies(Type moduleType)
+        {
+            var assemblies = new List<Assembly>();
+
+            var additionalAssemblyDescriptors = moduleType
+                .GetCustomAttributes()
+                .OfType<IAdditionalModuleAssemblyProvider>();
+
+            foreach (var descriptor in additionalAssemblyDescriptors)
+            {
+                foreach (var assembly in descriptor.GetAssemblies())
+                {
+                    assemblies.AddIfNotContains(assembly);
+                }
+            }
+
+            assemblies.Add(moduleType.Assembly);
+
+            return assemblies.ToArray();
+        }
+
         public static void GetDependsAllModuleType(Type moduleType, List<Type> moduleTypes)
         {
             ZModule.CheckModuleType(moduleType);

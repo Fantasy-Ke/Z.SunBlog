@@ -15,7 +15,7 @@ namespace Z.Module.Modules
 
         public Assembly Assembly { get; }
 
-
+        public Assembly[] AllAssemblies { get; }
 
         public IZModule Instance { get; }
 
@@ -28,6 +28,7 @@ namespace Z.Module.Modules
             Type = type;
             Instance = instance;
             Assembly = type.Assembly;
+            AllAssemblies = ZModuleHelper.GetAllAssemblies(type);
         }
 
     }

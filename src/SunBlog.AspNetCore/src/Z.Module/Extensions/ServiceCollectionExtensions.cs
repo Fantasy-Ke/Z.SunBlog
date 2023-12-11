@@ -14,7 +14,7 @@ namespace Z.Module.Extensions;
 public static class ServiceCollectionExtensions
 {
 
-    public static void AddObjectAccessor<T>(this IServiceCollection services)
+    public static ObjectAccessor<T> AddObjectAccessor<T>(this IServiceCollection services)
     {
         if (services.Any(s => s.ServiceType == typeof(IObjectAccessor<T>)))
         {
@@ -30,7 +30,30 @@ public static class ServiceCollectionExtensions
         }
 
         services.Insert(0, ServiceDescriptor.Singleton(accessor));
+
+        return accessor;
     }
+
+    public static ObjectAccessor<T> AddObjectAccessor<T>(this IServiceCollection services, T obj)
+    {
+        if (services.Any(s => s.ServiceType == typeof(IObjectAccessor<T>)))
+        {
+            throw new Exception("该对象已经注册成功过 " + typeof(T).AssemblyQualifiedName);
+        }
+        var accessor = new ObjectAccessor<T>(obj);
+        //Add to the beginning for fast retrieve
+        services.Insert(0, ServiceDescriptor.Singleton<IObjectAccessor<T>>(accessor));
+
+        if (services.Any(s => s.ServiceType == typeof(ObjectAccessor<T>)))
+        {
+            throw new Exception("该对象已经注册成功过: " + typeof(T).AssemblyQualifiedName);
+        }
+
+        services.Insert(0, ServiceDescriptor.Singleton(accessor));
+
+        return accessor;
+    }
+
 
     public static void CheckNull(this IServiceCollection services)
     {

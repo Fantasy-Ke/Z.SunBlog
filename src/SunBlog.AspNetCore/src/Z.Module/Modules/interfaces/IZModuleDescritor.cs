@@ -13,6 +13,8 @@ namespace Z.Module.Modules.interfaces
 
         Assembly Assembly { get; }
 
+        public Assembly[] AllAssemblies { get; }
+
         IZModule Instance { get; }
     }
 }
