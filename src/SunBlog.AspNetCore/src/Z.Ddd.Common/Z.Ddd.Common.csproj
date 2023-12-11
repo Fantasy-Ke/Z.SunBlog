@@ -7,6 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+	<PackageReference Include="Autofac" Version="7.1.0" />
+	<PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
 	<PackageReference Include="AutoMapper" Version="12.0.1" />
 	<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
 	<PackageReference Include="Caching.CSRedis" Version="3.8.800" />
@@ -38,7 +40,10 @@
 	<PackageReference Include="Yitter.IdGenerator" Version="1.0.14" />
 	<PackageReference Include="MrHuo.OAuth.Core" Version="1.1.1" />
 	<PackageReference Include="Z.EventBus" Version="1.0.1" />
-	<PackageReference Include="Z.Module" Version="1.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Z.Module\Z.Module.csproj" />
   </ItemGroup>
 
 </Project>

@@ -13,6 +13,9 @@ using Z.Ddd.Common;
 using Z.Ddd.Common.Helper;
 using Z.EventBus.EventBus;
 using Z.SunBlog.Core.Handlers.TestHandlers;
+using Z.Ddd.Common.AutofacExtensions;
+using Z.SunBlog.Application.AlbumsModule.BlogServer;
+using Z.SunBlog.Application.MenuModule;
 
 namespace Z.SunBlog.Host.Controllers
 {
@@ -82,6 +85,8 @@ namespace Z.SunBlog.Host.Controllers
         [ZAuthorization]
         public async Task<string> GetUser()
         {
+           var ser =  IOCManager.GetService<IMenuAppService>();
+            var list =  await ser.TreeSelect();
             var user = _userSession.UserName;
             var userid = _userSession.UserId;
 

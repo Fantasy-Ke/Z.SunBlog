@@ -11,9 +11,8 @@ using System.Threading.Tasks;
 using Z.Ddd.Common.Minio;
 using Z.EventBus.Handlers;
 using Z.Module.DependencyInjection;
-using Z.SunBlog.Core.Handlers.TestHandlers;
 
-namespace Z.SunBlog.Core.Handlers.FileHandlers
+namespace Z.SunBlog.Core.Handlers.TestHandlers
 {
     public class TestEventHandler : IEventHandler<TestDto>, ITransientDependency
     {
@@ -25,7 +24,7 @@ namespace Z.SunBlog.Core.Handlers.FileHandlers
         public Task HandelrAsync(TestDto eto)
         {
             _logger.LogInformation($"{typeof(TestDto).Name}--{eto.Name}--{eto.Description}");
-           return Task.CompletedTask;
+            return Task.CompletedTask;
         }
     }
 }
