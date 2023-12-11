@@ -106,7 +106,7 @@ namespace Z.Fantasy.Core.Extensions
             {
                 if (value == null)
                 {
-                    return default;
+                    return defaultValue ?? default;
                 }
                 else if (value.GetType() == typeof(string))
                 {

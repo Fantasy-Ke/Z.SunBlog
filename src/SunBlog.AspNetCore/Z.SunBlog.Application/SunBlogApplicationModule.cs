@@ -29,7 +29,7 @@ namespace Z.SunBlog.Application
     /// <summary>
     /// SunBlog应用层
     /// </summary>
-    [DependOn(typeof(SunBlogCoreModule), typeof(ZDddApplicationModule))]
+    [DependOn(typeof(SunBlogCoreModule), typeof(ZFantasyApplicationModule))]
     public class SunBlogApplicationModule : ZModule
     {
         /// <summary>

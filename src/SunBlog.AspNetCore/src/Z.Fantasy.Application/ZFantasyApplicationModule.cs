@@ -10,8 +10,8 @@ using Z.Module.Modules;
 
 namespace Z.Fantasy.Application
 {
-    [DependOn(typeof(ZDddCommonModule))]
-    public class ZDddApplicationModule : ZModule
+    [DependOn(typeof(ZFantasyCoreModule))]
+    public class ZFantasyApplicationModule : ZModule
     {
         public override void ConfigureServices(ServiceConfigerContext context)
         {

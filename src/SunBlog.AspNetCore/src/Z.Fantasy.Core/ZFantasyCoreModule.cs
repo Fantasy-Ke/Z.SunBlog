@@ -1,5 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Z.Fantasy.Core.Aop.AopLog;
+using Z.Fantasy.Core.DependencyInjection.Extensions;
+using Z.Fantasy.Core.DynamicProxy;
 using Z.Fantasy.Core.Filters;
 using Z.Fantasy.Core.Minio;
 using Z.Fantasy.Core.RedisModule;
@@ -9,7 +12,8 @@ using Z.Module.Modules;
 
 namespace Z.Fantasy.Core
 {
-    public class ZDddCommonModule : ZModule
+    [DependOn(typeof(ZCastleCoreModule))]
+    public class ZFantasyCoreModule : ZModule
     {
         public override void ConfigureServices(ServiceConfigerContext context)
         {
@@ -20,6 +24,8 @@ namespace Z.Fantasy.Core
             {
                 c.Filters.Add<ResultFilter>();
             });
+
+            context.Services.OnRegistered(LogInterceptorRegistrar.RegisterIfNeeded);
             //context.UseAutofac();
 
             //redis注册
