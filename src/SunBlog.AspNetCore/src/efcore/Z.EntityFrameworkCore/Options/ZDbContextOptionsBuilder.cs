@@ -36,7 +36,7 @@ namespace Z.EntityFrameworkCore.Options
     public class ZDbContextOptionsBuilder<TDbContext> : ZDbContextOptionsBuilder
     where TDbContext : DbContext
     {
-        public ZDbContextOptions<TDbContext> MasaOptions
+        public ZDbContextOptions<TDbContext> ZOptions
             => new(ServiceProvider, DbContextOptionsBuilder.Options, EnableSoftDelete);
 
         public ZDbContextOptionsBuilder(bool enableSoftDelete = false) : this(null, enableSoftDelete)

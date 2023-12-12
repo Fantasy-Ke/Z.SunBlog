@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Serilog;
 using Z.EntityFrameworkCore;
 using Z.EntityFrameworkCore.Options;
 using Z.SunBlog.Core.AlbumsModule;
@@ -31,6 +33,13 @@ namespace Z.SunBlog.EntityFrameworkCore
         {
             modelBuilder.ConfigureModel();
             base.OnModelCreating(modelBuilder);
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.EnableSensitiveDataLogging(true);
+            optionsBuilder.UseLoggerFactory(LoggerFactory.Create(builder => builder.AddSerilog()));
+            base.OnConfiguring(optionsBuilder);
         }
 
         public virtual DbSet<Article> Article { get; set; }

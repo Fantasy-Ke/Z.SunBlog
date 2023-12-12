@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using Z.EntityFrameworkCore.Extensions;
 using Z.Fantasy.Core.DomainServiceRegister;
 using Z.Fantasy.Core.Entities.Enum;
 using Z.Fantasy.Core.Exceptions;
@@ -43,12 +44,8 @@ public class MenuAppService : ApplicationService, IMenuAppService
         //if (_userSession.UserId != null)
         //{
         var menuList = await _menuManager.QueryAsNoTracking
+            .WhereIf(!string.IsNullOrWhiteSpace(name), x => x.Name.Contains(name))
             .OrderBy(x => x.Sort).ToListAsync();
-        if (!string.IsNullOrWhiteSpace(name))
-        {
-            var list = menuList.Where(x => x.Name.Contains(name)).ToList();
-            return ObjectMapper.Map<List<MenuPageOutput>>(list);
-        }
 
         var menus = menuList.Where(x => x.ParentId == null).ToList();
 

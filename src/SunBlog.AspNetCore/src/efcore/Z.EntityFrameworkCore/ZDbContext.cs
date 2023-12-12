@@ -47,13 +47,14 @@ namespace Z.EntityFrameworkCore
             OnModelCreatingConfigureGlobalFilters(modelBuilder);
         }
 
-        protected sealed override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (Options == null)
                 return;
 
             var zDbContextOptionsBuilder = new ZDbContextOptionsBuilder(optionsBuilder, Options);
             base.OnConfiguring(optionsBuilder);
+
             optionsBuilder.LogTo(
                 Console.WriteLine,
                 LogLevel.Warning,

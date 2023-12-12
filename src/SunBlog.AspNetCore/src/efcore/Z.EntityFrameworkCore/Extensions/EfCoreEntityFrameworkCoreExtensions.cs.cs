@@ -118,7 +118,7 @@ public static class EfCoreEntityFrameworkCoreExtensions
         var masaDbContextOptionsBuilder = new ZDbContextOptionsBuilder<TDbContext>(serviceProvider, enableSoftDelete);
         optionsBuilder?.Invoke(serviceProvider, masaDbContextOptionsBuilder);
 
-        return masaDbContextOptionsBuilder.MasaOptions;
+        return masaDbContextOptionsBuilder.ZOptions;
     }
 
 

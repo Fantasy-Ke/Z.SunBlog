@@ -9,7 +9,9 @@
         "Microsoft": "Information",
         "System": "Warning",
         "Microsoft.AspNetCore": "Warning",
-        "Microsoft.EntityFrameworkCore": "Warning"
+        "Microsoft.EntityFrameworkCore": "Warning",
+        "Microsoft.Hosting.Lifetime": "Information",
+        "Microsoft.EntityFrameworkCore.Database.Command": "Information"
       }
     },
     "Properties": {
