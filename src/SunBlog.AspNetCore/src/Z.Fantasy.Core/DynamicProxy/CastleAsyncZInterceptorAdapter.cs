@@ -7,17 +7,17 @@ namespace Z.Fantasy.Core.DynamicProxy;
 public class CastleAsyncZInterceptorAdapter<TInterceptor> : AsyncInterceptorBase
     where TInterceptor : IZInterceptor
 {
-    private readonly TInterceptor _abpInterceptor;
+    private readonly TInterceptor _zInterceptor;
 
     public CastleAsyncZInterceptorAdapter(TInterceptor abpInterceptor)
     {
-        _abpInterceptor = abpInterceptor;
+        _zInterceptor = abpInterceptor;
     }
 
     protected override async Task InterceptAsync(IInvocation invocation, IInvocationProceedInfo proceedInfo, Func<IInvocation, IInvocationProceedInfo, Task> proceed)
     {
-        await _abpInterceptor.InterceptAsync(
-            new CastleAbpMethodInvocationAdapter(invocation, proceedInfo, proceed)
+        await _zInterceptor.InterceptAsync(
+            new CastleZMethodInvocationAdapter(invocation, proceedInfo, proceed)
         );
     }
 
@@ -25,7 +25,7 @@ public class CastleAsyncZInterceptorAdapter<TInterceptor> : AsyncInterceptorBase
     {
         var adapter = new CastleZMethodInvocationAdapterWithReturnValue<TResult>(invocation, proceedInfo, proceed);
 
-        await _abpInterceptor.InterceptAsync(
+        await _zInterceptor.InterceptAsync(
             adapter
         );
 
