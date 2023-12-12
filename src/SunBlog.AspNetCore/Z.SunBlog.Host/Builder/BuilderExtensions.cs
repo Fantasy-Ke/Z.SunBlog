@@ -259,10 +259,8 @@ namespace Z.SunBlog.Host.Builder
                 options.GetLevel = SerilogRequestUtility.GetRequestLevel;
                 options.EnrichDiagnosticContext = SerilogRequestUtility.EnrichFromRequest;
             });
-            
-            app.UseMiddleware<RequestLogMiddleware>();
 
-            app.UseMiddleware<ExceptionMiddleware>();
+            app.UseMiddleware();
 
             app.UseUnitOfWorkMiddleware();
 
@@ -276,6 +274,20 @@ namespace Z.SunBlog.Host.Builder
             app.UseAuthorization();
 
             
+        }
+
+
+        /// <summary>
+        /// 中间件管道注入
+        /// </summary>
+        /// <param name="app"></param>
+        public static void UseMiddleware(this IApplicationBuilder app)
+        {
+            app.UseMiddleware<RequestLogMiddleware>();
+
+            app.UseMiddleware<ExceptionMiddleware>();
+
+            app.UseUnitOfWorkMiddleware();
         }
 
         /// <summary>
