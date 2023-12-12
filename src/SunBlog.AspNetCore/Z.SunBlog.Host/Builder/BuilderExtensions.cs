@@ -262,8 +262,6 @@ namespace Z.SunBlog.Host.Builder
 
             app.UseMiddleware();
 
-            app.UseUnitOfWorkMiddleware();
-
             app.UseRouting();
 
             app.UseAddSwagger();
