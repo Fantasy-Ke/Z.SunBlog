@@ -1,11 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using Z.Fantasy.Core.Entities.Repositories;
 using Z.Fantasy.Core.Entities;
 using Z.EntityFrameworkCore.Core;

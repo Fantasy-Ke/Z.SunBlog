@@ -24,11 +24,16 @@ public class ZRequestLog : CreationAuditedEntity<Guid>
     /// <summary>
     /// 用户ID
     /// </summary>
-    public int? UserId { get; set; }
+    public string UserId { get; set; }
     /// <summary>
     /// 用户姓名
     /// </summary>
     public string UserName { get; set; }
+
+    /// <summary>
+    /// 访问ip
+    /// </summary>
+    public string ClientIP { get; set; }
     /// <summary>
     /// 用户代理（主要指浏览器）
     /// </summary>

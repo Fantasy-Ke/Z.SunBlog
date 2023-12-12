@@ -48,7 +48,6 @@ public class UnitOfWorkMiddleware : IMiddleware
             try
             {
                 await next.Invoke(context);
-
                 foreach (var unitOfWork in unitOfWorks)
                 {
                     // 提交事务

@@ -20,7 +20,6 @@ namespace Z.Fantasy.Core.UserSession
         public CurrentUserSession(IHttpContextAccessor httpContextAccessor)
         {
             _httpContextAccessor = httpContextAccessor;
-            _principal = _httpContextAccessor.HttpContext?.User;
         }
         /// <summary>
         /// 用户id
@@ -43,12 +42,12 @@ namespace Z.Fantasy.Core.UserSession
 
         public virtual Claim FindClaim(string claimType)
         {
-            return _principal?.Claims.FirstOrDefault(c => c.Type == claimType);
+            return _httpContextAccessor.HttpContext?.User?.Claims.FirstOrDefault(c => c.Type == claimType);
         }
 
         public virtual Claim[] FindClaims(string claimType)
         {
-            return _principal?.Claims.Where(c => c.Type == claimType).ToArray() ?? EmptyClaimsArray;
+            return _httpContextAccessor.HttpContext?.User?.Claims.Where(c => c.Type == claimType).ToArray() ?? EmptyClaimsArray;
         }
 
     }

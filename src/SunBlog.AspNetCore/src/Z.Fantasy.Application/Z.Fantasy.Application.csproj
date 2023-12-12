@@ -3,8 +3,11 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="UAParser" Version="3.1.47" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Z.Fantasy.Core\Z.Fantasy.Core.csproj" />

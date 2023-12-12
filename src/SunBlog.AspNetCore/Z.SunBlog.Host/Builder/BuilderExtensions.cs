@@ -17,6 +17,7 @@ using Z.EntityFrameworkCore.Extensions;
 using Serilog;
 using Z.Fantasy.Application.Middleware;
 using Z.Fantasy.Core.Serilog.Utility;
+using Z.EntityFrameworkCore.Middlewares;
 
 namespace Z.SunBlog.Host.Builder
 {
@@ -258,8 +259,12 @@ namespace Z.SunBlog.Host.Builder
                 options.GetLevel = SerilogRequestUtility.GetRequestLevel;
                 options.EnrichDiagnosticContext = SerilogRequestUtility.EnrichFromRequest;
             });
+            
+            app.UseMiddleware<RequestLogMiddleware>();
 
             app.UseMiddleware<ExceptionMiddleware>();
+
+            app.UseUnitOfWorkMiddleware();
 
             app.UseRouting();
 
@@ -270,7 +275,7 @@ namespace Z.SunBlog.Host.Builder
 
             app.UseAuthorization();
 
-            app.UseUnitOfWorkMiddleware();
+            
         }
 
         /// <summary>
