@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Castle.DynamicProxy;
 namespace Z.Fantasy.Core.DynamicProxy;
 
-public class CastleAbpMethodInvocationAdapter : CastleAbpMethodInvocationAdapterBase, IZMethodInvocation
+public class CastleAbpMethodInvocationAdapter : CastleZMethodInvocationAdapterBase, IZMethodInvocation
 {
     protected IInvocationProceedInfo ProceedInfo { get; }
     protected Func<IInvocation, IInvocationProceedInfo, Task> Proceed { get; }

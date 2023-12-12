@@ -23,7 +23,7 @@ public class CastleAsyncZInterceptorAdapter<TInterceptor> : AsyncInterceptorBase
 
     protected override async Task<TResult> InterceptAsync<TResult>(IInvocation invocation, IInvocationProceedInfo proceedInfo, Func<IInvocation, IInvocationProceedInfo, Task<TResult>> proceed)
     {
-        var adapter = new CastleAbpMethodInvocationAdapterWithReturnValue<TResult>(invocation, proceedInfo, proceed);
+        var adapter = new CastleZMethodInvocationAdapterWithReturnValue<TResult>(invocation, proceedInfo, proceed);
 
         await _abpInterceptor.InterceptAsync(
             adapter

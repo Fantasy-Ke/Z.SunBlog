@@ -6,9 +6,6 @@ using Z.Module.Modules.interfaces;
 using Z.Module.Extensions;
 using System.Reflection;
 using Z.Fantasy.Core.AutofacExtensions.Builder;
-using Z.Fantasy.Core.Helper;
-using Microsoft.EntityFrameworkCore.Diagnostics.Internal;
-using Z.Fantasy.Core.RedisModule.CacheHelper;
 using Z.Fantasy.Core.DependencyInjection.Extensions;
 
 namespace Z.Fantasy.Core.AutofacExtensions.Extensions;
@@ -37,7 +34,7 @@ public static class AutofacRegistration
     public static void Populate(
         this ContainerBuilder builder,
         IServiceCollection services,
-        object lifetimeScopeTagForSingletons)
+        object lifetimeScopeTag)
     {
         if (services == null)
         {
@@ -61,7 +58,7 @@ public static class AutofacRegistration
             .As<IServiceScopeFactory>()
             .SingleInstance();
 
-        Register(builder, services, lifetimeScopeTagForSingletons);
+        Register(builder, services);
     }
 
     /// <summary>
@@ -69,21 +66,12 @@ public static class AutofacRegistration
     /// </summary>
     private static IRegistrationBuilder<object, TActivatorData, TRegistrationStyle> ConfigureLifecycle<TActivatorData, TRegistrationStyle>(
         this IRegistrationBuilder<object, TActivatorData, TRegistrationStyle> registrationBuilder,
-        ServiceLifetime lifecycleKind,
-        object lifetimeScopeTagForSingleton)
+        ServiceLifetime lifecycleKind)
     {
         switch (lifecycleKind)
         {
             case ServiceLifetime.Singleton:
-                if (lifetimeScopeTagForSingleton == null)
-                {
                     registrationBuilder.SingleInstance();
-                }
-                else
-                {
-                    registrationBuilder.InstancePerMatchingLifetimeScope(lifetimeScopeTagForSingleton);
-                }
-
                 break;
             case ServiceLifetime.Scoped:
                 registrationBuilder.InstancePerLifetimeScope();
@@ -99,10 +87,7 @@ public static class AutofacRegistration
     /// <summary>
     /// Populates the Autofac container builder with the set of registered service descriptors.
     /// </summary>
-    private static void Register(
-        ContainerBuilder builder,
-        IServiceCollection services,
-        object lifetimeScopeTagForSingletons)
+    private static void Register(ContainerBuilder builder,IServiceCollection services)
     {
         var moduleContainer = services.GetSingletonInstance<IModuleContainer>();
         var registrationActionList = services.GetRegistrationActionList();
@@ -116,7 +101,7 @@ public static class AutofacRegistration
                     builder
                         .RegisterGeneric(descriptor.ImplementationType)
                         .As(descriptor.ServiceType)
-                        .ConfigureLifecycle(descriptor.Lifetime, lifetimeScopeTagForSingletons)
+                        .ConfigureLifecycle(descriptor.Lifetime)
                         .ConfigureZConventions(moduleContainer, registrationActionList);
                 }
                 else
@@ -124,8 +109,8 @@ public static class AutofacRegistration
                     builder
                         .RegisterType(descriptor.ImplementationType)
                         .As(descriptor.ServiceType)
-                        .ConfigureLifecycle(descriptor.Lifetime, lifetimeScopeTagForSingletons)
-                       .ConfigureZConventions(moduleContainer, registrationActionList);
+                        .ConfigureLifecycle(descriptor.Lifetime)
+                        .ConfigureZConventions(moduleContainer, registrationActionList);
                 }
             }
             else if (descriptor.ImplementationFactory != null)
@@ -135,7 +120,7 @@ public static class AutofacRegistration
                 {
                     var serviceProvider = context.Resolve<IServiceProvider>();
                     return descriptor.ImplementationFactory(serviceProvider);
-                }).ConfigureLifecycle(descriptor.Lifetime, lifetimeScopeTagForSingletons)
+                }).ConfigureLifecycle(descriptor.Lifetime)
                   .CreateRegistration();
 
                 builder.RegisterComponent(registration);
@@ -145,7 +130,7 @@ public static class AutofacRegistration
                 builder
                     .RegisterInstance(descriptor.ImplementationInstance!)
                     .As(descriptor.ServiceType)
-                    .ConfigureLifecycle(descriptor.Lifetime, null);
+                    .ConfigureLifecycle(descriptor.Lifetime);
             }
         }
     }

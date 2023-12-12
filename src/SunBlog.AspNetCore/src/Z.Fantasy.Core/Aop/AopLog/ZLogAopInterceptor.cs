@@ -1,10 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Serilog;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Serilog;
 using Z.Fantasy.Core.DynamicProxy;
 using Z.Module.DependencyInjection;
 
@@ -17,9 +11,12 @@ public class ZLogAopInterceptor : ZInterceptor, ITransientDependency
     {
        // _serviceScopeFactory = serviceScopeFactory;
     }
-    public override Task InterceptAsync(IZMethodInvocation invocation)
+    public override async Task InterceptAsync(IZMethodInvocation invocation)
     {
-        //Log.Error("日志拦截器");
-        return Task.CompletedTask;
+        Log.Warning("日志拦截器,接口开始执行");
+
+        await invocation.ProceedAsync();
+
+        Log.Warning("日志拦截器,接口执行结束");
     }
 }

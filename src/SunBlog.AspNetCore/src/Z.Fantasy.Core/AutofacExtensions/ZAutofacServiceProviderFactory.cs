@@ -32,8 +32,8 @@ public class ZAutofacServiceProviderFactory : IServiceProviderFactory<ContainerB
 
     public IServiceProvider CreateServiceProvider(ContainerBuilder containerBuilder)
     {
-        //Check.NotNull(containerBuilder, nameof(containerBuilder));
-
+        if (nameof(containerBuilder) == null)
+            throw new ArgumentNullException(nameof(containerBuilder));
         return new AutofacServiceProvider(containerBuilder.Build());
     }
 }

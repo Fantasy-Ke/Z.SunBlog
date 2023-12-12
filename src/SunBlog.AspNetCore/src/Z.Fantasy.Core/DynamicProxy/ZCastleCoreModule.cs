@@ -4,10 +4,10 @@ using Z.Module.Modules;
 
 namespace Z.Fantasy.Core.DynamicProxy;
 
-public class ZCastleCoreModule : ZModule
+public class ZCastleCoreModule
 {
-    public override void ConfigureServices(ServiceConfigerContext context)
-    {
-        context.Services.AddTransient(typeof(ZAsyncDeterminationInterceptor<>));
-    }
+    //public override void ConfigureServices(ServiceConfigerContext context)
+    //{
+    //    context.Services.AddTransient(typeof(ZAsyncDeterminationInterceptor<>));
+    //}
 }

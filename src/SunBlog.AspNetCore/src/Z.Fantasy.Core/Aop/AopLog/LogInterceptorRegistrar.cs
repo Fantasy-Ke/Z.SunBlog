@@ -18,7 +18,7 @@ public static class LogInterceptorRegistrar
 
     private static bool ShouldIntercept(Type type)
     {
-        if (AppSettings.GetValue("App:LogAOP:Enabled").CastTo(true))
+        if (AppSettings.GetValue("App:LogAOP:Enabled").CastTo(true) && typeof(ILogEnabled).IsAssignableFrom(type))
         {
             return true;
         }

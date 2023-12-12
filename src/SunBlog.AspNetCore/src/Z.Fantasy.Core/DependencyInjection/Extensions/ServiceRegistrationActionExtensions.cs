@@ -30,4 +30,9 @@ public static class ServiceRegistrationActionExtensions
 
         return actionList;
     }
+
+    public static void DisableZClassInterceptors(this IServiceCollection services)
+    {
+        GetOrCreateRegistrationActionList(services).IsClassInterceptorsDisabled = true;
+    }
 }

@@ -107,8 +107,7 @@ public static class ZRegistrationBuilderExtensions
             {
                 return registrationBuilder;
             }
-            if (serviceType.IsPublic)
-                 (registrationBuilder as IRegistrationBuilder<TLimit, ConcreteReflectionActivatorData, TRegistrationStyle>)?.EnableClassInterceptors();
+           (registrationBuilder as IRegistrationBuilder<TLimit, ConcreteReflectionActivatorData, TRegistrationStyle>)?.EnableClassInterceptors();
         }
 
         foreach (var interceptor in interceptors)

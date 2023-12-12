@@ -12,11 +12,12 @@ using Z.Module.Modules;
 
 namespace Z.Fantasy.Core
 {
-    [DependOn(typeof(ZCastleCoreModule))]
     public class ZFantasyCoreModule : ZModule
     {
         public override void ConfigureServices(ServiceConfigerContext context)
         {
+            context.Services.AddTransient(typeof(ZAsyncDeterminationInterceptor<>));
+            context.Services.DisableZClassInterceptors();
             //context.Services.AddAutoMapperSetup();
             var configuration = context.GetConfiguration();
 

@@ -112,8 +112,8 @@ namespace Z.SunBlog.Application.ArticleModule.BlogServer
                                  select t.Id).ToListAsync();
 
 
-
-            articles!.Tags = tagsList;
+            if (articles != null)
+                articles.Tags = tagsList;
 
 
             return articles;

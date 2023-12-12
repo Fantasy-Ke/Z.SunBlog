@@ -3,7 +3,7 @@ using Castle.DynamicProxy;
 
 namespace Z.Fantasy.Core.DynamicProxy;
 
-public abstract class CastleAbpMethodInvocationAdapterBase : IZMethodInvocation
+public abstract class CastleZMethodInvocationAdapterBase : IZMethodInvocation
 {
     public object[] Arguments => Invocation.Arguments;
 
@@ -20,7 +20,7 @@ public abstract class CastleAbpMethodInvocationAdapterBase : IZMethodInvocation
 
     protected IInvocation Invocation { get; }
 
-    protected CastleAbpMethodInvocationAdapterBase(IInvocation invocation)
+    protected CastleZMethodInvocationAdapterBase(IInvocation invocation)
     {
         Invocation = invocation;
         _lazyArgumentsDictionary = new Lazy<IReadOnlyDictionary<string, object>>(GetArgumentsDictionary);
