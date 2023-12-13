@@ -389,6 +389,53 @@ namespace Z.SunBlog.EntityFrameworkCore.Migrations
                 .Annotation("Relational:Collation", "utf8mb4_general_ci");
 
             migrationBuilder.CreateTable(
+                name: "ZAccessLog",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", maxLength: 36, nullable: false, collation: "ascii_general_ci"),
+                    UserId = table.Column<string>(type: "longtext", nullable: true, collation: "utf8mb4_general_ci"),
+                    RoutePath = table.Column<string>(type: "longtext", nullable: true, collation: "utf8mb4_general_ci"),
+                    RouteParams = table.Column<string>(type: "longtext", nullable: true, collation: "utf8mb4_general_ci"),
+                    RemoteIp = table.Column<string>(type: "varchar(64)", maxLength: 64, nullable: true, collation: "utf8mb4_general_ci"),
+                    UserAgent = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true, collation: "utf8mb4_general_ci"),
+                    Location = table.Column<string>(type: "varchar(128)", maxLength: 128, nullable: true, collation: "utf8mb4_general_ci"),
+                    OsDescription = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true, collation: "utf8mb4_general_ci"),
+                    Message = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true, collation: "utf8mb4_general_ci"),
+                    LogType = table.Column<string>(type: "longtext", nullable: true, collation: "utf8mb4_general_ci"),
+                    CreatorId = table.Column<string>(type: "varchar(32)", maxLength: 32, nullable: true, collation: "utf8mb4_general_ci"),
+                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ZAccessLog", x => x.Id);
+                })
+                .Annotation("Relational:Collation", "utf8mb4_general_ci");
+
+            migrationBuilder.CreateTable(
+                name: "ZExceptionLog",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", maxLength: 36, nullable: false, collation: "ascii_general_ci"),
+                    RequestUri = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true, collation: "utf8mb4_general_ci"),
+                    ClientIP = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true, collation: "utf8mb4_general_ci"),
+                    Message = table.Column<string>(type: "longtext", maxLength: 2147483647, nullable: true, collation: "utf8mb4_general_ci"),
+                    Source = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true, collation: "utf8mb4_general_ci"),
+                    StackTrace = table.Column<string>(type: "longtext", maxLength: 2147483647, nullable: true, collation: "utf8mb4_general_ci"),
+                    Type = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true, collation: "utf8mb4_general_ci"),
+                    OperatorId = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true, collation: "utf8mb4_general_ci"),
+                    OperatorName = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true, collation: "utf8mb4_general_ci"),
+                    UserAgent = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true, collation: "utf8mb4_general_ci"),
+                    UserOS = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true, collation: "utf8mb4_general_ci"),
+                    CreatorId = table.Column<string>(type: "varchar(32)", maxLength: 32, nullable: true, collation: "utf8mb4_general_ci"),
+                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ZExceptionLog", x => x.Id);
+                })
+                .Annotation("Relational:Collation", "utf8mb4_general_ci");
+
+            migrationBuilder.CreateTable(
                 name: "ZFileInfo",
                 columns: table => new
                 {
@@ -496,6 +543,30 @@ namespace Z.SunBlog.EntityFrameworkCore.Migrations
                 .Annotation("Relational:Collation", "utf8mb4_general_ci");
 
             migrationBuilder.CreateTable(
+                name: "ZRequestLog",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", maxLength: 36, nullable: false, collation: "ascii_general_ci"),
+                    RequestUri = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true, collation: "utf8mb4_general_ci"),
+                    RequestType = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true, collation: "utf8mb4_general_ci"),
+                    RequestData = table.Column<string>(type: "varchar(2560)", maxLength: 2560, nullable: true, collation: "utf8mb4_general_ci"),
+                    ResponseData = table.Column<string>(type: "longtext", maxLength: 2147483647, nullable: true, collation: "utf8mb4_general_ci"),
+                    UserId = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true, collation: "utf8mb4_general_ci"),
+                    UserName = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true, collation: "utf8mb4_general_ci"),
+                    ClientIP = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true, collation: "utf8mb4_general_ci"),
+                    UserAgent = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true, collation: "utf8mb4_general_ci"),
+                    UserOS = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true, collation: "utf8mb4_general_ci"),
+                    SpendTime = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true, collation: "utf8mb4_general_ci"),
+                    CreatorId = table.Column<string>(type: "varchar(32)", maxLength: 32, nullable: true, collation: "utf8mb4_general_ci"),
+                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ZRequestLog", x => x.Id);
+                })
+                .Annotation("Relational:Collation", "utf8mb4_general_ci");
+
+            migrationBuilder.CreateTable(
                 name: "ZRoles",
                 columns: table => new
                 {
@@ -514,26 +585,6 @@ namespace Z.SunBlog.EntityFrameworkCore.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ZRoles", x => x.Id);
-                })
-                .Annotation("Relational:Collation", "utf8mb4_general_ci");
-
-            migrationBuilder.CreateTable(
-                name: "ZSigninLog",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "char(36)", maxLength: 36, nullable: false, collation: "ascii_general_ci"),
-                    UserId = table.Column<string>(type: "longtext", nullable: true, collation: "utf8mb4_general_ci"),
-                    RemoteIp = table.Column<string>(type: "varchar(64)", maxLength: 64, nullable: true, collation: "utf8mb4_general_ci"),
-                    UserAgent = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true, collation: "utf8mb4_general_ci"),
-                    Location = table.Column<string>(type: "varchar(128)", maxLength: 128, nullable: true, collation: "utf8mb4_general_ci"),
-                    OsDescription = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true, collation: "utf8mb4_general_ci"),
-                    Message = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true, collation: "utf8mb4_general_ci"),
-                    CreatorId = table.Column<string>(type: "varchar(32)", maxLength: 32, nullable: true, collation: "utf8mb4_general_ci"),
-                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ZSigninLog", x => x.Id);
                 })
                 .Annotation("Relational:Collation", "utf8mb4_general_ci");
 
@@ -644,6 +695,12 @@ namespace Z.SunBlog.EntityFrameworkCore.Migrations
                 name: "Talks");
 
             migrationBuilder.DropTable(
+                name: "ZAccessLog");
+
+            migrationBuilder.DropTable(
+                name: "ZExceptionLog");
+
+            migrationBuilder.DropTable(
                 name: "ZFileInfo");
 
             migrationBuilder.DropTable(
@@ -656,10 +713,10 @@ namespace Z.SunBlog.EntityFrameworkCore.Migrations
                 name: "ZPermissions");
 
             migrationBuilder.DropTable(
-                name: "ZRoles");
+                name: "ZRequestLog");
 
             migrationBuilder.DropTable(
-                name: "ZSigninLog");
+                name: "ZRoles");
 
             migrationBuilder.DropTable(
                 name: "ZUserRoles");

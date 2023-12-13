@@ -79,7 +79,8 @@ namespace Z.SunBlog.EntityFrameworkCore.Migrations
                         .HasColumnType("char(36)");
 
                     b.Property<string>("ClientIP")
-                        .HasColumnType("longtext");
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.Property<DateTime?>("CreationTime")
                         .HasColumnType("datetime(6)");
@@ -89,31 +90,40 @@ namespace Z.SunBlog.EntityFrameworkCore.Migrations
                         .HasColumnType("varchar(32)");
 
                     b.Property<string>("Message")
+                        .HasMaxLength(2147483647)
                         .HasColumnType("longtext");
 
                     b.Property<string>("OperatorId")
-                        .HasColumnType("longtext");
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("OperatorName")
-                        .HasColumnType("longtext");
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("RequestUri")
-                        .HasColumnType("longtext");
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<string>("Source")
-                        .HasColumnType("longtext");
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<string>("StackTrace")
+                        .HasMaxLength(2147483647)
                         .HasColumnType("longtext");
 
                     b.Property<string>("Type")
-                        .HasColumnType("longtext");
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<string>("UserAgent")
-                        .HasColumnType("longtext");
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("UserOS")
-                        .HasColumnType("longtext");
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.HasKey("Id");
 
@@ -218,7 +228,8 @@ namespace Z.SunBlog.EntityFrameworkCore.Migrations
                         .HasColumnType("char(36)");
 
                     b.Property<string>("ClientIP")
-                        .HasColumnType("longtext");
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.Property<DateTime?>("CreationTime")
                         .HasColumnType("datetime(6)");
@@ -228,31 +239,40 @@ namespace Z.SunBlog.EntityFrameworkCore.Migrations
                         .HasColumnType("varchar(32)");
 
                     b.Property<string>("RequestData")
-                        .HasColumnType("longtext");
+                        .HasMaxLength(2560)
+                        .HasColumnType("varchar(2560)");
 
                     b.Property<string>("RequestType")
-                        .HasColumnType("longtext");
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("RequestUri")
-                        .HasColumnType("longtext");
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<string>("ResponseData")
+                        .HasMaxLength(2147483647)
                         .HasColumnType("longtext");
 
                     b.Property<string>("SpendTime")
-                        .HasColumnType("longtext");
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("UserAgent")
-                        .HasColumnType("longtext");
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("UserId")
-                        .HasColumnType("longtext");
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("UserName")
-                        .HasColumnType("longtext");
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("UserOS")
-                        .HasColumnType("longtext");
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.HasKey("Id");
 

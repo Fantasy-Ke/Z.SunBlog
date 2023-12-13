@@ -35,9 +35,9 @@ namespace Z.Fantasy.Application.Middleware
         {
             var requestUri = context.Request.Path.NotNullString().TrimEnd('/');
             var requestMethod = context.Request.Method;
-            if (AppSettings.GetValue("App:MiddlewareSettings:EnableRequestLog").CastTo(false))
+            if (AppSettings.GetValue("App:MiddlewareSettings:RequestLog:Enable").CastTo(false))
             {
-                var ignoreApis = AppSettings.GetValue("App:MiddlewareSettings:IgnoreRequestApi");
+                var ignoreApis = AppSettings.GetValue("App:MiddlewareSettings:RequestLog:IgnoreRequestApi");
                 if (requestMethod?.ToLower() != "options" &&
                     requestUri.Contains("api", StringComparison.OrdinalIgnoreCase) &&
                     !ignoreApis.Contains(requestUri, StringComparison.OrdinalIgnoreCase))
@@ -78,6 +78,7 @@ namespace Z.Fantasy.Application.Middleware
                     context.Response.OnCompleted(async () =>
                     {
                         stopwatch.Stop();
+                        if (!AppSettings.GetValue("App:MiddlewareSettings:RequestLog:WriteDB").CastTo(false)) return;
                         using var unit = IOCManager.GetService<IUnitOfWork>();
                         try
                         {
@@ -105,6 +106,8 @@ namespace Z.Fantasy.Application.Middleware
                             await unit.RollbackTransactionAsync();
                             logger.LogError(ex, $"插入请求日志失败={ex.Message}（requestMethod={requestMethod}，requestUri={requestUri}，requestAgent={requestAgent}，ipAddress={ipAddress}）");
                         }
+
+
                     });
                 }
                 else

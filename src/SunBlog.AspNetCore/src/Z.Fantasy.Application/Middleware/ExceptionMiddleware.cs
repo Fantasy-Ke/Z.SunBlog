@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Serilog;
 using Z.Fantasy.Core.Extensions;
 using System.Runtime.ExceptionServices;
 using UAParser;
@@ -20,13 +19,13 @@ public class ExceptionMiddleware
     private readonly RequestDelegate _next;
     private IHostEnvironment _environment;
     private readonly IUserSession _userSession;
-    readonly ILogger<ExceptionMiddleware> logger;
+    readonly ILogger<ExceptionMiddleware> _logger;
 
     public ExceptionMiddleware(RequestDelegate next, IHostEnvironment environment, ILogger<ExceptionMiddleware> logger, IUserSession userSession)
     {
         _next = next;
         _environment = environment;
-        this.logger = logger;
+        this._logger = logger;
         _userSession = userSession;
     }
 
@@ -51,6 +50,24 @@ public class ExceptionMiddleware
         await HandleException(context, edi);
     }
 
+    //捕获后续管道的异常
+    private async Task Awaited(HttpContext context, Func<Task> func)
+    {
+        ExceptionDispatchInfo? edi = null;
+        try
+        {
+            await func.Invoke();
+        }
+        catch (Exception exception)
+        {
+            edi = ExceptionDispatchInfo.Capture(exception);
+        }
+        if (edi != null)
+        {
+            await HandleException(context, edi);
+        }
+    }
+
     private async Task HandleException(HttpContext context, ExceptionDispatchInfo edi)
     {
         if (context.Response.HasStarted)
@@ -62,7 +79,7 @@ public class ExceptionMiddleware
         var requestPath = context.Request.Path;
         var exception = edi.SourceException;
         var logMsg = $"SourseRoute {requestPath} {exception.Source},错误信息：{exception.Message} {exception.StackTrace} ";
-        Log.Error(logMsg);
+        _logger.LogError(logMsg);
         ZEngineResponse response = new ZEngineResponse(new ErrorInfo()
         {
             Message = _environment.IsDevelopment() ? logMsg : exception.Message
@@ -73,6 +90,7 @@ public class ExceptionMiddleware
 
         context.Response.OnCompleted(async () =>
         {
+            if (!AppSettings.GetValue("App:MiddlewareSettings:ExceptionLog:WriteDB").CastTo(false)) return;
             var request = context.Request;
             string requestUri = $"{request.Scheme}://{request.Host}{request.Path}{request.QueryString}";
             string ipAddress = App.GetRemoteIp(context);
@@ -90,7 +108,7 @@ public class ExceptionMiddleware
                     Message = exception.Message,
                     Source = exception.Source,
                     StackTrace = exception.StackTrace,
-                    Type = _userSession.UserId,
+                    Type = exception.GetType().Name,
                     OperatorId = _userSession.UserId,
                     ClientIP = ipAddress,
                     OperatorName = _userSession.UserName,
@@ -102,27 +120,8 @@ public class ExceptionMiddleware
             catch (Exception ex)
             {
                 await unit.RollbackTransactionAsync();
-                logger.LogError(ex, $"插入异常日志失败={ex.Message}（requestUri={requestUri}，requestAgent={requestAgent}，ipAddress={ipAddress}）");
+                _logger.LogError(ex, $"插入异常日志失败={ex.Message}（requestUri={requestUri}，requestAgent={requestAgent}，ipAddress={ipAddress}）");
             }
         });
-    }
-
-
-    //捕获后续管道的异常
-    private async Task Awaited(HttpContext context, Func<Task> func)
-    {
-        ExceptionDispatchInfo? edi = null;
-        try
-        {
-            await func.Invoke();
-        }
-        catch (Exception exception)
-        {
-            edi = ExceptionDispatchInfo.Capture(exception);
-        }
-        if (edi != null)
-        {
-            await HandleException(context, edi);
-        }
     }
 }

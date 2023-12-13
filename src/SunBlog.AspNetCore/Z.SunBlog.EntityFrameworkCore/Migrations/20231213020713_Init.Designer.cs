@@ -11,7 +11,7 @@ using Z.SunBlog.EntityFrameworkCore;
 namespace Z.SunBlog.EntityFrameworkCore.Migrations
 {
     [DbContext(typeof(SunBlogDbContext))]
-    [Migration("20231204022611_Init")]
+    [Migration("20231213020713_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -22,6 +22,116 @@ namespace Z.SunBlog.EntityFrameworkCore.Migrations
                 .UseCollation("utf8mb4_general_ci")
                 .HasAnnotation("ProductVersion", "7.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
+
+            modelBuilder.Entity("Z.Fantasy.Core.Entities.EntityLog.ZAccessLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(36)
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime?>("CreationTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("CreatorId")
+                        .HasMaxLength(32)
+                        .HasColumnType("varchar(32)");
+
+                    b.Property<string>("Location")
+                        .HasMaxLength(128)
+                        .HasColumnType("varchar(128)");
+
+                    b.Property<string>("LogType")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Message")
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
+
+                    b.Property<string>("OsDescription")
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
+
+                    b.Property<string>("RemoteIp")
+                        .HasMaxLength(64)
+                        .HasColumnType("varchar(64)");
+
+                    b.Property<string>("RouteParams")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("RoutePath")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("UserAgent")
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ZAccessLog");
+                });
+
+            modelBuilder.Entity("Z.Fantasy.Core.Entities.EntityLog.ZExceptionLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(36)
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("ClientIP")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<DateTime?>("CreationTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("CreatorId")
+                        .HasMaxLength(32)
+                        .HasColumnType("varchar(32)");
+
+                    b.Property<string>("Message")
+                        .HasMaxLength(2147483647)
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("OperatorId")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("OperatorName")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("RequestUri")
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
+
+                    b.Property<string>("Source")
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
+
+                    b.Property<string>("StackTrace")
+                        .HasMaxLength(2147483647)
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Type")
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
+
+                    b.Property<string>("UserAgent")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("UserOS")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ZExceptionLog");
+                });
 
             modelBuilder.Entity("Z.Fantasy.Core.Entities.EntityLog.ZOperationLog", b =>
                 {
@@ -113,12 +223,16 @@ namespace Z.SunBlog.EntityFrameworkCore.Migrations
                     b.ToTable("ZOperationLog");
                 });
 
-            modelBuilder.Entity("Z.Fantasy.Core.Entities.EntityLog.ZSigninLog", b =>
+            modelBuilder.Entity("Z.Fantasy.Core.Entities.EntityLog.ZRequestLog", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(36)
                         .HasColumnType("char(36)");
+
+                    b.Property<string>("ClientIP")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.Property<DateTime?>("CreationTime")
                         .HasColumnType("datetime(6)");
@@ -127,32 +241,45 @@ namespace Z.SunBlog.EntityFrameworkCore.Migrations
                         .HasMaxLength(32)
                         .HasColumnType("varchar(32)");
 
-                    b.Property<string>("Location")
-                        .HasMaxLength(128)
-                        .HasColumnType("varchar(128)");
+                    b.Property<string>("RequestData")
+                        .HasMaxLength(2560)
+                        .HasColumnType("varchar(2560)");
 
-                    b.Property<string>("Message")
+                    b.Property<string>("RequestType")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("RequestUri")
                         .HasMaxLength(256)
                         .HasColumnType("varchar(256)");
 
-                    b.Property<string>("OsDescription")
-                        .HasMaxLength(256)
-                        .HasColumnType("varchar(256)");
+                    b.Property<string>("ResponseData")
+                        .HasMaxLength(2147483647)
+                        .HasColumnType("longtext");
 
-                    b.Property<string>("RemoteIp")
-                        .HasMaxLength(64)
-                        .HasColumnType("varchar(64)");
+                    b.Property<string>("SpendTime")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("UserAgent")
-                        .HasMaxLength(256)
-                        .HasColumnType("varchar(256)");
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("UserId")
-                        .HasColumnType("longtext");
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("UserOS")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("ZSigninLog");
+                    b.ToTable("ZRequestLog");
                 });
 
             modelBuilder.Entity("Z.Fantasy.Core.Entities.Files.ZFileInfo", b =>
