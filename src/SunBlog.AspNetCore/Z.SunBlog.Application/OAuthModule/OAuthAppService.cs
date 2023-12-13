@@ -28,6 +28,7 @@ using Z.Fantasy.Core.Authorization.Dtos;
 using Z.Fantasy.Core.Helper;
 using Z.Fantasy.Core.OAuth.Gitee;
 using Z.Fantasy.Core.OAuth.GitHub;
+using Z.Fantasy.Core.Extensions;
 
 namespace Z.SunBlog.Application.OAuthModule
 {
@@ -197,6 +198,7 @@ namespace Z.SunBlog.Application.OAuthModule
         public async Task<OAuthAccountDetailOutput> UserInfo()
         {
             string id = UserService.UserId;
+            if (id.IsNullWhiteSpace()) return null;
             var result=  await _authAccountDomainManager.QueryAsNoTracking
                 .GroupJoin(_friendLinkManager.QueryAsNoTracking, ac => ac.Id, link => link.AppUserId, (ac, link) => new { ac = ac, link = link })
                 .SelectMany(p => p.link.DefaultIfEmpty(), (ac, link) => new { ac = ac.ac, link = link })

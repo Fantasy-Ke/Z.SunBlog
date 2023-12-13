@@ -8,6 +8,7 @@ using Z.SunBlog.Core.UserModule.DomainManager;
 using System.ComponentModel;
 using Z.Fantasy.Core.UserSession;
 using Yitter.IdGenerator;
+using Z.Fantasy.Core.Exceptions;
 
 namespace Z.SunBlog.Application.UserModule
 {
@@ -75,6 +76,7 @@ namespace Z.SunBlog.Application.UserModule
         public async Task<ZUserInfoOutput> CurrentUserInfo()
         {
             var userId = UserService.UserId;
+            if (!userId.IsNullWhiteSpace()) return null;
             return await _userDomainManager.QueryAsNoTracking.Where(x => x.Id == userId)
                   .Select(x => new ZUserInfoOutput
                   {

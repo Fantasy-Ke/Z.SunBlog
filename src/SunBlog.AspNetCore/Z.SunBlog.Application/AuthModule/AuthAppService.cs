@@ -151,7 +151,7 @@ namespace Z.SunBlog.Application.AuthModule
         [HttpPost]
         public async Task ZSignOut([FromBody] string token)
         {
-            if (token.IsNullWhiteSpace()) throw new UserFriendlyException("token失效或不存在!");
+            if (token.IsNullWhiteSpace()) throw new UserFriendlyException("token不存在!");
             var userid = UserService.UserId;
             if (!userid.IsNullWhiteSpace())
             {

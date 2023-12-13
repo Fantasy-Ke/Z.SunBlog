@@ -50,6 +50,7 @@ namespace Z.SunBlog.Application
             var scope = context.ServiceProvider.CreateAsyncScope();
             var authorizeManager = scope.ServiceProvider.GetRequiredService<IAuthorizeManager>();
             IAuthorizePermissionContext permissionContext = new AuthorizePermissionContext();
+
             await authorizeManager.AddAuthorizeRegiester(permissionContext);
         }
 
