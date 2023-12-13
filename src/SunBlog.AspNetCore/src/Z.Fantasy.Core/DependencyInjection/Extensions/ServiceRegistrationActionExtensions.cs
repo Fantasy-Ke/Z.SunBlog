@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
+using Z.Fantasy.Core.DynamicProxy;
 using Z.Module.Extensions;
 using Z.Module.Modules.interfaces;
 
@@ -34,5 +35,10 @@ public static class ServiceRegistrationActionExtensions
     public static void DisableZClassInterceptors(this IServiceCollection services)
     {
         GetOrCreateRegistrationActionList(services).IsClassInterceptorsDisabled = true;
+    }
+
+    public static void AddAsyncDeterminationTransient(this IServiceCollection services)
+    {
+        services.AddTransient(typeof(ZAsyncDeterminationInterceptor<>));
     }
 }

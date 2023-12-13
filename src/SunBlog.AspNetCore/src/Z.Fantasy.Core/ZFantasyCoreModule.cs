@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Z.Fantasy.Core.Aop.AopLog;
 using Z.Fantasy.Core.DependencyInjection.Extensions;
 using Z.Fantasy.Core.DynamicProxy;
@@ -12,23 +11,22 @@ using Z.Module.Modules;
 
 namespace Z.Fantasy.Core
 {
+    [DependOn(typeof(ZCastleCoreModule))]
     public class ZFantasyCoreModule : ZModule
     {
         public override void ConfigureServices(ServiceConfigerContext context)
         {
-            context.Services.AddTransient(typeof(ZAsyncDeterminationInterceptor<>));
-            context.Services.DisableZClassInterceptors();
-            //context.Services.AddAutoMapperSetup();
-            var configuration = context.GetConfiguration();
-
             context.Services.AddControllers(c =>
             {
                 c.Filters.Add<ResultFilter>();
             });
 
+            //context.Services.AddAsyncDeterminationTransient();
+            //context.Services.DisableZClassInterceptors();禁用类拦截Aop
+            //Registered拦截器
             context.Services.OnRegistered(LogInterceptorRegistrar.RegisterIfNeeded);
             //context.UseAutofac();
-
+            var configuration = context.GetConfiguration();
             //redis注册
             context.Services.AddRedis(configuration);
 
