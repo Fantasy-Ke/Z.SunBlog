@@ -3,8 +3,8 @@ import { defineStore } from "pinia";
 import { computed, inject } from "vue";
 import apiHttpClient from "../utils/api-http-client";
 import { StoreKey, useUserStore } from "./user";
+import signalR from "@/utils/signalRService";
 import { useToast } from "./toast";
-import { signalR } from "@/utils/signalR";
 const _oAuthCService = new OAuthsServiceProxy(inject("$baseurl"), apiHttpClient as any);
 const _authService = new AuthsServiceProxy(inject("$baseurl"), apiHttpClient as any);
 
@@ -31,7 +31,8 @@ export const useAuth = defineStore(StoreKey.Auth, () => {
     _authService.zSignOut(userStore.zToken.accessToken).then((res) => {
       const toast = useToast();
       userStore.clearToken();
-      signalR.off("ReceiveMessage");
+      signalR.close();
+      signalR.start();
       toast.success("退出登录成功！");
     });
   };

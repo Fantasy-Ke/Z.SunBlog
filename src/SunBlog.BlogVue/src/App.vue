@@ -23,21 +23,18 @@ import Footer from "./components/layout/Footer.vue";
 import BackTop from "./components/BackTop.vue";
 import { useThemeSettingStore } from "./stores/themeSetting";
 import { computed, onMounted } from "vue";
+import { ElNotification } from "element-plus";
+import signalR from "./utils/signalRService";
+import { useAuth } from "./stores/auth";
 const { theme } = storeToRefs(useThemeSettingStore());
 const route = useRoute();
+const authStore = useAuth();
 const key = computed(() => {
   return route.fullPath + Math.random();
 });
 
 onMounted(async () => {
-  // signalR.off("ReceiveMessage");
-  // signalR.on("ReceiveMessage", (data) => {
-  //   ElNotification({
-  //     title: data.Title,
-  //     message: data.Message,
-  //     type: "success",
-  //     position: "top-right",
-  //   });
-  // });
+  signalR.close();
+  signalR.start();
 });
 </script>

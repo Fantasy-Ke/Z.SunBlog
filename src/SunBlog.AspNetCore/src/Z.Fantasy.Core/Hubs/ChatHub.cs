@@ -28,13 +28,10 @@ namespace Z.Fantasy.Core.Hubs
 
         public override async Task OnConnectedAsync()
         {
-           var f =  HubClients.ConnectionClient;
-            var token = Context.GetHttpContext().Request.Query["access_token"];
-            if (token.IsNullOrEmpty()) return;
-            var claims = _jwtTokenProvider.DecodeToken(token);
             await base.OnConnectedAsync();
-            if (claims.Count() > 0)
+            if (Context.User?.Identity?.IsAuthenticated == true) 
             {
+                var claims = Context.User.Claims.ToList();
                 //按用户分组
                 //是有必要的 例如多个浏览器、多个标签页使用同个用户登录 应当归属于一组
                 var groupName = claims.FirstOrDefault(c => c.Type == ZClaimTypes.UserId).Value;

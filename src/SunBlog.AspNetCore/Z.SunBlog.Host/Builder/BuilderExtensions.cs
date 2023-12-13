@@ -189,6 +189,15 @@ namespace Z.SunBlog.Host.Builder
                             context.Token = accessToken;
                         }
 
+                        var signlRToken = context.Request.Query["access_token"];
+
+                        // If the request is for our hub...
+                        var path = context.HttpContext.Request.Path;
+                        if (!string.IsNullOrEmpty(signlRToken) && (path.StartsWithSegments("/api/chatHub")))
+                        {
+                            context.Token = signlRToken;
+                        }
+
                         return Task.CompletedTask;
                     },
                 };

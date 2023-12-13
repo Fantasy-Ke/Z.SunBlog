@@ -208,6 +208,7 @@ import { useApp } from "@/stores/app";
 import { storeToRefs } from "pinia";
 import { ElNotification, dayjs } from "element-plus";
 import { useAuth } from "@/stores/auth";
+import signalR from "@/utils/signalRService";
 const route = useRoute();
 const router = useRouter();
 const appStore = useApp();
@@ -282,15 +283,17 @@ onMounted(async () => {
   const code = route.query.code || route.params.code;
   if (code) {
     const res = await authStore.login(code as string);
-    // signalR.off("ReceiveMessage");
-    // signalR.on("ReceiveMessage", (data) => {
-    //   ElNotification({
-    //     title: data.Title,
-    //     message: data.Message,
-    //     type: "success",
-    //     position: "top-right",
-    //   });
-    // });
+    signalR.close();
+    signalR.start();
+    signalR.connection.off("ReceiveMessage");
+    signalR.connection.on("ReceiveMessage", (data) => {
+      ElNotification({
+        title: data.Title,
+        message: data.Message,
+        type: "success",
+        position: "top-right",
+      });
+    });
     if (res.redirectUrl) {
       router.push(res.redirectUrl);
     }
