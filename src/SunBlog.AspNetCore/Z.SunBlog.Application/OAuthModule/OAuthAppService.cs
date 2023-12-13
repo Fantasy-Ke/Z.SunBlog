@@ -29,6 +29,8 @@ using Z.Fantasy.Core.Helper;
 using Z.Fantasy.Core.OAuth.Gitee;
 using Z.Fantasy.Core.OAuth.GitHub;
 using Z.Fantasy.Core.Extensions;
+using Z.SunBlog.Core.MessageModule.DomainManager;
+using Z.SunBlog.Core.MessageModule.Dto;
 
 namespace Z.SunBlog.Application.OAuthModule
 {
@@ -56,6 +58,7 @@ namespace Z.SunBlog.Application.OAuthModule
         private readonly IJwtTokenProvider _jwtTokenProvider;
         private readonly IAlbumsManager _albumsManager;
         private readonly IPicturesManager _picturesManager;
+        private readonly IMessageManager _messageManager;
         public OAuthAppService(
             IServiceProvider serviceProvider,
             QQOAuth qqoAuth,
@@ -68,7 +71,8 @@ namespace Z.SunBlog.Application.OAuthModule
             IAlbumsManager albumsManager,
             IPicturesManager picturesManager,
             ZGiteeOAuth giteeoAuth,
-            ZGitHubOAuth githuboAuth) : base(serviceProvider)
+            ZGitHubOAuth githuboAuth,
+            IMessageManager messageManager) : base(serviceProvider)
         {
             _qqoAuth = qqoAuth;
             _authAccountDomainManager = authAccountDomainManager;
@@ -81,6 +85,7 @@ namespace Z.SunBlog.Application.OAuthModule
             _picturesManager = picturesManager;
             _giteeoAuth = giteeoAuth;
             _githuboAuth = githuboAuth;
+            _messageManager = messageManager;
         }
 
         /// <summary>
@@ -116,7 +121,7 @@ namespace Z.SunBlog.Application.OAuthModule
         /// <returns></returns>
         [HttpGet]
         [NoResult]
-        public async Task<IActionResult> Callback(string type,[FromQuery] string code, [FromQuery] string state)
+        public async Task<IActionResult> Callback(string type, [FromQuery] string code, [FromQuery] string state)
         {
             if (string.IsNullOrWhiteSpace(state) || !await _cacheManager.ExistsAsync($"{OAuthRedirectKey}{state}"))
             {
@@ -183,6 +188,8 @@ namespace Z.SunBlog.Application.OAuthModule
                 new Claim(ZClaimTypes.UserId, account.Id!.ToString()),
                 new Claim(ZClaimTypes.Expiration, DateTimeOffset.Now.AddMinutes(tokenConfig.AccessTokenExpirationMinutes).ToString()),
             };
+            if (account.IsBlogger)
+                await _messageManager.SendOtherUser(new MessageInput() { UserId = account.Id,Title = "提示！！", Message = "博主登陆了大家赶紧拜访拜访！！！" });
             var token = _jwtTokenProvider.GenerateZToken(claims.ToArray());
             string url = await _cacheManager.GetCacheAsync<string>(key2);
             await _cacheManager.RemoveCacheAsync(key);
@@ -199,7 +206,7 @@ namespace Z.SunBlog.Application.OAuthModule
         {
             string id = UserService.UserId;
             if (id.IsNullWhiteSpace()) return null;
-            var result=  await _authAccountDomainManager.QueryAsNoTracking
+            var result = await _authAccountDomainManager.QueryAsNoTracking
                 .GroupJoin(_friendLinkManager.QueryAsNoTracking, ac => ac.Id, link => link.AppUserId, (ac, link) => new { ac = ac, link = link })
                 .SelectMany(p => p.link.DefaultIfEmpty(), (ac, link) => new { ac = ac.ac, link = link })
                 .Where(al => al.ac.Id == id)

@@ -1,13 +1,12 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Z.Fantasy.Core.Authorization;
 using Z.EventBus.EventBus;
 using Z.Fantasy.Core.UserSession;
 
 namespace Z.Fantasy.Core.Hubs
 {
-    [ZAuthorization]
-    public class ChatHub : Hub
+    public class ChatHub : Hub<IChatService>
     {
         private readonly ILogger _logger;
         private readonly ILocalEventBus _eventBus;
@@ -23,36 +22,81 @@ namespace Z.Fantasy.Core.Hubs
 
         public override async Task OnConnectedAsync()
         {
-            var userId = GetUserId();
-            var status = new UserStatus(userId);
-            if (await RedisHelper.ExistsAsync(userId.ToString()))
+            await base.OnConnectedAsync();
+            if (Context.User.Claims.Count() > 0)
             {
-                await RedisHelper.SetAsync(userId.ToString(), status, exists: CSRedis.RedisExistence.Xx);
-            }
-            else
-            {
-                await RedisHelper.SetAsync(userId.ToString(), status, exists: CSRedis.RedisExistence.Nx);
+                //按用户分组
+                //是有必要的 例如多个浏览器、多个标签页使用同个用户登录 应当归属于一组
+                var groupName = Context.User.Claims.FirstOrDefault(c => c.Type == ZClaimTypes.UserId).Value;
+                await AddToGroup(groupName);
+                AddCacheClient(groupName);
             }
         }
 
         public override async Task OnDisconnectedAsync(Exception exception)
         {
             _logger.LogWarning(exception?.Message ?? "断开连接信息异常");
-            var userId = GetUserId();
-            var userStaus = await RedisHelper.GetAsync<UserStatus>(userId.ToString());
-            userStaus.SetLeave();
-            await RedisHelper.SetAsync(userId.ToString(), userStaus, exists: CSRedis.RedisExistence.Xx);
+            if (Context.User.Claims.Count() > 0)
+            {
+                //按用户分组
+                //是有必要的 例如多个浏览器、多个标签页使用同个用户登录 应当归属于一组
+                var groupName = Context.User.Claims.FirstOrDefault(c => c.Type == ZClaimTypes.UserId).Value;
+                await RemoveToGroup(groupName);
+                RemoveCacheClient(groupName);
+            }
+
+            await base.OnDisconnectedAsync(exception);
 
         }
 
-        public Task SendMessage(SendMessageModel message)
+        /// <summary>
+        /// 加入指定组
+        /// </summary>
+        /// <param name="groupName">组名</param>
+        /// <returns></returns>
+        public async Task AddToGroup(string groupName)
         {
-            return Task.CompletedTask;
+            await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
         }
 
-        private string GetUserId()
+        /// <summary>
+        /// 加入指定组
+        /// </summary>
+        /// <param name="groupName">组名</param>
+        /// <returns></returns>
+        public async Task RemoveToGroup(string groupName)
         {
-            return _userSession.UserId;
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, groupName);
         }
+
+        public void AddCacheClient(string groupName)
+        {
+            HubClients.ConnectionClient.Add(new ConnectionClient()
+            {
+                GroupName = groupName,
+                ConnectionId = Context.ConnectionId
+            });
+        }
+
+        public void RemoveCacheClient(string groupName)
+        {
+            var client = HubClients.ConnectionClient.FirstOrDefault(n => n.ConnectionId == Context.ConnectionId && n.GroupName == groupName);
+            if (client != null)
+            {
+                HubClients.ConnectionClient.Remove(client);
+                _logger.LogWarning($"remove :{client.ConnectionId}");
+            }
+        }
+    }
+
+    public static class HubClients
+    {
+        public static List<ConnectionClient> ConnectionClient = new List<ConnectionClient>();
+    }
+
+    public class ConnectionClient
+    {
+        public string GroupName { get; set; }
+        public string ConnectionId { get; set; }
     }
 }

@@ -10,6 +10,7 @@ using Z.SunBlog.EntityFrameworkCore;
 using Z.Fantasy.Core.Helper;
 using Z.Fantasy.Core.OAuth.Gitee;
 using Z.Fantasy.Core.OAuth.GitHub;
+using Z.Fantasy.Core.Hubs;
 
 namespace Z.SunBlog.Host;
 
@@ -57,6 +58,7 @@ public class SunBlogHostModule : ZModule
         {
             endpoints.MapDefaultControllerRoute();
             endpoints.MapRazorPages();
+            endpoints.MapHub<ChatHub>("/api/chatHub");
         });
     }
 }
