@@ -194,6 +194,7 @@ import { reactive, onMounted, computed, inject, watch } from "vue";
 import EasyTyper from "easy-typer-js/src/ts";
 import Swiper from "../components/Swiper.vue";
 import { useToast } from "@/stores/toast";
+//import { signalR } from "@/utils/signalR";
 import moment from "moment";
 import {
   ArticleCsServiceProxy,
@@ -205,7 +206,7 @@ import {
 } from "@/shared/service-proxies";
 import { useApp } from "@/stores/app";
 import { storeToRefs } from "pinia";
-import { dayjs } from "element-plus";
+import { ElNotification, dayjs } from "element-plus";
 import { useAuth } from "@/stores/auth";
 const route = useRoute();
 const router = useRouter();
@@ -281,16 +282,25 @@ onMounted(async () => {
   const code = route.query.code || route.params.code;
   if (code) {
     const res = await authStore.login(code as string);
+    // signalR.off("ReceiveMessage");
+    // signalR.on("ReceiveMessage", (data) => {
+    //   ElNotification({
+    //     title: data.Title,
+    //     message: data.Message,
+    //     type: "success",
+    //     position: "top-right",
+    //   });
+    // });
     if (res.redirectUrl) {
       router.push(res.redirectUrl);
     }
   }
 
   if (authStore.token) {
-    const result = await authStore.getUserInfo()
+    const result = await authStore.getUserInfo();
     if (!result.id) {
       authStore.clearToken();
-      router.push('/')
+      router.push("/");
     }
   }
 

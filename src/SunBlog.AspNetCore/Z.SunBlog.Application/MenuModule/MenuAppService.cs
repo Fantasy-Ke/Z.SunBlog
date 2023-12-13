@@ -14,6 +14,8 @@ using Z.SunBlog.Application.MenuModule.Dto;
 using Z.SunBlog.Core.Const;
 using Z.SunBlog.Core.MenuModule;
 using Z.SunBlog.Core.MenuModule.DomainManager;
+using Z.SunBlog.Core.MessageModule.DomainManager;
+using Z.SunBlog.Core.MessageModule.Dto;
 using Z.SunBlog.Core.SharedDto;
 
 namespace Z.SunBlog.Application.MenuModule;
@@ -25,11 +27,13 @@ public class MenuAppService : ApplicationService, IMenuAppService
 {
     private readonly IMenuManager _menuManager;
     private readonly ICacheManager _cacheManager;
+    private readonly IMessageManager _messageManager;
     public MenuAppService(
-        IServiceProvider serviceProvider, IMenuManager menuManager, ICacheManager cacheManager) : base(serviceProvider)
+        IServiceProvider serviceProvider, IMenuManager menuManager, ICacheManager cacheManager, IMessageManager messageManager) : base(serviceProvider)
     {
         _menuManager = menuManager;
         _cacheManager = cacheManager;
+        _messageManager = messageManager;
     }
 
     /// <summary>
@@ -272,7 +276,6 @@ public class MenuAppService : ApplicationService, IMenuAppService
         //List<SysMenu> menus;
         //if (_authManager.IsSuperAdmin)//超级管理员
         //{
-
         var menusList = await _menuManager.QueryAsNoTracking.ToListAsync();
         var parentList = menusList.Where(p => p.ParentId == null).ToList();
         await BuildMenu(parentList, menusList);

@@ -4,6 +4,7 @@ import { computed, inject } from "vue";
 import apiHttpClient from "../utils/api-http-client";
 import { StoreKey, useUserStore } from "./user";
 import { useToast } from "./toast";
+import { signalR } from "@/utils/signalR";
 const _oAuthCService = new OAuthsServiceProxy(inject("$baseurl"), apiHttpClient as any);
 const _authService = new AuthsServiceProxy(inject("$baseurl"), apiHttpClient as any);
 
@@ -30,6 +31,7 @@ export const useAuth = defineStore(StoreKey.Auth, () => {
     _authService.zSignOut(userStore.zToken.accessToken).then((res) => {
       const toast = useToast();
       userStore.clearToken();
+      signalR.off("ReceiveMessage");
       toast.success("退出登录成功！");
     });
   };
@@ -38,7 +40,7 @@ export const useAuth = defineStore(StoreKey.Auth, () => {
    * 退出登录
    */
   const clearToken = async () => {
-    await _authService.zSignOut(userStore.zToken?.accessToken)
+    await _authService.zSignOut(userStore.zToken?.accessToken);
     userStore.clearToken();
   };
 

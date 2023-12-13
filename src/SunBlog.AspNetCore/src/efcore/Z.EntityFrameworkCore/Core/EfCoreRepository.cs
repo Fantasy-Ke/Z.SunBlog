@@ -108,6 +108,11 @@ public abstract class EfCoreRepository<TDbContext, TEntity> : IBasicRepository<T
         return (await DbSet.AddAsync(entity, cancellationToken)).Entity;
     }
 
+    public TEntity Insert(TEntity entity)
+    {
+        return DbSet.Add(entity).Entity;
+    }
+
     public async Task InsertManyAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
     {
         await DbSet.AddRangeAsync(entities, cancellationToken);

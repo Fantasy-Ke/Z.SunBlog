@@ -1,26 +1,17 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
+﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Z.Fantasy.Core.Entities.IAuditing;
 using Z.Fantasy.Core.UnitOfWork;
 using Z.EntityFrameworkCore.Options;
 using Z.Module.DependencyInjection;
-using Z.Fantasy.Core.Entities.Auditing;
 using Z.Fantasy.Core.Entities;
 using Z.Fantasy.Core.Extensions;
 using Z.Fantasy.Core.Helper;
 using Microsoft.EntityFrameworkCore.Storage;
-using Microsoft.EntityFrameworkCore.Internal;
 
 namespace Z.EntityFrameworkCore.Core;
 
-public sealed class UnitOfWork<TDbContext> : IUnitOfWork, IDisposable where TDbContext : ZDbContext<TDbContext>
+public sealed class UnitOfWork<TDbContext> : IUnitOfWork, IDisposable,ITransientDependency where TDbContext : ZDbContext<TDbContext>
 {
     public bool IsDisposed { get; private set; }
 
@@ -46,6 +37,12 @@ public sealed class UnitOfWork<TDbContext> : IUnitOfWork, IDisposable where TDbC
         return await _dbContext.Database.BeginTransactionAsync(cancellationToken);
     }
 
+    public  IDbContextTransaction BeginTransaction()
+    {
+        IsCompleted = false;
+        return _dbContext.Database.CurrentTransaction ??  _dbContext.Database.BeginTransaction();
+    }
+
     public async Task CommitTransactionAsync(CancellationToken cancellationToken = default)
     {
         if (IsCompleted)
@@ -69,6 +66,29 @@ public sealed class UnitOfWork<TDbContext> : IUnitOfWork, IDisposable where TDbC
         }
     }
 
+    public void CommitTransaction()
+    {
+        if (IsCompleted)
+        {
+            return;
+        }
+
+        IsCompleted = true;
+        ApplyChangeConventions();
+        try
+        {
+            // 提交事务
+            _dbContext.SaveChanges();
+            _dbContext.Database.CommitTransaction();
+        }
+        catch (Exception x)
+        {
+            // 发生异常回滚事务
+            RollbackTransaction();
+            throw;
+        }
+    }
+
     public async Task RollbackTransactionAsync(CancellationToken cancellationToken = default)
     {
         if (IsCompleted)
@@ -77,6 +97,16 @@ public sealed class UnitOfWork<TDbContext> : IUnitOfWork, IDisposable where TDbC
         }
         IsRollback = true;
         await _dbContext.Database.RollbackTransactionAsync(cancellationToken).ConfigureAwait(false);
+    }
+
+    public void RollbackTransaction()
+    {
+        if (IsCompleted)
+        {
+            return;
+        }
+        IsRollback = true;
+        _dbContext.Database.RollbackTransaction();
     }
 
     public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

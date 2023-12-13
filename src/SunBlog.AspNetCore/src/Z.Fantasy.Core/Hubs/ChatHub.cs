@@ -2,7 +2,10 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Z.EventBus.EventBus;
+using Z.Fantasy.Core.Authorization;
+using Z.Fantasy.Core.Extensions;
 using Z.Fantasy.Core.UserSession;
+using Z.Module.Extensions;
 
 namespace Z.Fantasy.Core.Hubs
 {
@@ -11,23 +14,30 @@ namespace Z.Fantasy.Core.Hubs
         private readonly ILogger _logger;
         private readonly ILocalEventBus _eventBus;
         private readonly IUserSession _userSession;
+        private readonly IJwtTokenProvider _jwtTokenProvider;
         public ChatHub(ILoggerFactory loggerFactory
             , ILocalEventBus eventBus,
-        IUserSession userSession)
+        IUserSession userSession,
+        IJwtTokenProvider jwtTokenProvider)
         {
             _logger = loggerFactory.CreateLogger<ChatHub>();
             _eventBus = eventBus;
             _userSession = userSession;
+            this._jwtTokenProvider = jwtTokenProvider;
         }
 
         public override async Task OnConnectedAsync()
         {
+           var f =  HubClients.ConnectionClient;
+            var token = Context.GetHttpContext().Request.Query["access_token"];
+            if (token.IsNullOrEmpty()) return;
+            var claims = _jwtTokenProvider.DecodeToken(token);
             await base.OnConnectedAsync();
-            if (Context.User.Claims.Count() > 0)
+            if (claims.Count() > 0)
             {
                 //按用户分组
                 //是有必要的 例如多个浏览器、多个标签页使用同个用户登录 应当归属于一组
-                var groupName = Context.User.Claims.FirstOrDefault(c => c.Type == ZClaimTypes.UserId).Value;
+                var groupName = claims.FirstOrDefault(c => c.Type == ZClaimTypes.UserId).Value;
                 await AddToGroup(groupName);
                 AddCacheClient(groupName);
             }
@@ -35,16 +45,12 @@ namespace Z.Fantasy.Core.Hubs
 
         public override async Task OnDisconnectedAsync(Exception exception)
         {
+            if (string.IsNullOrEmpty(Context.ConnectionId)) return;
             _logger.LogWarning(exception?.Message ?? "断开连接信息异常");
-            if (Context.User.Claims.Count() > 0)
-            {
-                //按用户分组
-                //是有必要的 例如多个浏览器、多个标签页使用同个用户登录 应当归属于一组
-                var groupName = Context.User.Claims.FirstOrDefault(c => c.Type == ZClaimTypes.UserId).Value;
-                await RemoveToGroup(groupName);
-                RemoveCacheClient(groupName);
-            }
-
+            //按用户分组
+            //是有必要的 例如多个浏览器、多个标签页使用同个用户登录 应当归属于一组
+            var groupName = RemoveCacheClient();
+            await RemoveToGroup(groupName);
             await base.OnDisconnectedAsync(exception);
 
         }
@@ -78,14 +84,16 @@ namespace Z.Fantasy.Core.Hubs
             });
         }
 
-        public void RemoveCacheClient(string groupName)
+        public string RemoveCacheClient()
         {
-            var client = HubClients.ConnectionClient.FirstOrDefault(n => n.ConnectionId == Context.ConnectionId && n.GroupName == groupName);
+            var client = HubClients.ConnectionClient.FirstOrDefault(n => n.ConnectionId == Context.ConnectionId);
             if (client != null)
             {
                 HubClients.ConnectionClient.Remove(client);
                 _logger.LogWarning($"remove :{client.ConnectionId}");
+                return client.GroupName;
             }
+           return string.Empty;
         }
     }
 

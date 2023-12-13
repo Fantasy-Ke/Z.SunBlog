@@ -18,6 +18,9 @@ public interface IBasicRepository<TEntity> : IReadOnlyBasicRepository<TEntity>
     /// <param name="entity">Inserted entity</param>
     Task<TEntity> InsertAsync(TEntity entity, CancellationToken cancellationToken = default);
 
+
+    TEntity Insert(TEntity entity);
+
     /// <summary>
     /// Inserts multiple new entities.
     /// </summary>

@@ -19,6 +19,13 @@ public interface IUnitOfWork : IDisposable
     Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default);
 
     /// <summary>
+    /// 开始事务
+    /// </summary>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    IDbContextTransaction BeginTransaction();
+
+    /// <summary>
     /// 保存更改
     /// </summary>
     /// <param name="cancellationToken"></param>
@@ -30,8 +37,22 @@ public interface IUnitOfWork : IDisposable
     /// </summary>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
+    void CommitTransaction();
+
+    /// <summary>
+    /// 提交事务
+    /// </summary>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     Task CommitTransactionAsync(CancellationToken cancellationToken = default);
 
+
+    /// <summary>
+    /// 回滚事务
+    /// </summary>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    void RollbackTransaction();
     /// <summary>
     /// 回滚事务
     /// </summary>

@@ -75,44 +75,46 @@ namespace Z.Fantasy.Application.Middleware
                         await _next(context);
                     }
 
-                    context.Response.OnCompleted(async () =>
+                    context.Response.OnCompleted(() =>
                     {
                         stopwatch.Stop();
-                        if (!AppSettings.GetValue("App:MiddlewareSettings:RequestLog:WriteDB").CastTo(false)) return;
-                        using var unit = IOCManager.GetService<IUnitOfWork>();
-                        try
-                        {
-                            var service = IOCManager.GetService<IBasicRepository<ZRequestLog>>();
-                            await unit.BeginTransactionAsync();
-                            var uaParser = Parser.GetDefault();
-                            ClientInfo info = uaParser.Parse(requestAgent);
-                            var entity = await service.InsertAsync(new ZRequestLog()
-                            {
-                                RequestUri = requestUri,
-                                RequestType = requestMethod,
-                                RequestData = requestData,
-                                ResponseData = responseData,
-                                UserId = _userSession.UserId,
-                                UserName = _userSession.UserName,
-                                ClientIP = ipAddress,
-                                SpendTime = $"{stopwatch.ElapsedMilliseconds}ms",
-                                UserOS = $"{info.OS}",
-                                UserAgent = $"{info.UA}",
-                            });
-                            await unit.CommitTransactionAsync();
-                        }
-                        catch (Exception ex)
-                        {
-                            await unit.RollbackTransactionAsync();
-                            logger.LogError(ex, $"插入请求日志失败={ex.Message}（requestMethod={requestMethod}，requestUri={requestUri}，requestAgent={requestAgent}，ipAddress={ipAddress}）");
-                        }
+                        if (!AppSettings.GetValue("App:MiddlewareSettings:RequestLog:WriteDB").CastTo(false)) return Task.CompletedTask;
+                        //using var unit = IOCManager.GetService<IUnitOfWork>();
+                        //try
+                        //{
+                        //    unit.BeginTransaction();
+                        //    var service = IOCManager.GetService<IBasicRepository<ZRequestLog>>();
+                        //    var uaParser = Parser.GetDefault();
+                        //    ClientInfo info = uaParser.Parse(requestAgent);
+                        //    var entity = service.Insert(new ZRequestLog()
+                        //    {
+                        //        RequestUri = requestUri,
+                        //        RequestType = requestMethod,
+                        //        RequestData = requestData,
+                        //        ResponseData = responseData,
+                        //        UserId = _userSession.UserId,
+                        //        UserName = _userSession.UserName,
+                        //        ClientIP = ipAddress,
+                        //        SpendTime = $"{stopwatch.ElapsedMilliseconds}ms",
+                        //        UserOS = $"{info.OS}",
+                        //        UserAgent = $"{info.UA}",
+                        //    });
+                        //    unit.CommitTransaction();
+                        //}
+                        //catch (Exception ex)
+                        //{
+                        //    unit.RollbackTransaction();
+                        //    logger.LogError(ex, $"插入请求日志失败={ex.Message}（requestMethod={requestMethod}，requestUri={requestUri}，requestAgent={requestAgent}，ipAddress={ipAddress}）");
+                        //}
 
+                        //unit.Dispose();
 
+                        return Task.CompletedTask;
                     });
                 }
                 else
                 {
-                    await _next(context).ConfigureAwait(false);
+                    await _next(context);
                 }
             }
             else
