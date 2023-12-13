@@ -22,11 +22,27 @@ import SideNavBar from "./components/layout/SideNavBar.vue";
 import Footer from "./components/layout/Footer.vue";
 import BackTop from "./components/BackTop.vue";
 import { useThemeSettingStore } from "./stores/themeSetting";
-import { computed } from "vue";
+import { computed, onMounted } from "vue";
+import { signalR } from '@/utils/signalR';
+import { ElNotification } from "element-plus";
 const { theme } = storeToRefs(useThemeSettingStore());
 const route = useRoute();
 const key = computed(() => {
   return route.fullPath + Math.random();
+});
+
+onMounted(async () => {
+  signalR.off("ReceiveMessage");
+  signalR.on("ReceiveMessage", (data) => {
+    debugger;
+    console.log(data);
+    ElNotification({
+      title: data.title,
+      message: data.message,
+      type: 'success',
+      position: 'top-right',
+    });
+  });
 });
 
 </script>
