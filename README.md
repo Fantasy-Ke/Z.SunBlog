@@ -9,14 +9,14 @@
 - EF Core 7 适配SqlServer和Mysql
   - 仓储
   - 简单工作单元
+- 模块化处理
+- 简单EventBus 基于Channels 
+- Autofac依赖注入，AOP注册处理
 - 简单Minio存储桶
 - 简单Redis缓存
-- 授权管理
 - 动态api
-- 模块化处理
+- 授权管理(部分)
 - AutoMapper (想改成 `Mapster` 对象映射 )
-- Autofac依赖注入，AOP注册处理
-- 简单EventBus 基于Channels 
 - HangFile 后台任务(待实现)
 - SignalR实时通信(待实现)
 - MongoDb(待实现)
