@@ -116,9 +116,6 @@ export class apiHttpClient {
 						case 408:
 							message = '请求超时(408)';
 							break;
-						case 500:
-							message = err.response.data.error.message;
-							break;
 						case 501:
 							message = '服务未实现(501)';
 							break;
@@ -134,12 +131,10 @@ export class apiHttpClient {
 						case 505:
 							message = 'HTTP版本不受支持(505)';
 							break;
-						default:
-							message = `连接出错(${err.response.status})!`;
 					}
 				}
 				// 这里错误消息可以使用全局弹框展示出来
-				if (message) {
+				if (message && err.response.status!=500) {
 					// 比如element plus 可以使用 ElMessage
 					ElMessage({
 						showClose: true,

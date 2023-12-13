@@ -28,9 +28,13 @@ export const useUserInfo = defineStore(StoreKey.UserInfo, () => {
 	/**
 	 * 获取当前用户基本信息
 	 */
-	const getUserInfo = async () => {
-		const { result } = await _usersCService.currentUserInfo();
-		userStore.setUserInfo(result!);
+	const getUserInfo = () => {
+		_usersCService.currentUserInfo().then(res=>{
+        userStore.setUserInfo(res.result!);
+     }).catch(() => {
+      clearToken();
+    })
+		
 	};
 	/**
 	 * 获取当前用户基本信息
