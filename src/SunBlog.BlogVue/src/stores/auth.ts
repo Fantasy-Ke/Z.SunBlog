@@ -35,19 +35,31 @@ export const useAuth = defineStore(StoreKey.Auth, () => {
   };
 
   /**
+   * 退出登录
+   */
+  const clearToken = async () => {
+    await _authService.zSignOut(userStore.zToken?.accessToken)
+    userStore.clearToken();
+  };
+
+  /**
    * 获取用户信息
    */
   const getUserInfo = async () => {
-    await _oAuthCService.userInfo().then((res) => {
-      if (res.success) {
-        userStore.setUserInfo(res.result);
-      }
-    });
+    const { result } = await _oAuthCService.userInfo();
+    if (result.id) {
+      userStore.setUserInfo(result);
+    }
+    return result;
   };
 
   const info = computed(() => {
     return userStore.userInfo;
   });
 
-  return { login, logout, getUserInfo, info };
+  const token = computed(() => {
+    return userStore.zToken;
+  });
+
+  return { login, logout, getUserInfo, clearToken, info, token };
 });

@@ -286,6 +286,14 @@ onMounted(async () => {
     }
   }
 
+  if (authStore.token) {
+    const result = await authStore.getUserInfo()
+    if (!result.id) {
+      authStore.clearToken();
+      router.push('/')
+    }
+  }
+
   _talksCService.getList({ pageNo: 1, pageSize: 10 } as Pagination).then((res) => {
     let data = res.result;
     if (data) {
