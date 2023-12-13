@@ -260,6 +260,7 @@ namespace Z.SunBlog.Host.Builder
                 options.EnrichDiagnosticContext = SerilogRequestUtility.EnrichFromRequest;
             });
 
+            //中间件
             app.UseMiddleware();
 
             app.UseRouting();
@@ -289,7 +290,7 @@ namespace Z.SunBlog.Host.Builder
         }
 
         /// <summary>
-        /// swagger
+        /// swagger管道
         /// </summary>
         /// <param name="app"></param>
         public static void UseAddSwagger(this IApplicationBuilder app)

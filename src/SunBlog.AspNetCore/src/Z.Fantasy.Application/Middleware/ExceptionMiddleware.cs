@@ -1,9 +1,17 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Serilog;
-using System;
+using Z.Fantasy.Core.Extensions;
 using System.Runtime.ExceptionServices;
+using UAParser;
+using Z.Fantasy.Core.AutofacExtensions;
+using Z.Fantasy.Core.Entities.EntityLog;
+using Z.Fantasy.Core.Entities.Repositories;
+using Z.Fantasy.Core.Helper;
 using Z.Fantasy.Core.ResultResponse;
+using Z.Fantasy.Core.UnitOfWork;
+using Z.Fantasy.Core.UserSession;
 
 namespace Z.Fantasy.Application.Middleware;
 
@@ -11,11 +19,15 @@ public class ExceptionMiddleware
 {
     private readonly RequestDelegate _next;
     private IHostEnvironment _environment;
+    private readonly IUserSession _userSession;
+    readonly ILogger<ExceptionMiddleware> logger;
 
-    public ExceptionMiddleware(RequestDelegate next, IHostEnvironment environment)
+    public ExceptionMiddleware(RequestDelegate next, IHostEnvironment environment, ILogger<ExceptionMiddleware> logger, IUserSession userSession)
     {
         _next = next;
         _environment = environment;
+        this.logger = logger;
+        _userSession = userSession;
     }
 
     public async Task Invoke(HttpContext context)
@@ -58,6 +70,41 @@ public class ExceptionMiddleware
         response.Success = false;
         response.StatusCode = StatusCodes.Status500InternalServerError;
         await context.Response.WriteAsJsonAsync(response);
+
+        context.Response.OnCompleted(async () =>
+        {
+            var request = context.Request;
+            string requestUri = $"{request.Scheme}://{request.Host}{request.Path}{request.QueryString}";
+            string ipAddress = App.GetRemoteIp(context);
+            string requestAgent = context.Request.Headers.UserAgent.NotNullString();
+            using var unit = IOCManager.GetService<IUnitOfWork>();
+            try
+            {
+                var service = IOCManager.GetService<IBasicRepository<ZExceptionLog>>();
+                await unit.BeginTransactionAsync();
+                var uaParser = Parser.GetDefault();
+                ClientInfo info = uaParser.Parse(requestAgent);
+                var entity = await service.InsertAsync(new ZExceptionLog()
+                {
+                    RequestUri = requestUri,
+                    Message = exception.Message,
+                    Source = exception.Source,
+                    StackTrace = exception.StackTrace,
+                    Type = _userSession.UserId,
+                    OperatorId = _userSession.UserId,
+                    ClientIP = ipAddress,
+                    OperatorName = _userSession.UserName,
+                    UserOS = $"{info.OS}",
+                    UserAgent = $"{info.UA}",
+                });
+                await unit.CommitTransactionAsync();
+            }
+            catch (Exception ex)
+            {
+                await unit.RollbackTransactionAsync();
+                logger.LogError(ex, $"插入异常日志失败={ex.Message}（requestUri={requestUri}，requestAgent={requestAgent}，ipAddress={ipAddress}）");
+            }
+        });
     }
 
 

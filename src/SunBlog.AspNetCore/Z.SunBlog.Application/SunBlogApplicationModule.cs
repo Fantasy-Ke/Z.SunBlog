@@ -1,9 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using System.Reactive.Linq;
 using Z.Fantasy.Application;
 using Z.Fantasy.Core.Authorization.Authorize;
 using Z.Fantasy.Core.AutoMapper;
-using Z.EventBus.Extensions;
 using Z.Module;
 using Z.Module.Modules;
 using Z.SunBlog.Application.AlbumsModule.BlogServer.MapperConfig;
@@ -49,11 +47,10 @@ namespace Z.SunBlog.Application
         /// <returns></returns>
         public override async Task PostInitApplicationAsync(InitApplicationContext context)
         {
-            var scope = context.ServiceProvider.CreateScope();
+            var scope = context.ServiceProvider.CreateAsyncScope();
             var authorizeManager = scope.ServiceProvider.GetRequiredService<IAuthorizeManager>();
-
             IAuthorizePermissionContext permissionContext = new AuthorizePermissionContext();
-           await authorizeManager.AddAuthorizeRegiester(permissionContext);
+            await authorizeManager.AddAuthorizeRegiester(permissionContext);
         }
 
         private void PermissionProvider()
