@@ -1,12 +1,4 @@
-﻿using FreeRedis;
-using NewLife.Caching;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Z.Fantasy.Core.RedisModule.CacheHelper;
-using Z.Module.DependencyInjection;
+﻿using Z.Module.DependencyInjection;
 
 namespace Z.Fantasy.Core.RedisModule
 {
@@ -41,7 +33,7 @@ namespace Z.Fantasy.Core.RedisModule
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        Task<bool> ExistsAsync(string key);
+        Task<bool> ExistsCacheAsync(string key);
 
 
         /// <summary>

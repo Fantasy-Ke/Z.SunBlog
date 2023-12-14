@@ -3,6 +3,10 @@
 public class CacheConst
 {
     /// <summary>
+    /// signlR缓存键
+    /// </summary>
+    public const string SignlRKey = "signlr.chat.key.";
+    /// <summary>
     /// 权限缓存键
     /// </summary>
     public const string PermissionKey = "permission.";

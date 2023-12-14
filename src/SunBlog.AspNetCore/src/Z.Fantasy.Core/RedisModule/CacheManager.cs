@@ -1,15 +1,7 @@
 ﻿using FreeRedis;
-using Microsoft.AspNetCore.SignalR.Protocol;
-using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.IdentityModel.Tokens;
-using NewLife.Caching;
-using Newtonsoft.Json.Linq;
-using StackExchange.Redis;
-using System.Text;
 using Z.Fantasy.Core.Exceptions;
 using Z.Fantasy.Core.Extensions;
-using Z.Fantasy.Core.Helper;
-using Z.Fantasy.Core.RedisModule.CacheHelper;
 using Z.Module.DependencyInjection;
 
 namespace Z.Fantasy.Core.RedisModule
@@ -17,12 +9,10 @@ namespace Z.Fantasy.Core.RedisModule
     public class CacheManager : RedisCacheBaseService, ICacheManager, ISingletonDependency
     {
         private readonly RedisClient _redisClient;
-        private readonly RedisCacheOptions cacheOptions;
 
         public CacheManager(RedisClient redisClient):base(redisClient)
         {
             _redisClient = redisClient;
-            cacheOptions = AppSettings.AppOption<RedisCacheOptions>("App:RedisCache");
         }
 
         /// <summary>
@@ -163,7 +153,7 @@ namespace Z.Fantasy.Core.RedisModule
 
         }
 
-        public async Task<bool> ExistsAsync(string key)
+        public async Task<bool> ExistsCacheAsync(string key)
         {
             return await _redisClient.ExistsAsync(BuildKey(key));
         }

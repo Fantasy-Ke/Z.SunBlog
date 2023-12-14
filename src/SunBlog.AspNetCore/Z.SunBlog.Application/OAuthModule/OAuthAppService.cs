@@ -123,7 +123,7 @@ namespace Z.SunBlog.Application.OAuthModule
         [NoResult]
         public async Task<IActionResult> Callback(string type, [FromQuery] string code, [FromQuery] string state)
         {
-            if (string.IsNullOrWhiteSpace(state) || !await _cacheManager.ExistsAsync($"{OAuthRedirectKey}{state}"))
+            if (string.IsNullOrWhiteSpace(state) || !await _cacheManager.ExistsCacheAsync($"{OAuthRedirectKey}{state}"))
             {
                 throw new UserFriendlyException("缺少参数");
             }

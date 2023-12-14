@@ -10,7 +10,7 @@ using Z.SunBlog.EntityFrameworkCore;
 using Z.Fantasy.Core.Helper;
 using Z.Fantasy.Core.OAuth.Gitee;
 using Z.Fantasy.Core.OAuth.GitHub;
-using Z.Fantasy.Core.Hubs;
+using Z.SunBlog.Core.Hubs;
 
 namespace Z.SunBlog.Host;
 

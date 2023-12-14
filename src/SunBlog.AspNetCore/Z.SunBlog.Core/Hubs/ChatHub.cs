@@ -1,42 +1,32 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Z.EventBus.EventBus;
-using Z.Fantasy.Core.Authorization;
-using Z.Fantasy.Core.Extensions;
+using Z.Fantasy.Core.RedisModule;
 using Z.Fantasy.Core.UserSession;
-using Z.Module.Extensions;
+using Z.SunBlog.Core.Const;
 
-namespace Z.Fantasy.Core.Hubs
+namespace Z.SunBlog.Core.Hubs
 {
     public class ChatHub : Hub<IChatService>
     {
         private readonly ILogger _logger;
-        private readonly ILocalEventBus _eventBus;
-        private readonly IUserSession _userSession;
-        private readonly IJwtTokenProvider _jwtTokenProvider;
-        public ChatHub(ILoggerFactory loggerFactory
-            , ILocalEventBus eventBus,
-        IUserSession userSession,
-        IJwtTokenProvider jwtTokenProvider)
+        private readonly ICacheManager _cacheManager;
+        public ChatHub(ILoggerFactory loggerFactory, ICacheManager cacheManager)
         {
             _logger = loggerFactory.CreateLogger<ChatHub>();
-            _eventBus = eventBus;
-            _userSession = userSession;
-            this._jwtTokenProvider = jwtTokenProvider;
+            _cacheManager = cacheManager;
         }
 
         public override async Task OnConnectedAsync()
         {
             await base.OnConnectedAsync();
-            if (Context.User?.Identity?.IsAuthenticated == true) 
+            if (Context.User?.Identity?.IsAuthenticated == true)
             {
                 var claims = Context.User.Claims.ToList();
                 //按用户分组
                 //是有必要的 例如多个浏览器、多个标签页使用同个用户登录 应当归属于一组
                 var groupName = claims.FirstOrDefault(c => c.Type == ZClaimTypes.UserId).Value;
                 await AddToGroup(groupName);
-                AddCacheClient(groupName);
+                await AddCacheClient(groupName);
             }
         }
 
@@ -46,7 +36,7 @@ namespace Z.Fantasy.Core.Hubs
             _logger.LogWarning(exception?.Message ?? "断开连接信息异常");
             //按用户分组
             //是有必要的 例如多个浏览器、多个标签页使用同个用户登录 应当归属于一组
-            var groupName = RemoveCacheClient();
+            var groupName = await RemoveCacheClient();
             await RemoveToGroup(groupName);
             await base.OnDisconnectedAsync(exception);
 
@@ -72,25 +62,41 @@ namespace Z.Fantasy.Core.Hubs
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, groupName);
         }
 
-        public void AddCacheClient(string groupName)
+        public async Task AddCacheClient(string groupName)
         {
-            HubClients.ConnectionClient.Add(new ConnectionClient()
+            var connectionClients = await _cacheManager.LRangeAsync<ConnectionClient>(CacheConst.SignlRKey, 0, -1);
+            var client = connectionClients.FirstOrDefault(n => n.GroupName == groupName);
+            int index = Array.IndexOf(connectionClients, client);
+            if (index == -1)
             {
-                GroupName = groupName,
-                ConnectionId = Context.ConnectionId
-            });
+                await _cacheManager.LPushAsync(CacheConst.SignlRKey, new ConnectionClient()
+                {
+                    GroupName = groupName,
+                    ConnectionId = Context.ConnectionId
+                });
+            }
+            else
+            {
+                await _cacheManager.LSetAsync(CacheConst.SignlRKey, index, new ConnectionClient()
+                {
+                    GroupName = groupName,
+                    ConnectionId = Context.ConnectionId
+                });
+            }
+
         }
 
-        public string RemoveCacheClient()
+        public async Task<string> RemoveCacheClient()
         {
-            var client = HubClients.ConnectionClient.FirstOrDefault(n => n.ConnectionId == Context.ConnectionId);
+            var connectionClients = await _cacheManager.LRangeAsync<ConnectionClient>(CacheConst.SignlRKey, 0, -1);
+            var client = connectionClients.FirstOrDefault(n => n.ConnectionId == Context.ConnectionId);
             if (client != null)
             {
-                HubClients.ConnectionClient.Remove(client);
+                await _cacheManager.LRemAsync(CacheConst.SignlRKey, 0, client);
                 _logger.LogWarning($"remove :{client.ConnectionId}");
                 return client.GroupName;
             }
-           return string.Empty;
+            return string.Empty;
         }
     }
 

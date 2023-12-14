@@ -9,8 +9,6 @@ using Z.SunBlog.Core.PraiseModule.DomainManager;
 using Z.SunBlog.Core.TalksModule.DomainManager;
 using Z.Fantasy.Core.Entities.Enum;
 using Z.Fantasy.Core.ResultResponse.Pager;
-using Microsoft.AspNetCore.SignalR;
-using Z.Fantasy.Core.Hubs;
 
 namespace Z.SunBlog.Application.TalksModule.BlogClient
 {

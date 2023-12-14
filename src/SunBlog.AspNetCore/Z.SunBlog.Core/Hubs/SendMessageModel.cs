@@ -1,4 +1,4 @@
-﻿namespace Z.Fantasy.Core.Hubs
+﻿namespace Z.SunBlog.Core.Hubs
 {
     public class SendMessageModel
     {

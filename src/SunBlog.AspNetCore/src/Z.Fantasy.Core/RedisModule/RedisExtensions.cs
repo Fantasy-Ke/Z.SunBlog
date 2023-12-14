@@ -3,17 +3,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
-using NewLife.Caching;
 using Newtonsoft.Json;
-using StackExchange.Redis;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Z.Fantasy.Core.Exceptions;
-using Z.Fantasy.Core.Helper;
-using Z.Fantasy.Core.RedisModule.CacheHelper;
 
 namespace Z.Fantasy.Core.RedisModule
 {

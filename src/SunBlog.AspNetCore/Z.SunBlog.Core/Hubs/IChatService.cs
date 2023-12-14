@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Z.Fantasy.Core.Hubs
+namespace Z.SunBlog.Core.Hubs
 {
     public interface IChatService
     {
