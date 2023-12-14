@@ -27,12 +27,7 @@ namespace Z.Fantasy.Core
             context.Services.OnRegistered(LogInterceptorRegistrar.RegisterIfNeeded);
             //context.UseAutofac();
             var configuration = context.GetConfiguration();
-            //redis注册
-            context.Services.AddRedis(configuration);
-
-            context.Services.AddMinio(configuration);
-
-            context.Services.AddTransient<IMinioService, MinioService>();
+            
         }
 
         public override void PostInitApplication(InitApplicationContext context)

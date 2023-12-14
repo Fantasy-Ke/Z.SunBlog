@@ -1,4 +1,6 @@
-﻿using System;
+﻿using FreeRedis;
+using NewLife.Caching;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,61 +10,8 @@ using Z.Module.DependencyInjection;
 
 namespace Z.Fantasy.Core.RedisModule
 {
-    public interface ICacheManager : ISingletonDependency
+    public interface ICacheManager :IRedisCacheBaseService, ITransientDependency
     {
-        #region 设置缓存 
-        /// <summary>
-        /// 设置缓存
-        /// </summary>
-        /// <param name="key">缓存Key</param>
-        /// <param name="value">值</param>
-        void SetCache(string key, object value);
-        /// <summary>
-        /// 设置缓存
-        /// </summary>
-        /// <param name="key">缓存Key</param>
-        /// <param name="value">值</param>
-        Task SetCacheAsync(string key, object value);
-
-        /// <summary>
-        /// 设置缓存
-        /// 注：默认过期类型为绝对过期
-        /// </summary>
-        /// <param name="key">缓存Key</param>
-        /// <param name="value">值</param>
-        /// <param name="timeout">过期时间间隔</param>
-        void SetCache(string key, object value, TimeSpan timeout);
-
-        /// <summary>
-        /// 设置缓存
-        /// 注：默认过期类型为绝对过期
-        /// </summary>
-        /// <param name="key">缓存Key</param>
-        /// <param name="value">值</param>
-        /// <param name="timeout">过期时间间隔</param>
-        Task SetCacheAsync(string key, object value, TimeSpan timeout);
-
-        /// <summary>
-        /// 设置缓存
-        /// 注：默认过期类型为绝对过期
-        /// </summary>
-        /// <param name="key">缓存Key</param>
-        /// <param name="value">值</param>
-        /// <param name="timeout">过期时间间隔</param>
-        /// <param name="expireType">过期类型</param>  
-        void SetCache(string key, object value, TimeSpan timeout, ExpireType expireType);
-
-        /// <summary>
-        /// 设置缓存
-        /// 注：默认过期类型为绝对过期
-        /// </summary>
-        /// <param name="key">缓存Key</param>
-        /// <param name="value">值</param>
-        /// <param name="timeout">过期时间间隔</param>
-        /// <param name="expireType">过期类型</param>  
-        Task SetCacheAsync(string key, object value, TimeSpan timeout, ExpireType expireType);
-        #endregion
-
         #region 获取缓存
 
         /// <summary>
@@ -125,17 +74,5 @@ namespace Z.Fantasy.Core.RedisModule
 
         #endregion
 
-        #region 刷新缓存
-        /// <summary>
-        /// 刷新缓存
-        /// </summary>
-        /// <param name="key">缓存Key</param>
-        void RefreshCache(string key);
-        /// <summary>
-        /// 刷新缓存
-        /// </summary>
-        /// <param name="key">缓存Key</param>
-        Task RefreshCacheAsync(string key);
-        #endregion
     }
 }

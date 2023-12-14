@@ -12,10 +12,9 @@
 	<PackageReference Include="Autofac.Extras.DynamicProxy" Version="7.1.0" />
 	<PackageReference Include="AutoMapper" Version="12.0.1" />
 	<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
-	<PackageReference Include="Caching.CSRedis" Version="3.8.800" />
 	<PackageReference Include="Castle.Core.AsyncInterceptor" Version="2.1.0" />
-	<PackageReference Include="CSRedisCore" Version="3.8.802" />
 	<PackageReference Include="Cuemon.Extensions.AspNetCore.Mvc.Formatters.Newtonsoft.Json" Version="8.0.0" />
+	<PackageReference Include="FreeRedis" Version="1.2.9" />
 	<PackageReference Include="Hashids.net" Version="1.7.0" />
 	<PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.MessagePack" Version="8.0.0" />
 	<PackageReference Include="Microsoft.AspNetCore.SignalR.StackExchangeRedis" Version="8.0.0" />
@@ -27,6 +26,7 @@
 	  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	</PackageReference>
 	<PackageReference Include="Minio" Version="6.0.1" />
+	<PackageReference Include="NewLife.Core" Version="10.6.2023.1201" />
 	<PackageReference Include="Serilog.Sinks.Seq" Version="6.0.0" />
 	<PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.5.0" />
 	<PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />

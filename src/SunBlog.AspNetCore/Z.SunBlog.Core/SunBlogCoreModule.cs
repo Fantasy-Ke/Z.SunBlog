@@ -10,6 +10,7 @@ using Z.Module.Modules;
 using Z.SunBlog.Common;
 using Z.SunBlog.Core.Handlers.FileHandlers;
 using Z.SunBlog.Core.Handlers.TestHandlers;
+using Z.Fantasy.Core.Minio;
 
 namespace Z.SunBlog.Core
 {
@@ -19,6 +20,11 @@ namespace Z.SunBlog.Core
         public override void ConfigureServices(ServiceConfigerContext context)
         {
             var configuration = context.GetConfiguration();
+
+            //redis注册
+            context.Services.AddZRedis(configuration);
+
+            context.Services.AddZMinio(configuration);
             // 注入事件总线
             context.Services.AddEventBus();
 

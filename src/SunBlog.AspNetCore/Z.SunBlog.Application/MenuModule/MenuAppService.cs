@@ -208,7 +208,7 @@ public class MenuAppService : ApplicationService, IMenuAppService
     public async Task Delete(KeyDto dto)
     {
         await _menuManager.DeleteAsync(dto.Id);
-        await _cacheManager.RefreshCacheAsync(CacheConst.PermissionKey);
+        await _cacheManager.RemoveCacheAsync(CacheConst.PermissionKey);
     }
 
     /// <summary>
@@ -222,7 +222,7 @@ public class MenuAppService : ApplicationService, IMenuAppService
         var entity = await _menuManager.FindByIdAsync((Guid)dto.GId!);
         entity.Status = dto.Status;
         var entityAfter = await _menuManager.UpdateAsync(entity);
-        await _cacheManager.RefreshCacheAsync(CacheConst.PermissionKey);
+        await _cacheManager.RemoveCacheAsync(CacheConst.PermissionKey);
     }
 
     /// <summary>

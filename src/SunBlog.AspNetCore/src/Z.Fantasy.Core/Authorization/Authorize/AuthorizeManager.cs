@@ -1,12 +1,6 @@
-﻿using CSRedis;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Serilog;
-using Yitter.IdGenerator;
-using Z.Fantasy.Core.DomainServiceRegister;
-using Z.Fantasy.Core.Entities.Users;
 using Z.Fantasy.Core.Entities.Permission;
 using Z.Fantasy.Core.Entities.Repositories;
 using Z.Fantasy.Core.RedisModule;

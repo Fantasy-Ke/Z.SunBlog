@@ -11,7 +11,7 @@ public static class MinioExtensions
     /// </summary>
     /// <param name="services"></param>
     /// <param name="options"></param>
-    public static void AddMinio(this IServiceCollection services, IConfiguration configuration)
+    public static void AddZMinio(this IServiceCollection services, IConfiguration configuration)
     {
         var config = configuration.GetSection("App:MinioConfig")
                       .Get<MinioConfig>();
@@ -36,5 +36,7 @@ public static class MinioExtensions
             .Build();
 
         services.AddSingleton((MinioClient)client);
+
+        services.AddTransient<IMinioService, MinioService>();
     }
 }

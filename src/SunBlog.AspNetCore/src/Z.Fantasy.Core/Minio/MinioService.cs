@@ -10,7 +10,7 @@ using System.Diagnostics;
 
 namespace Z.Fantasy.Core.Minio
 {
-    public class MinioService : IMinioService, IScopedDependency
+    public class MinioService : IMinioService
     {
         private readonly MinioClient _minioClient;
 
