@@ -155,6 +155,9 @@ namespace Z.SunBlog.Application.AuthModule
             var userid = UserService.UserId;
             if (!userid.IsNullWhiteSpace())
             {
+                var accIds = await _cacheManager.LRangeAsync("Blog.Blogger.Key", 0,-1);
+                var index = Array.IndexOf(accIds, userid);
+                await _cacheManager.LRemAsync("Blog.Blogger.Key", index, userid);
                 await _cacheManager.RemoveCacheAsync($"Token_{userid}");
             }
         }

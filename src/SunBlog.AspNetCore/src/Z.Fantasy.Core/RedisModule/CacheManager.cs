@@ -10,9 +10,12 @@ namespace Z.Fantasy.Core.RedisModule
     {
         private readonly RedisClient _redisClient;
 
+        public RedisClient Client { get; set; }
+
         public CacheManager(RedisClient redisClient):base(redisClient)
         {
             _redisClient = redisClient;
+            Client = _redisClient;
         }
 
         /// <summary>
@@ -157,6 +160,5 @@ namespace Z.Fantasy.Core.RedisModule
         {
             return await _redisClient.ExistsAsync(BuildKey(key));
         }
-
     }
 }

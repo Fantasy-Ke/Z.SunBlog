@@ -189,7 +189,10 @@ namespace Z.SunBlog.Application.OAuthModule
                 new Claim(ZClaimTypes.Expiration, DateTimeOffset.Now.AddMinutes(tokenConfig.AccessTokenExpirationMinutes).ToString()),
             };
             if (account.IsBlogger)
+            {
                 await _messageManager.SendAll(new MessageInput() { Title = "提示！！", Message = "博主登陆了大家赶紧拜访拜访！！！" });
+                await _cacheManager.LPushAsync("Blog.Blogger.Key",account.Id);
+            }
             var token = _jwtTokenProvider.GenerateZToken(claims.ToArray());
             string url = await _cacheManager.GetCacheAsync<string>(key2);
             await _cacheManager.RemoveCacheAsync(key);

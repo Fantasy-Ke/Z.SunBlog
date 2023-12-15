@@ -27,8 +27,10 @@ namespace Z.Fantasy.Core.RedisModule
                 redisClient.Serialize = JsonConvert.SerializeObject;
                 redisClient.Deserialize = JsonConvert.DeserializeObject;
                 redisClient.Notice += (s, e) => logger.LogInformation(e.Log);
-                redisClient.Connected += (object sender, global::FreeRedis.ConnectedEventArgs e) =>
-                        logger.LogInformation($"RedisClient_Connected：{e.Host}");
+                redisClient.Connected += (object sender, global::FreeRedis.ConnectedEventArgs e) => 
+                {
+                    logger.LogInformation($"RedisClient_Connected：{e.Host}");
+                };
                 redisClient.Unavailable += (object sender, global::FreeRedis.UnavailableEventArgs e) =>
                        logger.LogInformation($"RedisClient_Connected：{e.Host}");
                 if (cacheOption.SideCache.Enable)

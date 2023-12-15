@@ -1,9 +1,12 @@
-﻿using Z.Module.DependencyInjection;
+﻿using FreeRedis;
+using Z.Module.DependencyInjection;
 
 namespace Z.Fantasy.Core.RedisModule
 {
     public interface ICacheManager :IRedisCacheBaseService, ITransientDependency
     {
+        public RedisClient Client { get; protected set; }
+
         #region 获取缓存
 
         /// <summary>
