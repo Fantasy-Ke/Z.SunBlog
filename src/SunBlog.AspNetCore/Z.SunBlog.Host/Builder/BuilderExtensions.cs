@@ -18,6 +18,7 @@ using Serilog;
 using Z.Fantasy.Application.Middleware;
 using Z.Fantasy.Core.Serilog.Utility;
 using Z.EntityFrameworkCore.Middlewares;
+using Z.Fantasy.Core.HangFire.BackgroundJobs.Builder;
 
 namespace Z.SunBlog.Host.Builder
 {
@@ -46,6 +47,7 @@ namespace Z.SunBlog.Host.Builder
         public static void AddCoreServices(this IServiceCollection services)
         {
             services.ServicesConfig();
+            services.ConfigureHangfireService();
             services.ServicesMvc();
             services.ServicesSwagger();
             services.ServicesCors();
@@ -268,6 +270,8 @@ namespace Z.SunBlog.Host.Builder
                 options.GetLevel = SerilogRequestUtility.GetRequestLevel;
                 options.EnrichDiagnosticContext = SerilogRequestUtility.EnrichFromRequest;
             });
+
+            app.UseHangfire();
 
             //中间件
             app.UseMiddleware();

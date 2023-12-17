@@ -14,6 +14,11 @@ using Z.SunBlog.Core.CommentsModule.DomainManager;
 using Z.SunBlog.Core.PraiseModule;
 using Z.SunBlog.Core.PraiseModule.DomainManager;
 using Z.SunBlog.Core.SharedDto;
+using Z.Fantasy.Core.RedisModule;
+using Z.SunBlog.Core.Const;
+using Z.SunBlog.Core.Hubs;
+using Z.SunBlog.Core.MessageModule.DomainManager;
+using Z.SunBlog.Core.MessageModule.Dto;
 
 namespace Z.SunBlog.Application.CommentsModule.BlogClient
 {
@@ -25,15 +30,19 @@ namespace Z.SunBlog.Application.CommentsModule.BlogClient
         private readonly ICommentsManager _commentsManager;
         private readonly IAuthAccountDomainManager _authAccountDomainManager;
         private readonly IPraiseManager _praiseManager;
+        private readonly ICacheManager _cacheManager;
+        private readonly IMessageManager _messageManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         public CommentsCAppService(
-            IServiceProvider serviceProvider, ICommentsManager commentsManager, IAuthAccountDomainManager authAccountDomainManager, IPraiseManager praiseManager,IHttpContextAccessor httpContextAccessor) : base(serviceProvider)
+            IServiceProvider serviceProvider, ICommentsManager commentsManager, IAuthAccountDomainManager authAccountDomainManager, IPraiseManager praiseManager, IHttpContextAccessor httpContextAccessor, ICacheManager cacheManager, IMessageManager messageManager) : base(serviceProvider)
         {
             _commentsManager = commentsManager;
             _authAccountDomainManager = authAccountDomainManager;
             _praiseManager = praiseManager;
             _httpContextAccessor = httpContextAccessor;
+            _cacheManager = cacheManager;
+            _messageManager = messageManager;
         }
 
 
@@ -47,6 +56,13 @@ namespace Z.SunBlog.Application.CommentsModule.BlogClient
         {
             string address = _httpContextAccessor.HttpContext.GetGeolocation()?.Address;
             var comments = ObjectMapper.Map<Comments>(dto);
+            await _messageManager.SendUser(new MessageInput()
+            {
+                UserId = comments.ReplyAccountId,
+                Message = $"用户【{UserService.UserName}】回复了你的评论！！内容：{comments.Content}",
+                Title = "消息通知"
+
+            });
             comments.AccountId = UserService.UserId;
             comments.IP = _httpContextAccessor.HttpContext.GetRemoteIp();
             comments.Geolocation = address;

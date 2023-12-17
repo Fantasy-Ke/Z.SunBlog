@@ -33,7 +33,7 @@ namespace Z.SunBlog.Core.Hubs
                 await AddToGroup(groupName);
                 await AddCacheClient(groupName);
                 var accountIds =  await _cacheManager.LRangeAsync("Blog.Blogger.Key", 0, -1);
-                accountIds.ToList().ForEach(async c =>
+                accountIds.Where(c=>c == groupName).ToList().ForEach(async c =>
                 {
                     await _messageManager.SendAll(new MessageInput() { Title = "提示！！", Message = "博主重新连接了大家赶紧拜访拜访！！！" });
                 });
