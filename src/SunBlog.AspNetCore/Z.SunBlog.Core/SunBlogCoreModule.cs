@@ -22,7 +22,10 @@ namespace Z.SunBlog.Core
             var configuration = context.GetConfiguration();
 
             //redis注册
-            context.Services.AddZRedis(configuration);
+            context.Services.AddZRedis(configuration, option =>
+            {
+                option.Capacity = 6;
+            });
 
             context.Services.AddZMinio(configuration);
             // 注入事件总线
