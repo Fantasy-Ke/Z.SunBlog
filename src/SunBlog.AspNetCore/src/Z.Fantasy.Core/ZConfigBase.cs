@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Z.Fantasy.Core.Entities.Enum;
 
 namespace Z.Fantasy.Core
 {
@@ -51,5 +52,8 @@ namespace Z.Fantasy.Core
         /// "Admin".
         /// </summary>
         public const string DefaultRoleName = "管理员";
+
+
+        public static DatabaseType DatabaseType = DatabaseType.SqlServer;
     }
 }

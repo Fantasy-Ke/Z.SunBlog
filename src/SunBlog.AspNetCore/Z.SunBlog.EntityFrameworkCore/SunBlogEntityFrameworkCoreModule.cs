@@ -11,6 +11,8 @@ using Z.SunBlog.EntityFrameworkCore.EntityFrameworkCore.Seed;
 using Microsoft.Extensions.Configuration;
 using Z.Fantasy.Core.Exceptions;
 using Z.EntityFrameworkCore.Mysql;
+using Z.Fantasy.Core;
+using Z.Fantasy.Core.Entities.Enum;
 
 namespace Z.SunBlog.EntityFrameworkCore
 {
@@ -21,15 +23,14 @@ namespace Z.SunBlog.EntityFrameworkCore
         public override void ConfigureServices(ServiceConfigerContext context)
         {
             var configuration = context.GetConfiguration();
-            var dbtype = configuration.GetSection("App:DbType").Get<string>()!;
             string? connectionString = string.Empty;
-            switch (dbtype.ToLower())
+            switch (ZConfigBase.DatabaseType)
             {
-                case "sqlserver":
+                case DatabaseType.SqlServer:
                     connectionString = configuration.GetSection("App:ConnectionString:SqlServer").Get<string>();
                     context.AddSqlServerEfCoreEntityFrameworkCore<SunBlogDbContext>(connectionString);
                     break;
-                case "mysql":
+                case DatabaseType.MySql:
                     connectionString = configuration.GetSection("App:ConnectionString:Mysql").Get<string>();
                     context.AddMysqlEfCoreEntityFrameworkCore<SunBlogDbContext>(new Version(8, 0,21), connectionString);
                     break;
