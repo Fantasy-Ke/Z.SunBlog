@@ -666,40 +666,278 @@ namespace Z.Fantasy.Core.RedisModule
         #endregion
 
         #region 有序集合（Sorted Set）
-
         /// <summary>
         /// 获取有序集合的长度
         /// </summary>
-        /// <param name="key">键</param>
+        /// <param name="key">键名</param>
         /// <param name="min">最小值（负无穷）</param>
-        /// <param name="max">最小值（正无穷）</param>
+        /// <param name="max">最大值（正无穷）</param>
         /// <returns></returns>
-        Task<long> ZCountAsync(string key, decimal min = decimal.MinValue, decimal max = decimal.MaxValue);
-
+        Task<long> ZCountAsync(string key, decimal min = decimal.MinValue, decimal max = decimal.MaxValue);        
+        /// <summary>
+        /// 获取有序集合的长度
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="min">最小值</param>
+        /// <param name="max">最大值</param>
+        /// <returns></returns>
+        Task<long> ZCountAsync(string key, string min, string max);
         /// <summary>
         /// 向有序集合插入元素
         /// </summary>
-        /// <param name="key">键</param>
-        /// <param name="member">元素</param>
+        /// <param name="key">键名</param>
         /// <param name="score">分数</param>
+        /// <param name="member">元素</param>
+        /// <param name="scoreMembers">元素</param>
         /// <returns></returns>
-        Task<long> ZAddAsync(string key, decimal score, string member, params object[] scoreMembers);
-
+        Task<long> ZAddAsync(string key, decimal score, string member, params object[] scoreMembers);        
         /// <summary>
         /// 向有序集合插入元素
         /// </summary>
-        /// <param name="key">键</param>
-        /// <param name="data">集合</param>
+        /// <param name="key">键名</param>
+        /// <param name="scoreMembers">元素数组</param>
         /// <returns></returns>
         Task<long> ZAddAsync(string key, ZMember[] scoreMembers);
-
         /// <summary>
         /// 移除有序集合指定元素
         /// </summary>
-        /// <param name="key">键</param>
-        /// <param name="member">元素</param>
+        /// <param name="key">键名</param>
+        /// <param name="members">元素数组</param>
         /// <returns></returns>
         Task<long> ZRemAsync(string key, params string[] members);
+        /// <summary>
+        /// 获取有序集合指定元素的排名顺序
+        /// </summary>
+        /// <param name="key">键名</param>
+        /// <param name="member">元素</param>
+        /// <returns></returns>
+        Task<long?> ZRankAsync(string key, string member);
+        /// <summary>
+        /// 获取有序集合指定元素的指定区间内的元素
+        /// </summary>
+        /// <param name="key">键名</param>
+        /// <param name="start">开始索引</param>
+        /// <param name="stop">结束索引</param>
+        /// <returns></returns>
+        Task<string[]> ZRangeAsync(string key, decimal start = 0, decimal stop = -1);
+        /// <summary>
+        /// 获取元素个数
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        Task<long> ZCardAsync(string key);
+        /// <summary>
+        /// 只有在member不存在时，向有序集合插入元素
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="score">分数</param>
+        /// <param name="member">元素</param>
+        /// <param name="scoreMembers">元素数组</param>
+        /// <returns></returns>
+        Task<long> ZAddNxAsync(string key, decimal score, string member, params object[] scoreMembers);        
+        /// <summary>
+        /// 只有在member不存在时，向有序集合插入元素
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="scoreMembers">元素分数对象数组</param>
+        /// <param name="than"></param>
+        /// <param name="ch"></param>
+        /// <returns></returns>
+        Task<long> ZAddNxAsync(string key, ZMember[] scoreMembers, ZAddThan? than = null, bool ch = false);        
+        /// <summary>
+        /// 只有在member存在时，更新有序集合元素
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="score">分数</param>
+        /// <param name="member">元素</param>
+        /// <param name="scoreMembers">元素数组</param>
+        /// <returns></returns>
+        Task<long> ZAddXxAsync(string key, decimal score, string member, params object[] scoreMembers);        
+        /// <summary>
+        /// 只有在member存在时，更新有序集合元素
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="scoreMembers">元素数组</param>
+        /// <param name="than"></param>
+        /// <param name="ch"></param>
+        /// <returns></returns>
+        Task<long> ZAddXxAsync(string key, ZMember[] scoreMembers, ZAddThan? than = null, bool ch = false);
+        /// <summary>
+        /// 有序集合中对指定元素的分数加上增量 increment
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="increment">增量（默认为1）</param>
+        /// <param name="member">元素</param>
+        /// <returns></returns>
+        Task<decimal> ZIncrByAsync(string key, decimal increment, string member);
+        /// <summary>
+        /// 计算 numkeys 个有序集合的交集，并且把结果放到 destination 中
+        /// </summary>
+        /// <param name="destination">目标key</param>
+        /// <param name="keys"></param>
+        /// <param name="weights">乘法因子（默认为1）</param>
+        /// <param name="aggregate">结果集的聚合方式（默认为SUM）</param>
+        /// <returns></returns>
+        Task<long> ZInterStoreAsync(string destination, string[] keys, int[] weights = null, ZAggregate? aggregate = null);
+        /// <summary>
+        /// 在有序集合中计算指定字典区间内元素数量
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="min">最小值</param>
+        /// <param name="max">最大值</param>
+        /// <returns></returns>
+        Task<long> ZLexCountAsync(string key, string min, string max);
+        /// <summary>
+        /// 删除并返回最多count个有序集合key中最低得分的成员
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        Task<ZMember> ZPopMinAsync(string key);        /// <summary>
+        /// 删除并返回最多count个有序集合key中最低得分的成员
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="count">数量</param>
+        /// <returns></returns>
+        Task<ZMember[]> ZPopMinAsync(string key, int count);
+        /// <summary>
+        /// 删除并返回最多count个有序集合key中的最高得分的成员
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        Task<ZMember> ZPopMaxAsync(string key);        /// <summary>
+        /// 删除并返回最多count个有序集合key中的最高得分的成员
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="count">数量</param>
+        /// <returns></returns>
+        Task<ZMember[]> ZPopMaxAsync(string key, int count);
+        /// <summary>
+        /// 删除成员名称按字典由低到高排序介于min 和 max 之间的所有成员（集合中所有成员的分数相同）
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="min"></param>
+        /// <param name="max"></param>
+        /// <returns></returns>
+        Task<long> ZRemRangeByLexAsync(string key, string min, string max);
+        /// <summary>
+        /// 移除有序集key中，指定排名(rank)区间 start 和 stop 内的所有成员
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="start"></param>
+        /// <param name="stop"></param>
+        /// <returns></returns>
+        Task<long> ZRemRangeByRankAsync(string key, long start, long stop);
+        /// <summary>
+        /// 移除有序集key中，所有score值介于min和max之间(包括等于min或max)的成员
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="min"></param>
+        /// <param name="max"></param>
+        /// <returns></returns>
+        Task<long> ZRemRangeByScoreAsync(string key, decimal min, decimal max);        /// <summary>
+        /// 移除有序集key中，所有score值介于min和max之间(包括等于min或max)的成员
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="min"></param>
+        /// <param name="max"></param>
+        /// <returns></returns>
+        Task<long> ZRemRangeByScoreAsync(string key, string min, string max);
+        /// <summary>
+        /// 获取有序集key中，指定区间内的成员（成员的位置按score值递减(从高到低)来排列）
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="start"></param>
+        /// <param name="stop"></param>
+        /// <returns></returns>
+        Task<string[]> ZRevRangeAsync(string key, decimal start, decimal stop);
+        /// <summary>
+        /// 获取有序集key中，指定区间内的成员+分数列表（成员的位置按score值递减(从高到低)来排列）
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="start"></param>
+        /// <param name="stop"></param>
+        /// <returns></returns>
+        Task<ZMember[]> ZRevRangeWithScoresAsync(string key, decimal start, decimal stop);
+        /// <summary>
+        /// 按字典从低到高排序，取索引范围内的元素
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="max"></param>
+        /// <param name="min"></param>
+        /// <param name="offset"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        Task<string[]> ZRevRangeByLexAsync(string key, decimal max, decimal min, int offset = 0, int count = 0);        /// <summary>
+        /// 按字典从低到高排序，取索引范围内的元素
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="max"></param>
+        /// <param name="min"></param>
+        /// <param name="offset"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        Task<string[]> ZRevRangeByLexAsync(string key, string max, string min, int offset = 0, int count = 0);
+        /// <summary>
+        /// 获取有序集合中指定分数区间的成员列表
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="max"></param>
+        /// <param name="min"></param>
+        /// <param name="offset"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        Task<string[]> ZRevRangeByScoreAsync(string key, decimal max, decimal min, int offset = 0, int count = 0);        /// <summary>
+        /// 获取有序集合中指定分数区间的成员列表
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="max"></param>
+        /// <param name="min"></param>
+        /// <param name="offset"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        Task<string[]> ZRevRangeByScoreAsync(string key, string max, string min, int offset = 0, int count = 0);
+        /// <summary>
+        /// 获取有序集合中指定分数区间的成员+分数列表
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="max"></param>
+        /// <param name="min"></param>
+        /// <param name="offset"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        Task<ZMember[]> ZRevRangeByScoreWithScoresAsync(string key, decimal max, decimal min, int offset = 0, int count = 0);        /// <summary>
+        /// 获取有序集合中指定分数区间的成员+分数列表
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="max"></param>
+        /// <param name="min"></param>
+        /// <param name="offset"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        Task<ZMember[]> ZRevRangeByScoreWithScoresAsync(string key, string max, string min, int offset = 0, int count = 0);
+        /// <summary>
+        /// 获取有序集key中成员member的排名（按score值从高到低排列）
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="member"></param>
+        /// <returns></returns>
+        Task<long> ZRevRankAsync(string key, string member);
+        /// <summary>
+        /// 获取有序集key成员 member 的分数
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="member"></param>
+        /// <returns></returns>
+        Task<decimal?> ZScoreAsync(string key, string member);
+        /// <summary>
+        /// 计算一个或多个有序集的并集，并存储在新的 key 中
+        /// </summary>
+        /// <param name="destination">目标key</param>
+        /// <param name="keys"></param>
+        /// <param name="weights">乘法因子（默认为1）</param>
+        /// <param name="aggregate">结果集的聚合方式（默认为SUM）</param>
+        /// <returns></returns>
+        Task<long> ZUnionStoreAsync(string destination, string[] keys, int[] weights = null, ZAggregate? aggregate = null);
 
         #endregion
     }
