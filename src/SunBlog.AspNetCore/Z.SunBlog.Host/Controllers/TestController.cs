@@ -16,6 +16,8 @@ using Z.SunBlog.Core.Handlers.TestHandlers;
 using Z.Fantasy.Core.AutofacExtensions;
 using Z.SunBlog.Application.AlbumsModule.BlogServer;
 using Z.SunBlog.Application.MenuModule;
+using Z.Fantasy.Core.HangFire.BackgroundJobs.Abstractions;
+using Z.SunBlog.Core.jobs.TestJob;
 
 namespace Z.SunBlog.Host.Controllers
 {
@@ -31,13 +33,16 @@ namespace Z.SunBlog.Host.Controllers
         private readonly IUserAppService _userAppService;
         private ICacheManager _cacheManager;
         private readonly ILocalEventBus _localEvent;
-        public TestController(IJwtTokenProvider jwtTokenProvider, IUserSession userSession, IUserAppService userAppService, ICacheManager cacheManager, ILocalEventBus localEvent)
+
+        private readonly IBackgroundJobManager backgroundJobManager;
+        public TestController(IJwtTokenProvider jwtTokenProvider, IUserSession userSession, IUserAppService userAppService, ICacheManager cacheManager, ILocalEventBus localEvent, IBackgroundJobManager backgroundJobManager)
         {
             _jwtTokenProvider = jwtTokenProvider;
             _userSession = userSession;
             _userAppService = userAppService;
             _cacheManager = cacheManager;
             _localEvent = localEvent;
+            this.backgroundJobManager = backgroundJobManager;
         }
 
 
@@ -70,7 +75,7 @@ namespace Z.SunBlog.Host.Controllers
             Response.Cookies.Append("access-token", token.AccessToken, new CookieOptions()
             {
                 Expires = DateTimeOffset.UtcNow.AddMinutes(tokenConfig.AccessTokenExpirationMinutes)
-             });
+            });
 
             Log.Logger.Information("登录成功");
             return token.AccessToken;
@@ -85,8 +90,8 @@ namespace Z.SunBlog.Host.Controllers
         [ZAuthorization]
         public async Task<string> GetUser()
         {
-           var ser =  IOCManager.GetService<IMenuAppService>();
-            var list =  await ser.TreeSelect();
+            var ser = IOCManager.GetService<IMenuAppService>();
+            var list = await ser.TreeSelect();
             var user = _userSession.UserName;
             var userid = _userSession.UserId;
 
@@ -185,5 +190,15 @@ namespace Z.SunBlog.Host.Controllers
             Log.Warning("我什么时候开始得");
         }
 
+
+        /// <summary>
+        /// 后台消费事件
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task TestJobs1()
+        {
+            await backgroundJobManager.EnqueueAsync(new TestJobDto() { Id = Guid.NewGuid() });
+        }
     }
 }

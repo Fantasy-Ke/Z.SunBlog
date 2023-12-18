@@ -21,7 +21,7 @@ namespace Z.Fantasy.Core.HangFire.BackgroundJobs.Builder;
 
 public static class ZHangfireServiceBuilderExtensions
 {
-    private static void RegisterJobs(IServiceCollection services)
+    public static void RegisterJobs(this IServiceCollection services)
     {
         var jobTypes = new List<Type>();
 

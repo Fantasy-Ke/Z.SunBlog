@@ -418,7 +418,7 @@ namespace Z.SunBlog.Host.Builder
                 DarkModeEnabled = true,
                 DashboardTitle = "Fantasy_ke Hangfire",
             });
-
+            app.UseHangfireServer();
         }
 
         /// <summary>

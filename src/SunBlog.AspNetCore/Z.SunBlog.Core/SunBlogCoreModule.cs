@@ -11,6 +11,7 @@ using Z.SunBlog.Common;
 using Z.SunBlog.Core.Handlers.FileHandlers;
 using Z.SunBlog.Core.Handlers.TestHandlers;
 using Z.Fantasy.Core.Minio;
+using Z.Fantasy.Core.HangFire.BackgroundJobs.Builder;
 
 namespace Z.SunBlog.Core
 {
@@ -20,7 +21,7 @@ namespace Z.SunBlog.Core
         public override void ConfigureServices(ServiceConfigerContext context)
         {
             var configuration = context.GetConfiguration();
-
+            context.Services.RegisterJobs();
             //redis注册
             context.Services.AddZRedis(configuration, option =>
             {
