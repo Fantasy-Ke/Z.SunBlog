@@ -6,6 +6,8 @@ using System.Diagnostics;
 using System.Text;
 using System.Web;
 using UAParser;
+using Z.EventBus.EventBus;
+using Z.Fantasy.Application.Handlers;
 using Z.Fantasy.Core.AutofacExtensions;
 using Z.Fantasy.Core.DomainServiceRegister.Domain;
 using Z.Fantasy.Core.Entities.EntityLog;
@@ -23,12 +25,15 @@ namespace Z.Fantasy.Application.Middleware
         readonly IUserSession _userSession;
         readonly ILogger<RequestLogMiddleware> logger;
         readonly Stopwatch stopwatch;
-        public RequestLogMiddleware(RequestDelegate next, IUserSession userSession, ILogger<RequestLogMiddleware> logger)
+        private readonly ILocalEventBus _localEvent;
+        public RequestLogMiddleware(RequestDelegate next, IUserSession userSession, ILogger<RequestLogMiddleware> logger, 
+            ILocalEventBus localEvent)
         {
             _next = next;
             _userSession = userSession;
             this.logger = logger;
             stopwatch = new Stopwatch();
+            _localEvent = localEvent;
         }
 
         public async Task InvokeAsync(HttpContext context)
@@ -75,10 +80,25 @@ namespace Z.Fantasy.Application.Middleware
                         await _next(context);
                     }
 
-                    context.Response.OnCompleted(() =>
+                    context.Response.OnCompleted(async () =>
                     {
                         stopwatch.Stop();
-                        if (!AppSettings.GetValue("App:MiddlewareSettings:RequestLog:WriteDB").CastTo(false)) return Task.CompletedTask;
+                        if (!AppSettings.GetValue("App:MiddlewareSettings:RequestLog:WriteDB").CastTo(false)) return;
+                        var uaParser = Parser.GetDefault();
+                        ClientInfo info = uaParser.Parse(requestAgent);
+                        await _localEvent.EnqueueAsync(new RequestLogDto()
+                        {
+                            RequestUri = requestUri,
+                            RequestType = requestMethod,
+                            RequestData = requestData,
+                            ResponseData = responseData,
+                            UserId = _userSession.UserId,
+                            UserName = _userSession.UserName,
+                            ClientIP = ipAddress,
+                            SpendTime = $"{stopwatch.ElapsedMilliseconds}ms",
+                            UserOS = $"{info.OS}",
+                            UserAgent = $"{info.UA}",
+                        });
                         //using var unit = IOCManager.GetService<IUnitOfWork>();
                         //try
                         //{
@@ -109,7 +129,7 @@ namespace Z.Fantasy.Application.Middleware
 
                         //unit.Dispose();
 
-                        return Task.CompletedTask;
+                        //return Task.CompletedTask;
                     });
                 }
                 else

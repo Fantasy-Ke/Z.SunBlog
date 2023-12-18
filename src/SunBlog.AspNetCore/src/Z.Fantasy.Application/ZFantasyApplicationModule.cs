@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Z.EventBus.Extensions;
+using Z.Fantasy.Application.Handlers;
 using Z.Fantasy.Application.Middleware;
 using Z.Fantasy.Core;
 using Z.Fantasy.Core.AutoMapper;
@@ -15,14 +17,15 @@ namespace Z.Fantasy.Application
     {
         public override void ConfigureServices(ServiceConfigerContext context)
         {
+            
             //注册AutoMapper
             context.Services.AddSingleton(MapperHepler.CreateMappings);
             context.Services.AddSingleton<IMapper>(provider => provider.GetRequiredService<Mapper>());
+            
             context.Services.AddControllers(c =>
             {
                 c.Filters.Add<ModelValidateActionFilterAttribute>();
             });
         }
-
     }
 }

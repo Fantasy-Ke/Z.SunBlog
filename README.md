@@ -5,19 +5,26 @@
 ## 🎃.NET 8 后端框架
 ### 👕SunBlog.AspNetCore/src 后端自己搭建的框架
 
-- .Net8
-- EF Core 7 适配SqlServer和Mysql
+- 🛺.Net8
+- EF Core 7 适配SqlServer和Mysql🎏
   - 仓储
   - 简单工作单元
 - 模块化处理
 - 简单EventBus 基于Channels 
+    - 中间件接口请求日志使用`队列事件发布订阅`和`工作单元`写入数据库
 - Autofac依赖注入，AOP注册处理
-- 简单Minio存储桶
-- 简单Redis缓存
+    - 横向处理`Application`
+- AutoMapper模块化注入 (想改成 `Mapster` 对象映射 )🍔
+- ⛑️`Serilog`json配置化
+    - Seq日志中心面板
+    - 控制台日志
+    - 文件日志插入
+    - 数据库日志写入
+- 👒简单Minio存储桶
+- 🎪简单Redis缓存
 - 动态api
 - 授权管理(部分)
-- AutoMapper (想改成 `Mapster` 对象映射 )
-- HangFile 后台任务(待实现)
+- HangFile 后台任务使用
 - SignalR实时通信(待实现)
 - MongoDb(待实现)
 - RabbitMQ(待实现)

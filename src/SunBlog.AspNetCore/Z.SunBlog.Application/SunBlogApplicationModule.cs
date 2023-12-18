@@ -21,6 +21,10 @@ using Z.SunBlog.Application.TagsModule.BlogServer.MapperConfig;
 using Z.SunBlog.Application.TalksModule.BlogServer.MapperConfig;
 using Z.SunBlog.Application.UserModule.MapperConfig;
 using Z.SunBlog.Core;
+using Z.EventBus.Extensions;
+using Z.Fantasy.Application.Handlers;
+using Z.SunBlog.Core.Handlers.FileHandlers;
+using Z.SunBlog.Core.Handlers.TestHandlers;
 
 namespace Z.SunBlog.Application
 {
@@ -37,6 +41,15 @@ namespace Z.SunBlog.Application
         public override void ConfigureServices(ServiceConfigerContext context)
         {
             ConfigureAutoMapper();
+
+            //事件Handler
+            context.Services.EventBusSubscribes(c =>
+            {
+                c.Subscribe<FileEventDto, FileEventHandler>();
+                c.Subscribe<TestDto, TestEventHandler>();
+                c.Subscribe<RequestLogDto, RequestLogEventHandler>();
+
+            });
             AuthorizeRegister.Register.Init(context.Services);
         }
 

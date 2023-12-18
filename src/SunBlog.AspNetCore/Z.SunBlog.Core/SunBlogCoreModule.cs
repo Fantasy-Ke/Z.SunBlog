@@ -33,38 +33,32 @@ namespace Z.SunBlog.Core
 
             context.Services.AddSignalR()
                 .AddMessagePackProtocol();
-                //.AddStackExchangeRedis(o =>
-                //{
-                //    o.ConnectionFactory = async writer =>
-                //    {
-                //        //使用CsRedis
-                //        var cacheOption = configuration.GetSection("App:Cache").Get<CacheOptions>()!;
-                //        var connection = await ConnectionMultiplexer.ConnectAsync(cacheOption.RedisEndpoint, writer);
-                //        connection.ConnectionFailed += (_, e) =>
-                //        {
-                //            Console.WriteLine("Connection to Redis failed.");
-                //        };
+            //.AddStackExchangeRedis(o =>
+            //{
+            //    o.ConnectionFactory = async writer =>
+            //    {
+            //        //使用CsRedis
+            //        var cacheOption = configuration.GetSection("App:Cache").Get<CacheOptions>()!;
+            //        var connection = await ConnectionMultiplexer.ConnectAsync(cacheOption.RedisEndpoint, writer);
+            //        connection.ConnectionFailed += (_, e) =>
+            //        {
+            //            Console.WriteLine("Connection to Redis failed.");
+            //        };
 
-                //        if (!connection.IsConnected)
-                //        {
-                //            Console.WriteLine("Did not connect to Redis.");
-                //        }
+            //        if (!connection.IsConnected)
+            //        {
+            //            Console.WriteLine("Did not connect to Redis.");
+            //        }
 
-                //        return connection;
-                //    };
-                //});
-
-            context.Services.EventBusSubscribes(c =>
-            {
-                c.Subscribe<FileEventDto, FileEventHandler>();
-                c.Subscribe<TestDto, TestEventHandler>();
-
-            });
+            //        return connection;
+            //    };
+            //});
+            
         }
 
-        public override void PostInitApplication(InitApplicationContext context)
+        public override async Task PostInitApplicationAsync(InitApplicationContext context)
         {
-            context.ServiceProvider.InitChannles();
+            await context.ServiceProvider.InitChannlesAsync();
         }
     }
 }

@@ -13,6 +13,9 @@ using Microsoft.AspNetCore.Http;
 
 namespace Z.Fantasy.Application.Middleware
 {
+    /// <summary>
+    /// 模型验证
+    /// </summary>
     public class ModelValidateActionFilterAttribute : ActionFilterAttribute
     {
         public override void OnActionExecuting(ActionExecutingContext context)
