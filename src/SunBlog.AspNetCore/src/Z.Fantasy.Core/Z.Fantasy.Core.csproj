@@ -16,7 +16,6 @@
 	<PackageReference Include="Cuemon.Extensions.AspNetCore.Mvc.Formatters.Newtonsoft.Json" Version="8.0.0" />
 	<PackageReference Include="FreeRedis" Version="1.2.9" />
 	<PackageReference Include="Hangfire.AspNetCore" Version="1.8.6" />
-	<PackageReference Include="Hangfire.Core" Version="1.8.6" />
 	<PackageReference Include="Hangfire.MySqlStorage" Version="2.0.3" />
 	<PackageReference Include="Hangfire.Redis.StackExchange" Version="1.9.3" />
 	<PackageReference Include="Hangfire.SqlServer" Version="1.8.6" />

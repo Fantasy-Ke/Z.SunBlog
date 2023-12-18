@@ -2,7 +2,6 @@
 using Lazy.Captcha.Core;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
@@ -17,8 +16,6 @@ using Z.EntityFrameworkCore.Extensions;
 using Serilog;
 using Z.Fantasy.Application.Middleware;
 using Z.Fantasy.Core.Serilog.Utility;
-using Z.EntityFrameworkCore.Middlewares;
-using Z.Fantasy.Core.HangFire.BackgroundJobs.Builder;
 using System.Data;
 using Z.Fantasy.Core.Helper;
 using Z.Fantasy.Core.Entities.Enum;
@@ -28,7 +25,6 @@ using Hangfire.SqlServer;
 using Hangfire;
 using StackExchange.Redis;
 using Z.Fantasy.Core.Exceptions;
-using Hangfire.Console;
 
 namespace Z.SunBlog.Host.Builder
 {
@@ -227,14 +223,13 @@ namespace Z.SunBlog.Host.Builder
             var enable = AppSettings.AppOption<bool>("App:HangFire:HangfireEnabled");
             if (!enable) return;
             services.AddHangfire(config =>config
-            .UseSimpleAssemblyNameTypeSerializer()
-            .UseRecommendedSerializerSettings()
-            .UseZHangfireStorage()
-            .UseConsole(new ConsoleOptions()
-            {
-                BackgroundColor = "#000079"
-            })
+                .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)//向前兼容
+                .UseSimpleAssemblyNameTypeSerializer()
+                .UseRecommendedSerializerSettings()
+                .UseZHangfireStorage()
+                .UseSerilogLogProvider()
             );
+
             services.AddHangfireServer(optionsAction: c =>
             {
                 //wait all jobs performed when BackgroundJobServer shutdown.
@@ -409,7 +404,11 @@ namespace Z.SunBlog.Host.Builder
         {
             // TODO: 判断是否启用 HangfireDashboard
             //配置服务最大重试次数值
-            GlobalJobFilters.Filters.Add(new AutomaticRetryAttribute { Attempts = 5 });
+            GlobalJobFilters.Filters.Add(new AutomaticRetryAttribute 
+            { 
+                Attempts = 5, 
+                OnAttemptsExceeded = AttemptsExceededAction.Fail 
+            });
             var enable = AppSettings.AppOption<bool>("App:HangFire:HangfireDashboardEnabled");
             if (!enable) return;
             //启用Hangfire仪表盘和服务器(支持使用Hangfire而不是默认的后台作业管理器)
