@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Hangfire;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Z.Fantasy.Core.Exceptions;
 using Z.Fantasy.Core.HangFire.BackgroundJobs.Abstractions;
 
 namespace Z.Fantasy.Core.HangFire.BackgroundJobs;
@@ -28,12 +29,8 @@ public class HangfireJobExecutionAdapter<TArgs>
     {
         if (!Options.IsJobExecutionEnabled)
         {
-            throw new Exception(
-                "Background job execution is disabled. " +
-                "This method should not be called! " +
-                "If you want to enable the background job execution, " +
-                $"set {nameof(ZBackgroundJobOptions)}.{nameof(ZBackgroundJobOptions.IsJobExecutionEnabled)} to true! " +
-                "If you've intentionally disabled job execution and this seems a bug, please report it."
+            throw new UserFriendlyException(
+                $"Job没有启用,修改 {nameof(ZBackgroundJobOptions.IsJobExecutionEnabled)} to true! "
             );
         }
 

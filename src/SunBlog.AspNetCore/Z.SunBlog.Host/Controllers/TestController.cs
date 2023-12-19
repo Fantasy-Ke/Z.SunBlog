@@ -18,6 +18,7 @@ using Z.SunBlog.Application.AlbumsModule.BlogServer;
 using Z.SunBlog.Application.MenuModule;
 using Z.Fantasy.Core.HangFire.BackgroundJobs.Abstractions;
 using Z.SunBlog.Core.jobs.TestJob;
+using Hangfire;
 
 namespace Z.SunBlog.Host.Controllers
 {
@@ -192,13 +193,23 @@ namespace Z.SunBlog.Host.Controllers
 
 
         /// <summary>
-        /// 后台消费事件
+        /// 自己加的hangfire
         /// </summary>
         /// <returns></returns>
         [HttpGet]
         public async Task TestJobs1()
         {
             await backgroundJobManager.EnqueueAsync(new TestJobDto() { Id = Guid.NewGuid() });
+        }
+
+        /// <summary>
+        /// 延迟任务
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public  async Task TestJobs2()
+        {
+            await backgroundJobManager.EnqueueAsync(new TestJobDto() { Id = Guid.NewGuid() }, TimeSpan.FromSeconds(10));
         }
     }
 }

@@ -259,7 +259,7 @@ namespace Z.SunBlog.Host.Builder
                     InvisibilityTimeout = TimeSpan.FromMinutes(30.0),
                     FetchTimeout = TimeSpan.FromMinutes(3.0),
                     ExpiryCheckInterval = TimeSpan.FromHours(1.0),
-                    Db = 1,
+                    Db = 2,
                     Prefix = "Z_Fantasy:",
                     SucceededListSize = 499,
                     DeletedListSize = 499,
