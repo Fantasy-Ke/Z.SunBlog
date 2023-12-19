@@ -1,40 +1,32 @@
-// Copyright (c) MASA Stack All rights reserved.
-// Licensed under the MIT License. See LICENSE.txt in the project root for license information.
-
 using Hangfire;
 using Serilog;
+using Z.Fantasy.Core.AutofacExtensions;
 using Z.Fantasy.Core.HangFire.BackgroundJobs.Abstractions;
+using Z.Module.DependencyInjection;
 
-namespace Masa.Contrib.Extensions.BackgroundJobs.Memory;
+namespace Z.SunBlog.Application.HangfireWork.TestWork;
 
 /// <summary>
 /// 后台任务测试
 /// </summary>
-public class HangfireTestScheduleJob : IBackgroundScheduleJob
+public class HangfireTestScheduleJob : BackgroundScheduleJobBase, ITransientDependency
 {
-    public RecurringJobOptions JobOptions { get; set; }
-    public string Queue { get; set; }
-    public string Id { get ; set; }
-    public double CronSeqs { get; set; }
-    
+    private readonly IServiceProvider _serviceProvider;
     /// <summary>
     /// 构造函数
     /// </summary>
-    public HangfireTestScheduleJob()
+    public HangfireTestScheduleJob(IServiceProvider serviceProvider = null)
     {
+        _serviceProvider = serviceProvider ?? IOCManager.GetService<IServiceProvider>();
         Id = "hangfiretest";
         CronSeqs = TimeSpan.FromMinutes(1).TotalMilliseconds;
-        Queue = "cstest";
-        JobOptions = new RecurringJobOptions();
     }
-    
+
     /// <summary>
     /// 重新任务
     /// </summary>
-    /// <param name="serviceProvider"></param>
     /// <returns></returns>
-    /// <exception cref="NotImplementedException"></exception>
-    public Task ExecuteAsync(IServiceProvider serviceProvider)
+    public override Task DoWorkAsync()
     {
         Log.Error("测试-------------------------------------------------------------测试\n" +
             "测试-------------------------------------------------------------测试\n" +

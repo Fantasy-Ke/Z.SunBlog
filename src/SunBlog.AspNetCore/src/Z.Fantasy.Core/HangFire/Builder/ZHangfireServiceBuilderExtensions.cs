@@ -15,6 +15,7 @@ using Hangfire.Redis.StackExchange;
 using Minio.DataModel;
 using Microsoft.Extensions.Options;
 using StackExchange.Redis;
+using Z.Fantasy.Core.HangFire.BackgroundJobs;
 
 namespace Z.Fantasy.Core.HangFire.Builder;
 

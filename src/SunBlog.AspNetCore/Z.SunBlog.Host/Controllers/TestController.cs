@@ -19,7 +19,7 @@ using Z.SunBlog.Application.MenuModule;
 using Z.Fantasy.Core.HangFire.BackgroundJobs.Abstractions;
 using Z.SunBlog.Core.jobs.TestJob;
 using Hangfire;
-using Masa.Contrib.Extensions.BackgroundJobs.Memory;
+using Z.SunBlog.Application.HangfireWork.TestWork;
 
 namespace Z.SunBlog.Host.Controllers
 {
@@ -221,6 +221,22 @@ namespace Z.SunBlog.Host.Controllers
         public async Task TestJobs3()
         {
             await backgroundJobManager.AddOrUpdateScheduleAsync(new HangfireTestScheduleJob());
+        }
+
+        /// <summary>
+        /// 延迟任务
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public void TestJobs4()
+        {
+            RecurringJob.AddOrUpdate("myrecurringjob", () => YourMethod(), "*/1 * * * *");
+        }
+
+        public Task YourMethod()
+        {
+            Log.Error("4444444444444444444444444444444444444444444444444444444444444444444444444dddddddddddddddddddddddddd");
+            return Task.CompletedTask;
         }
     }
 }

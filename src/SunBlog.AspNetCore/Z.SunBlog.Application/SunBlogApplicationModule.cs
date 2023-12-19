@@ -26,7 +26,9 @@ using Z.Fantasy.Application.Handlers;
 using Z.SunBlog.Core.Handlers.FileHandlers;
 using Z.SunBlog.Core.Handlers.TestHandlers;
 using Z.Fantasy.Core.HangFire.BackgroundJobs.Abstractions;
-using Masa.Contrib.Extensions.BackgroundJobs.Memory;
+using Z.Module.Extensions;
+using Z.Fantasy.Core.HangFire.Builder;
+using Z.SunBlog.Application.HangfireWork.TestWork;
 
 namespace Z.SunBlog.Application
 {
@@ -68,7 +70,13 @@ namespace Z.SunBlog.Application
 
             await authorizeManager.AddAuthorizeRegiester(permissionContext);
 
-            await BackgroundJobManager.AddOrUpdateScheduleAsync(new HangfireTestScheduleJob());
+            //await BackgroundJobManager.AddOrUpdateScheduleAsync(new HangfireTestScheduleJob());
+
+            await  context.GetApplicationBuilder().RegisterScheduleJobs(c =>
+            {
+                c.Add(typeof(HangfireTestScheduleJob));
+            });
+
         }
 
         private void PermissionProvider()

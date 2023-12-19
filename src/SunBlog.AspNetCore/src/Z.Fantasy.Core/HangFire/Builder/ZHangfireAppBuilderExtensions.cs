@@ -1,4 +1,6 @@
 using System;
+using System.IO;
+using Autofac.Core;
 using Hangfire;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
@@ -39,4 +41,26 @@ public static class ZHangfireAppBuilderExtensions
         app.UseHangfireDashboard(pathMatch, options, storage);
     }
 
+    /// <summary>
+    /// 周期任务
+    /// </summary>
+    /// <param name="app"></param>
+    /// <param name="configure"></param>
+    /// <returns></returns>
+    public static Task RegisterScheduleJobs(this IApplicationBuilder app, Action<List<Type>> configure = null)
+    {
+        object[] constructorArgs = {  app.ApplicationServices };
+        var options = new List<Type>();
+        configure?.Invoke(options);
+        options?.ForEach(async res =>
+        {
+            if (res.IsSubclassOf(typeof(BackgroundScheduleJobBase)))
+            {
+                object myInstance = Activator.CreateInstance(res, new[] { app.ApplicationServices });
+                await BackgroundJobManager.AddOrUpdateScheduleAsync(myInstance as IBackgroundScheduleJob);
+            }
+           
+        });
+        return Task.CompletedTask;
+    }
 }

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
+﻿using System.Reflection;
 using Hangfire;
 using Hangfire.States;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,7 +11,7 @@ using Z.Module.DependencyInjection;
 namespace Z.Fantasy.Core.HangFire.BackgroundJobs;
 
 [RegisterLife(ReplaceServices = true)]
-public class HangFireBackgroundJobManager : IBackgroundJobManager, ITransientDependency
+public class HangFireBackgroundJobManager : IBackgroundJobManager, ISingletonDependency
 {
     protected ZBackgroundJobOptions Options { get; }
     private readonly IServiceProvider _serviceProvider;
@@ -40,27 +37,18 @@ public class HangFireBackgroundJobManager : IBackgroundJobManager, ITransientDep
 
     public Task AddOrUpdateScheduleAsync(IBackgroundScheduleJob backgroundScheduleJob)
     {
-        if (backgroundScheduleJob is IBackgroundScheduleJob hangfireBackgroundScheduleJob)
+        if (backgroundScheduleJob is BackgroundScheduleJobBase hangfireBackgroundScheduleJob)
         {
             if (backgroundScheduleJob.Id.IsNullWhiteSpace())
-            {
-                RecurringJob.AddOrUpdate(
-                    hangfireBackgroundScheduleJob.Queue,
-                    () => hangfireBackgroundScheduleJob.ExecuteAsync(_serviceProvider.CreateScope().ServiceProvider),
-                    GetCron(hangfireBackgroundScheduleJob.CronSeqs),
-                    hangfireBackgroundScheduleJob.JobOptions
-                    );
-            }
-            else
-            {
-                RecurringJob.AddOrUpdate(
-                    hangfireBackgroundScheduleJob.Id,
-                    hangfireBackgroundScheduleJob.Queue,
-                    () => hangfireBackgroundScheduleJob.ExecuteAsync(_serviceProvider.CreateScope().ServiceProvider),
-                    GetCron(hangfireBackgroundScheduleJob.CronSeqs),
-                    hangfireBackgroundScheduleJob.JobOptions
-                    );
-            }
+                throw new UserFriendlyException(errorCode: "recurringJobId不能为空");
+
+            RecurringJob.AddOrUpdate(
+                hangfireBackgroundScheduleJob.Id,
+                //hangfireBackgroundScheduleJob.Queue,
+                () => hangfireBackgroundScheduleJob.DoWorkAsync(),
+                GetCron(hangfireBackgroundScheduleJob.CronSeqs),
+                hangfireBackgroundScheduleJob.JobOptions
+                );
             return Task.CompletedTask;
         }
 

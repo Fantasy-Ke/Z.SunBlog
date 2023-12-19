@@ -27,8 +27,8 @@ public class BackgroundJobManager
     /// </summary>
     /// <param name="backgroundScheduleJob"></param>
     /// <returns></returns>
-    public static Task AddOrUpdateScheduleAsync(IBackgroundScheduleJob backgroundScheduleJob)
-        => JobManager.AddOrUpdateScheduleAsync(backgroundScheduleJob);
+    public static async Task AddOrUpdateScheduleAsync(IBackgroundScheduleJob backgroundScheduleJob)
+        => await JobManager.AddOrUpdateScheduleAsync(backgroundScheduleJob);
 
     internal static void ResetBackgroundJobManager()
     {

@@ -1,7 +1,4 @@
-﻿// Copyright (c) MASA Stack All rights reserved.
-// Licensed under the MIT License. See LICENSE.txt in the project root for license information.
-
-using Hangfire;
+﻿using Hangfire;
 
 namespace Z.Fantasy.Core.HangFire.BackgroundJobs.Abstractions;
 
@@ -11,9 +8,5 @@ public interface IBackgroundScheduleJob
 
     public double CronSeqs { get; set; }
 
-    Task ExecuteAsync(IServiceProvider serviceProvider);
-
-    RecurringJobOptions JobOptions { get; set; }
-
-    string Queue { get; set; }
+    Task DoWorkAsync();
 }
