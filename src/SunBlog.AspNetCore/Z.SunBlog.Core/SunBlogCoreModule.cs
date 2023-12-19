@@ -11,7 +11,7 @@ using Z.SunBlog.Common;
 using Z.SunBlog.Core.Handlers.FileHandlers;
 using Z.SunBlog.Core.Handlers.TestHandlers;
 using Z.Fantasy.Core.Minio;
-using Z.Fantasy.Core.HangFire.BackgroundJobs.Builder;
+using Z.Fantasy.Core.HangFire.Builder;
 
 namespace Z.SunBlog.Core
 {

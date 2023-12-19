@@ -8,7 +8,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Z.Fantasy.Core.DependencyInjection.Extensions;
 using Z.Fantasy.Core.Entities.Enum;
 using Z.Fantasy.Core.Exceptions;
-using Z.Fantasy.Core.HangFire.BackgroundJobs;
 using Z.Fantasy.Core.HangFire.BackgroundJobs.Abstractions;
 using Z.Fantasy.Core.Helper;
 using Z.Module.Reflection;
@@ -17,7 +16,7 @@ using Minio.DataModel;
 using Microsoft.Extensions.Options;
 using StackExchange.Redis;
 
-namespace Z.Fantasy.Core.HangFire.BackgroundJobs.Builder;
+namespace Z.Fantasy.Core.HangFire.Builder;
 
 public static class ZHangfireServiceBuilderExtensions
 {

@@ -8,7 +8,7 @@ using Z.Fantasy.Core.HangFire.BackgroundJobs.Abstractions;
 using Z.Fantasy.Core.Helper;
 using Z.Module.Reflection;
 
-namespace Z.Fantasy.Core.HangFire.BackgroundJobs.Builder;
+namespace Z.Fantasy.Core.HangFire.Builder;
 
 public static class ZHangfireAppBuilderExtensions
 {
@@ -19,7 +19,7 @@ public static class ZHangfireAppBuilderExtensions
     public static void UseZHangfire(this IApplicationBuilder app,
         string pathMatch = "/hangfire",
         Action<DashboardOptions> configure = null,
-        JobStorage? storage = null)
+        JobStorage storage = null)
     {
         // TODO: 判断是否启用 HangfireDashboard
         //配置服务最大重试次数值

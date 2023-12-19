@@ -4,7 +4,6 @@ using Z.Fantasy.Core.DependencyInjection.Extensions;
 using Z.Fantasy.Core.DynamicProxy;
 using Z.Fantasy.Core.Filters;
 using Z.Fantasy.Core.Minio;
-using Z.Fantasy.Core.HangFire.BackgroundJobs.Builder;
 using Z.Module;
 using Z.Module.Extensions;
 using Z.Module.Modules;

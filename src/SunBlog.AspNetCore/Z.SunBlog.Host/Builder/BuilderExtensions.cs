@@ -19,7 +19,7 @@ using Z.Fantasy.Core.Serilog.Utility;
 using System.Data;
 using Z.Fantasy.Core.Helper;
 using Z.Fantasy.Core.Entities.Enum;
-using Z.Fantasy.Core.HangFire.BackgroundJobs.Builder;
+using Z.Fantasy.Core.HangFire.Builder;
 
 namespace Z.SunBlog.Host.Builder
 {
