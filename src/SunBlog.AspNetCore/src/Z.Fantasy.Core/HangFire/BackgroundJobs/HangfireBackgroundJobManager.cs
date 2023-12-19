@@ -20,7 +20,7 @@ public class HangfireBackgroundJobManager : IBackgroundJobManager, ITransientDep
         Options = options.Value;
     }
 
-    public virtual Task<string> EnqueueAsync<TArgs>(TArgs args,TimeSpan? delay = null, BackgroundJobPriority priority = BackgroundJobPriority.Normal)
+    public virtual Task<string> EnqueueAsync<TArgs>(TArgs args,TimeSpan? delay = null)
     {
         return Task.FromResult(delay.HasValue
             ? BackgroundJob.Schedule<HangfireJobExecutionAdapter<TArgs>>(

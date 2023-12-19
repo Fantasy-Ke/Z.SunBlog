@@ -22,10 +22,15 @@
     - 数据库日志写入
 - 👒简单Minio存储桶
 - 🎪简单Redis缓存
+    - 使用FreeRedis组件包了一层而已，直接使用
 - 动态api
+- HangFile 后台任务使用🎢
+    - job类继承`BackgroundJob`和`AsyncBackgroundJob`实现接口`Execute`和`ExecuteAsync`(模仿abp vNext 实现的BackgroundJob，简化版👽)
+    - 注入`IBackgroundJobManager`调用接口。实现传参队列和延迟队列 任务
+- SignalR实时通信
+    - 前端的实时通知推送
+    - Redis使用无序列表缓存存储ConnectionId
 - 授权管理(部分)
-- HangFile 后台任务使用
-- SignalR实时通信(待实现)
 - MongoDb(待实现)
 - RabbitMQ(待实现)
 
