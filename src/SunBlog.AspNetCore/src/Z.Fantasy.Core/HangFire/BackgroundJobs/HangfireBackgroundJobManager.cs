@@ -4,20 +4,25 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Hangfire;
 using Hangfire.States;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Z.Fantasy.Core.Exceptions;
+using Z.Fantasy.Core.Extensions;
 using Z.Fantasy.Core.HangFire.BackgroundJobs.Abstractions;
 using Z.Module.DependencyInjection;
 
 namespace Z.Fantasy.Core.HangFire.BackgroundJobs;
 
 [RegisterLife(ReplaceServices = true)]
-public class HangfireBackgroundJobManager : IBackgroundJobManager, ITransientDependency
+public class HangFireBackgroundJobManager : IBackgroundJobManager, ITransientDependency
 {
     protected ZBackgroundJobOptions Options { get; }
+    private readonly IServiceProvider _serviceProvider;
 
-    public HangfireBackgroundJobManager(IOptions<ZBackgroundJobOptions> options)
+    public HangFireBackgroundJobManager(IOptions<ZBackgroundJobOptions> options, IServiceProvider serviceProvider)
     {
         Options = options.Value;
+        _serviceProvider = serviceProvider;
     }
 
     public virtual Task<string> EnqueueAsync<TArgs>(TArgs args,TimeSpan? delay = null)
@@ -32,6 +37,36 @@ public class HangfireBackgroundJobManager : IBackgroundJobManager, ITransientDep
             ));
     }
 
+
+    public Task AddOrUpdateScheduleAsync(IBackgroundScheduleJob backgroundScheduleJob)
+    {
+        if (backgroundScheduleJob is IBackgroundScheduleJob hangfireBackgroundScheduleJob)
+        {
+            if (backgroundScheduleJob.Id.IsNullWhiteSpace())
+            {
+                RecurringJob.AddOrUpdate(
+                    hangfireBackgroundScheduleJob.Queue,
+                    () => hangfireBackgroundScheduleJob.ExecuteAsync(_serviceProvider.CreateScope().ServiceProvider),
+                    GetCron(hangfireBackgroundScheduleJob.CronSeqs),
+                    hangfireBackgroundScheduleJob.JobOptions
+                    );
+            }
+            else
+            {
+                RecurringJob.AddOrUpdate(
+                    hangfireBackgroundScheduleJob.Id,
+                    hangfireBackgroundScheduleJob.Queue,
+                    () => hangfireBackgroundScheduleJob.ExecuteAsync(_serviceProvider.CreateScope().ServiceProvider),
+                    GetCron(hangfireBackgroundScheduleJob.CronSeqs),
+                    hangfireBackgroundScheduleJob.JobOptions
+                    );
+            }
+            return Task.CompletedTask;
+        }
+
+        throw new UserFriendlyException(errorCode: "500");
+    }
+
     protected virtual string GetQueueName(Type argsType)
     {
         var queueName = EnqueuedState.DefaultQueue;
@@ -42,5 +77,32 @@ public class HangfireBackgroundJobManager : IBackgroundJobManager, ITransientDep
         }
 
         return queueName;
+    }
+
+
+    protected virtual string GetCron(double period)
+    {
+        var time = TimeSpan.FromMilliseconds(period);
+        string cron;
+
+        if (time.TotalSeconds <= 59)
+        {
+            cron = $"*/p{time.TotalSeconds.CastTo(0)} * * * * *";
+        }
+        else if (time.TotalMinutes <= 59)
+        {
+            cron = $"*/{time.TotalMinutes.CastTo(0)} * * * *";
+        }
+        else if (time.TotalHours <= 23)
+        {
+            cron = $"0 */{time.TotalHours.CastTo(0)} * * *";
+        }
+        else
+        {
+            throw new UserFriendlyException(
+                $"Cannot convert period: {period} to cron expression, use HangfireBackgroundWorkerBase to define worker");
+        }
+
+        return cron;
     }
 }

@@ -19,4 +19,12 @@ public interface IBackgroundJobManager
         TArgs args,
         TimeSpan? delay = null
     );
+
+
+    /// <summary>
+    /// Add recurring job tasks
+    /// </summary>
+    /// <param name="backgroundScheduleJob"></param>
+    /// <returns></returns>
+    Task AddOrUpdateScheduleAsync(IBackgroundScheduleJob backgroundScheduleJob);
 }

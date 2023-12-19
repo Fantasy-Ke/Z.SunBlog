@@ -34,11 +34,9 @@ public class HangfireJobExecutionAdapter<TArgs>
             );
         }
 
-        using (var scope = ServiceScopeFactory.CreateScope())
-        {
-            var jobType = Options.GetJob(typeof(TArgs)).JobType;
-            var context = new JobExecutionContext(scope.ServiceProvider, jobType, args!, cancellationToken: cancellationToken);
-            await JobExecuter.ExecuteAsync(context);
-        }
+        using var scope = ServiceScopeFactory.CreateAsyncScope();
+        var jobType = Options.GetJob(typeof(TArgs)).JobType;
+        var context = new JobExecutionContext(scope.ServiceProvider, jobType, args!, cancellationToken: cancellationToken);
+        await JobExecuter.ExecuteAsync(context);
     }
 }

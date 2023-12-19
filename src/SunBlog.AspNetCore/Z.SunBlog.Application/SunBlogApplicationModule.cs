@@ -25,6 +25,8 @@ using Z.EventBus.Extensions;
 using Z.Fantasy.Application.Handlers;
 using Z.SunBlog.Core.Handlers.FileHandlers;
 using Z.SunBlog.Core.Handlers.TestHandlers;
+using Z.Fantasy.Core.HangFire.BackgroundJobs.Abstractions;
+using Masa.Contrib.Extensions.BackgroundJobs.Memory;
 
 namespace Z.SunBlog.Application
 {
@@ -65,6 +67,8 @@ namespace Z.SunBlog.Application
             IAuthorizePermissionContext permissionContext = new AuthorizePermissionContext();
 
             await authorizeManager.AddAuthorizeRegiester(permissionContext);
+
+            await BackgroundJobManager.AddOrUpdateScheduleAsync(new HangfireTestScheduleJob());
         }
 
         private void PermissionProvider()
