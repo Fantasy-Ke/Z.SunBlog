@@ -16,4 +16,11 @@ public abstract class BackgroundScheduleJobBase : IBackgroundScheduleJob
     public virtual string Queue { get; set; } = "default";
 
     public abstract Task DoWorkAsync();
+
+    public  IServiceProvider ServiceProvider { get; set; }
+
+    public BackgroundScheduleJobBase(IServiceProvider serviceProvider)
+    {
+        ServiceProvider = serviceProvider;
+    }
 }

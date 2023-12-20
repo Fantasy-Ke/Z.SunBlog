@@ -220,23 +220,7 @@ namespace Z.SunBlog.Host.Controllers
         [HttpGet]
         public async Task TestJobs3()
         {
-            await backgroundJobManager.AddOrUpdateScheduleAsync(new HangfireTestScheduleJob());
-        }
-
-        /// <summary>
-        /// 延迟任务
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        public void TestJobs4()
-        {
-            RecurringJob.AddOrUpdate("myrecurringjob", () => YourMethod(), "*/1 * * * *");
-        }
-
-        public Task YourMethod()
-        {
-            Log.Error("4444444444444444444444444444444444444444444444444444444444444444444444444dddddddddddddddddddddddddd");
-            return Task.CompletedTask;
+            await backgroundJobManager.AddOrUpdateScheduleAsync(new RequestLogJob());
         }
     }
 }

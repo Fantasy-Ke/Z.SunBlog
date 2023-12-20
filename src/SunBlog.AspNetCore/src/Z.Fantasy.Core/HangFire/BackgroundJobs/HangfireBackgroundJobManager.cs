@@ -44,7 +44,7 @@ public class HangFireBackgroundJobManager : IBackgroundJobManager, ISingletonDep
 
             RecurringJob.AddOrUpdate(
                 hangfireBackgroundScheduleJob.Id,
-                //hangfireBackgroundScheduleJob.Queue,
+                hangfireBackgroundScheduleJob.Queue,
                 () => hangfireBackgroundScheduleJob.DoWorkAsync(),
                 GetCron(hangfireBackgroundScheduleJob.CronSeqs),
                 hangfireBackgroundScheduleJob.JobOptions

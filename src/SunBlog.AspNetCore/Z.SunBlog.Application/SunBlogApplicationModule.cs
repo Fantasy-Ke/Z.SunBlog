@@ -29,6 +29,7 @@ using Z.Fantasy.Core.HangFire.BackgroundJobs.Abstractions;
 using Z.Module.Extensions;
 using Z.Fantasy.Core.HangFire.Builder;
 using Z.SunBlog.Application.HangfireWork.TestWork;
+using Z.SunBlog.Application.HangfireJob.ExceptionLog;
 
 namespace Z.SunBlog.Application
 {
@@ -72,9 +73,10 @@ namespace Z.SunBlog.Application
 
             //await BackgroundJobManager.AddOrUpdateScheduleAsync(new HangfireTestScheduleJob());
 
-            await  context.GetApplicationBuilder().RegisterScheduleJobs(c =>
+            await context.GetApplicationBuilder().RegisterScheduleJobs(c =>
             {
-                c.Add(typeof(HangfireTestScheduleJob));
+                c.Add(typeof(RequestLogJob));
+                c.Add(typeof(ExceptionLogJob));
             });
 
         }

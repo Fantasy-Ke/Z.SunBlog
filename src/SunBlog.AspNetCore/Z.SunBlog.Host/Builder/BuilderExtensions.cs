@@ -55,10 +55,10 @@ namespace Z.SunBlog.Host.Builder
             var context = new ServiceConfigerContext(services);
             Configuration = context.GetConfiguration();
             Env = context.Environment();
-            ZConfigBase.DatabaseType =  AppSettings.AppOption<DatabaseType>("App:DbType")!;
+            ZConfigBase.DatabaseType = AppSettings.AppOption<DatabaseType>("App:DbType")!;
         }
 
-        
+
 
         /// <summary>
         /// mvc动态api配置
@@ -209,7 +209,7 @@ namespace Z.SunBlog.Host.Builder
             });
         }
 
-        
+
 
 
         /// <summary>

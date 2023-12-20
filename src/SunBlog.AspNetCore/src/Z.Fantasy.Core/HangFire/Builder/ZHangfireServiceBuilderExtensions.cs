@@ -47,26 +47,27 @@ public static class ZHangfireServiceBuilderExtensions
     /// 注册Hangfire
     /// </summary>
     /// <param name="services"></param>
-    public static void ConfigureHangfireService(this IServiceCollection services)
+    public static void ConfigureHangfireService(this IServiceCollection services, 
+        Action<BackgroundJobServerOptions> optionsAction = null)
     {
         var enable = AppSettings.AppOption<bool>("App:HangFire:HangfireEnabled");
         if (!enable) return;
+
+        var options = new BackgroundJobServerOptions()
+        {
+            ShutdownTimeout = TimeSpan.FromMinutes(30),
+            Queues = new string[] { "default", "jobs" }, //队列名称，只能为小写
+            WorkerCount = 3, //Environment.ProcessorCount * 5, //并发任务数 Math.Max(Environment.ProcessorCount, 20)
+            ServerName = "fantasy.hangfire",
+        };
+        optionsAction?.Invoke(options);
         services.AddHangfire(config => config
             .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)//向前兼容
             .UseSimpleAssemblyNameTypeSerializer()
             .UseRecommendedSerializerSettings()
             .UseZHangfireStorage()
             .UseSerilogLogProvider()
-        );
-
-        services.AddHangfireServer(optionsAction: c =>
-        {
-            //wait all jobs performed when BackgroundJobServer shutdown.
-            c.ShutdownTimeout = TimeSpan.FromMinutes(30);
-            c.Queues = new[] { "default", "jobs" }; //队列名称，只能为小写
-            c.WorkerCount = 3; //Environment.ProcessorCount * 5, //并发任务数 Math.Max(Environment.ProcessorCount, 20)
-            c.ServerName = "fantasy.hangfire";
-        });
+        ).AddHangfireServer(optionsAction: c => c = options);
     }
 
 
