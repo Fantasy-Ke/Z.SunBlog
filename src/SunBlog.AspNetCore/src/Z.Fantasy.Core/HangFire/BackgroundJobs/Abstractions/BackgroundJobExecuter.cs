@@ -37,6 +37,8 @@ public class BackgroundJobExecuter : IBackgroundJobExecuter, ITransientDependenc
 
         try
         {
+            if(context.CancellationToken.IsCancellationRequested)
+                 context.CancellationToken.ThrowIfCancellationRequested();
             if (jobExecuteMethod.Name == nameof(IAsyncBackgroundJob<object>.ExecuteAsync))
             {
                 await (Task)jobExecuteMethod.Invoke(job, new[] { context.JobArgs })!;
