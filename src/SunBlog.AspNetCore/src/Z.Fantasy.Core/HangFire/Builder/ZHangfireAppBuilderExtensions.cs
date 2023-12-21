@@ -56,7 +56,7 @@ public static class ZHangfireAppBuilderExtensions
         {
             if (res.IsSubclassOf(typeof(BackgroundScheduleJobBase)))
             {
-                object myInstance = Activator.CreateInstance(res, new[] { app.ApplicationServices });
+                var myInstance = Activator.CreateInstance(res, constructorArgs);
                 await BackgroundJobManager.AddOrUpdateScheduleAsync(myInstance as IBackgroundScheduleJob);
             }
            
