@@ -22,7 +22,7 @@ public class ExceptionLogJob : BackgroundScheduleJobBase, ITransientDependency
     {
         ServiceProvider = serviceProvider ?? IOCManager.GetService<IServiceProvider>();
         Id = "exceptionlogjob";
-        CronSeqs = TimeSpan.FromHours(23).TotalMilliseconds;
+        CronExpression = "0 0 */5 * *";
     }
 
     /// <summary>

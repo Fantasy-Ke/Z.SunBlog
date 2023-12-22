@@ -9,7 +9,13 @@ public abstract class BackgroundScheduleJobBase : IBackgroundScheduleJob
 {
     public virtual string Id { get; set; }
 
+    /// <summary>
+    /// 时间小于24小时的时候使用timespan传入
+    /// </summary>
     public virtual double CronSeqs { get; set; }
+
+    public virtual string CronExpression { get; set; }
+
 
     public virtual RecurringJobOptions JobOptions { get; set; } = new RecurringJobOptions();
 

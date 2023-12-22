@@ -8,5 +8,7 @@ public interface IBackgroundScheduleJob
 
     public double CronSeqs { get; set; }
 
+    public string CronExpression { get; set; }
+
     Task DoWorkAsync();
 }

@@ -46,7 +46,7 @@ public class HangFireBackgroundJobManager : IBackgroundJobManager, ISingletonDep
                 hangfireBackgroundScheduleJob.Id,
                 hangfireBackgroundScheduleJob.Queue,
                 () => hangfireBackgroundScheduleJob.DoWorkAsync(),
-                GetCron(hangfireBackgroundScheduleJob.CronSeqs),
+                hangfireBackgroundScheduleJob.CronExpression ?? GetCron(hangfireBackgroundScheduleJob.CronSeqs),
                 hangfireBackgroundScheduleJob.JobOptions
                 );
             return Task.CompletedTask;
