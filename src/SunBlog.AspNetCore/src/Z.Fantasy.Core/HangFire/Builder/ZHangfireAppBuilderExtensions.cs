@@ -36,6 +36,7 @@ public static class ZHangfireAppBuilderExtensions
         options.DefaultRecordsPerPage = 10;
         options.DarkModeEnabled = true;
         options.DashboardTitle = "Fantasy_ke Hangfire";
+        options.Authorization = new[] { new CustomAuthorizeFilter() };
         configure?.Invoke(options);
         //启用Hangfire仪表盘和服务器(支持使用Hangfire而不是默认的后台作业管理器)
         app.UseHangfireDashboard(pathMatch, options, storage);
