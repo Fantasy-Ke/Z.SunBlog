@@ -20,6 +20,7 @@ using System.Data;
 using Z.Fantasy.Core.Helper;
 using Z.Fantasy.Core.Entities.Enum;
 using Z.Fantasy.Core.HangFire.Builder;
+using Z.RabbitMQ.Extensions;
 
 namespace Z.SunBlog.Host.Builder
 {
@@ -42,6 +43,7 @@ namespace Z.SunBlog.Host.Builder
             // 注入自动事务中间件
             services.AddUnitOfWorkMiddleware();
             services.ServicesJwtToken();
+            services.AddRabbitMQService();
             services.ServicesCaptcha();
         }
 

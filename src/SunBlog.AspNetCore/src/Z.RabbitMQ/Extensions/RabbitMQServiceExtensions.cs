@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
-using Z.RabbitMQ.PublishSubscribe;
+using Z.RabbitMQ.Manager;
 using Z.RabbitMQ.RabbitStore;
 
 namespace Z.RabbitMQ.Extensions;
@@ -50,11 +50,10 @@ public static class RabbitMQServiceExtensions
 
             return new RabbitSettingStore(factory, logger);
         });
-        // 注册序列化服务
-        services.AddSingleton<IMsgPackSerializer, MsgPackSerializer>();
+        // 注册序列化传输服务
+        services.AddSingleton<IMsgPackTransmit, MsgPackTransmit>();
         // 注册发布订阅服务
-        services.AddTransient<IRabbitSubscriber, RabbitSubscriber>();
-        services.AddTransient<IRabbitPublisher, RabbitPublisher>();
+        services.AddTransient<IRabbitEventManager, RabbitEventManager>();
 
         return services;
     }

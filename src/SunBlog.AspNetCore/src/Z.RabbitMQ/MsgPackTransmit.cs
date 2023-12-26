@@ -3,7 +3,7 @@ using MessagePack.Resolvers;
 
 namespace Z.RabbitMQ;
 
-public interface IMsgPackSerializer
+public interface IMsgPackTransmit
 {
     byte[] MessageToBytes<T>(T message);
 
@@ -15,12 +15,12 @@ public interface IMsgPackSerializer
 /// <summary>
 /// MsgPack 序列化器
 /// </summary>
-public class MsgPackSerializer : IMsgPackSerializer
+public class MsgPackTransmit : IMsgPackTransmit
 {
     static MessagePackSerializerOptions _serializerOptions;
     private static volatile bool isInit = true;
 
-    public MsgPackSerializer()
+    public MsgPackTransmit()
     {
         Init();
     }

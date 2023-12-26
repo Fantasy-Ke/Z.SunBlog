@@ -3,62 +3,150 @@ using RabbitMQ.Client;
 using System.Collections.Concurrent;
 using Z.RabbitMQ.RabbitStore;
 
-namespace Z.RabbitMQ.PublishSubscribe;
+namespace Z.RabbitMQ.Manager;
 
-/// <summary>
-/// 订阅者
-/// </summary>
-public interface IRabbitSubscriber : IDisposable
-{
-    /// <summary>
-    /// 订阅
-    /// </summary>
-    /// <typeparam name="T">消费者类型类型</typeparam>
-    /// <param name="configName">rabbitmq连接配置名称</param>
-    /// <param name="queueName">rabbitmq队列名称</param>
-    /// <param name="queueCount">负载均衡数/队列数</param>
-    /// <param name="xMaxPriority">消息最大优先级</param>
-    void Subscribe<T>(string configName, string queueName, int queueCount = 1,
-        int xMaxPriority = 0, bool isDLX = false)
-        where T : IRabbitConsumerInitializer;
-
-    /// <summary>
-    /// 订阅死信队列
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="configName">rabbitmq连接配置名称</param>
-    /// <param name="queueName">队列名称</param>
-    void SubscribeDLX<T>(string configName, string queueName)
-        where T : IRabbitConsumerInitializer;
-
-    /// <summary>
-    /// 取消订阅
-    /// </summary>
-    /// <typeparam name="T">消费者类型类型</typeparam>
-    /// <param name="configName">rabbitmq连接配置名称</param>
-    /// <param name="queueName">rabbitmq队列名称</param>
-    void UnSubscribe<T>(string configName, string queueName)
-        where T : IRabbitConsumerInitializer;
-}
-
-public class RabbitSubscriber : IRabbitSubscriber
+public class RabbitEventManager:IRabbitEventManager
 {
     protected readonly ConcurrentDictionary<IConnection, string> _connectionShutdownDict;
     protected readonly IServiceProvider _serviceProvider;
     protected readonly IRabbitConnectionStore _rabbitConnectionStore;
     protected readonly IRabbitPolicyStore _rabbitPolicyStore;
-
-    public RabbitSubscriber(IServiceProvider serviceProvider, IRabbitConnectionStore rabbitConnectionStore, IRabbitPolicyStore rabbitPolicyStore)
+    protected readonly IMsgPackTransmit _msgPackTransmit;
+    public RabbitEventManager(ConcurrentDictionary<IConnection, string> connectionShutdownDict, IServiceProvider serviceProvider, IRabbitConnectionStore rabbitConnectionStore, IRabbitPolicyStore rabbitPolicyStore, IMsgPackTransmit msgPackTransmit)
     {
+        _connectionShutdownDict = connectionShutdownDict;
         _serviceProvider = serviceProvider;
         _rabbitConnectionStore = rabbitConnectionStore;
         _rabbitPolicyStore = rabbitPolicyStore;
-
-        _connectionShutdownDict = new ConcurrentDictionary<IConnection, string>();
+        _msgPackTransmit = msgPackTransmit;
     }
 
+    #region 发布
+
+    public void Publish<TRabbitConsumer, TEventData>
+        (string queueName, TEventData eventData, string configName = "", int priority = 0, int queueCount = 1, int xMaxPriority = 0)
+        where TRabbitConsumer : IRabbitConsumer<TEventData>, IRabbitConsumerInitializer
+    {
+        configName = GetConfigName(configName);
+
+        // 消息数据
+        var buffer = _msgPackTransmit.MessageToBytes(eventData);
+
+        // 获取连接，这里永远都是最新的
+        var connection = _rabbitConnectionStore.GetConnection(configName);
+
+        // 获取订阅通道
+        var channel = _rabbitConnectionStore.GetChannel(connection, queueName);
+
+        // 获取订阅者
+        var subscribeDefDict = _rabbitConnectionStore.GetOrAddQueueSubscribeDef(connection);
+        subscribeDefDict.TryGetValue(queueName, out var subscribeDef);
+
+        // 如果在发布之前没有先订阅，则会在此处初始化存储并创建队列，但不绑定消费者
+        if (subscribeDef == null)
+        {
+            subscribeDef = new RabbitSubscribeDef
+            {
+                RabbitConsumerInitializerType = typeof(TRabbitConsumer),
+                ConfigName = configName,
+                QueueName = queueName,
+                QueueCount = queueCount,
+                XMaxPriority = xMaxPriority,
+                IsDLXQueue = false
+            };
+            subscribeDefDict.TryAdd(queueName, subscribeDef);
+
+            var sourceQueueName = subscribeDef.QueueName;
+            if (subscribeDef.IsLoadBalancing)
+            {
+                subscribeDef.InitLoadBalancing();
+                foreach (var queueNameItem in subscribeDef.LoadBalancing.GetAll())
+                {
+                    CreateQueue(sourceQueueName, queueNameItem, channel, subscribeDef.XMaxPriority);
+                }
+            }
+            else
+            {
+                CreateQueue(sourceQueueName, sourceQueueName, channel, subscribeDef.XMaxPriority);
+            }
+        }
+
+        // 负载均衡发布
+        if (subscribeDef.IsLoadBalancing)
+        {
+            Publish(channel, subscribeDef.LoadBalancing.NextKey(), buffer, priority);
+            return;
+        }
+
+        Publish(channel, queueName, buffer, priority);
+
+    }
+
+    #region 内部方法
+    /// <summary>
+    /// 创建队列
+    /// </summary>
+    /// <param name="queueName"></param>
+    /// <param name="channel"></param>
+    private void CreateQueue(string sourceQueueName, string queueName, IModel channel, int xMaxPriority = 0)
+    {
+        //死信交换机
+        var dlxexChange = RabbitConsts.DLXQueuePrefix + sourceQueueName;
+        //死信队列
+        var dlxQueueName = dlxexChange;
+
+        // 交换机名称
+        var exchangeName = queueName;
+        //定义一个Fanout类型交换机
+        channel.ExchangeDeclare(exchangeName, ExchangeType.Fanout, false, false, null);
+        // 定义队列参数
+        var args = new Dictionary<string, object> {
+            { "x-max-priority", xMaxPriority }, // 定义消息最大优先级 设置为0则代表不使用消息优先级
+            { "x-dead-letter-exchange",dlxexChange}, //设置当前队列的DLX(死信交换机)
+            { "x-dead-letter-routing-key",dlxQueueName}, //设置DLX的路由key，DLX会根据该值去找到死信消息存放的队列
+            //{ "x-message-ttl",5000} //设置队列的消息过期时间
+        };
+        // 定义队列
+        channel.QueueDeclare(queue: queueName,
+                  durable: true,
+                  exclusive: false,
+                  autoDelete: false,
+                  arguments: args);
+
+        channel.QueueBind(queueName, exchangeName, queueName, null);
+
+        // 设置公平调度
+        channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
+    }
+    protected virtual void Publish(IModel channel, string queueName, byte[] body, int priority)
+    {
+        var exchangeName = queueName;
+
+        //正常交换机通讯
+        channel.ExchangeDeclare(exchange: exchangeName,
+            type: ExchangeType.Fanout,
+            durable: false,
+            autoDelete: false,
+            arguments: null);
+
+        var properties = channel.CreateBasicProperties();
+        properties.Persistent = true;
+        //设置消息的优先级
+        properties.Priority = (byte)priority;
+
+        channel.BasicPublish(
+            exchange: exchangeName,
+            routingKey: queueName,
+            basicProperties: properties,
+            body: body);
+    }
+    #endregion
+
+    #endregion
+
+    #region 订阅
     /// <inheritdoc/>
-    public void Subscribe<T>(string configName, string queueName, int queueCount = 1,
+    public void Subscribe<T>(string queueName, string configName = "", int queueCount = 1,
         int xMaxPriority = 0, bool isDLX = false)
           where T : IRabbitConsumerInitializer
     {
@@ -75,28 +163,27 @@ public class RabbitSubscriber : IRabbitSubscriber
         };
 
         // 订阅失败重试
-        retryPolicy.ExecuteAsync(async () =>
+        retryPolicy.Execute( () =>
         {
             if (subscribeDef.IsLoadBalancing)
             {
                 subscribeDef.InitLoadBalancing();
             }
-
             // 订阅
             InnerSubscribe(subscribeDef);
 
-        }).GetAwaiter();
+        });
 
     }
     /// <inheritdoc/>
-    public void SubscribeDLX<T>(string configName, string queueName)
+    public void SubscribeDLX<T>(string queueName, string configName = "")
         where T : IRabbitConsumerInitializer
     {
         var dlxQueueName = RabbitConsts.DLXQueuePrefix + queueName;
         Subscribe<T>(configName, dlxQueueName, isDLX: true);
     }
     /// <inheritdoc/>
-    public void UnSubscribe<T>(string configName, string queueName)
+    public void UnSubscribe<T>(string queueName, string configName = "")
         where T : IRabbitConsumerInitializer
     {
         configName = GetConfigName(configName);
@@ -184,7 +271,7 @@ public class RabbitSubscriber : IRabbitSubscriber
 
             // 断开连接重试
             var retryPolicy = _rabbitPolicyStore.GetRetryPolicy(configName);
-            retryPolicy.ExecuteAsync(async () =>
+            retryPolicy.Execute(action:  () =>
             {
                 // 创建新连接
                 var connectionNew = _rabbitConnectionStore.GetConnection(configName, true);
@@ -194,9 +281,11 @@ public class RabbitSubscriber : IRabbitSubscriber
                     // 重新订阅
                     InnerSubscribe(item.Value, true);
                 }
-            }).GetAwaiter();
+            });
         };
     }
+
+    #endregion
 
     #endregion
 
@@ -214,5 +303,4 @@ public class RabbitSubscriber : IRabbitSubscriber
 
         return configName;
     }
-
 }

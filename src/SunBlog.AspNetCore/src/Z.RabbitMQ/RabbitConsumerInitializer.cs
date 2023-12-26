@@ -33,13 +33,13 @@ public interface IRabbitConsumer<T> : IRabbitConsumerInitializer
 public abstract class RabbitConsumer<T> : IRabbitConsumer<T>
 {
     private readonly IServiceProvider _serviceProvider;
-    private readonly IMsgPackSerializer _serializer;
+    private readonly IMsgPackTransmit _serializer;
     private readonly ILogger<RabbitConsumer<T>> _logger;
 
     protected RabbitConsumer(IServiceProvider serviceProvider, ILogger<RabbitConsumer<T>> logger)
     {
         _serviceProvider = serviceProvider;
-        _serializer = serviceProvider.GetService<IMsgPackSerializer>();
+        _serializer = serviceProvider.GetService<IMsgPackTransmit>();
         _logger = logger;
     }
 
@@ -85,7 +85,6 @@ public abstract class RabbitConsumer<T> : IRabbitConsumer<T>
         var dlxexChange = RabbitConsts.DLXQueuePrefix + sourceQueueName;
         //死信队列
         var dlxQueueName = dlxexChange;
-
 
         // 交换机名称
         var exchangeName = queueName;

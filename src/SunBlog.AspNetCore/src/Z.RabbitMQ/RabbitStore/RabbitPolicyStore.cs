@@ -15,33 +15,33 @@ public interface IRabbitPolicyStore : IDisposable
     /// </summary>
     /// <param name="configName">配置名称</param>
     /// <returns></returns>
-    AsyncRetryPolicy GetRetryPolicy(string configName = null);
+    RetryPolicy GetRetryPolicy(string configName = null);
 
     /// <summary>
     /// 配置重试策略
     /// </summary>
     /// <param name="configName">配置名称</param>
     /// <param name="retryPolicy">重试策略</param>
-    void SetRetryPolicy(string configName, AsyncRetryPolicy retryPolicy);
+    void SetRetryPolicy(string configName, RetryPolicy retryPolicy);
 }
 
 
 public class RabbitPolicyStore : IRabbitPolicyStore
 {
     protected readonly ILogger<IRabbitPolicyStore> _logger;
-    protected readonly ConcurrentDictionary<string, AsyncRetryPolicy> _dataDict;
-    protected readonly AsyncRetryPolicy _defaultRtryPolicy;
+    protected readonly ConcurrentDictionary<string, RetryPolicy> _dataDict;
+    protected readonly RetryPolicy _defaultRtryPolicy;
 
     public RabbitPolicyStore(ILogger<IRabbitPolicyStore> logger = null)
     {
         _logger = logger;
 
 
-        _dataDict = new ConcurrentDictionary<string, AsyncRetryPolicy>();
+        _dataDict = new ConcurrentDictionary<string, RetryPolicy>();
 
         _defaultRtryPolicy = Policy
             .Handle<Exception>()
-            .WaitAndRetryForeverAsync((retryAttempt) => //一直重试策略
+            .WaitAndRetryForever((retryAttempt) => //一直重试策略
             {
                 // 指数退避策略
                 return TimeSpan.FromSeconds(Math.Pow(2, retryAttempt));
@@ -55,7 +55,7 @@ public class RabbitPolicyStore : IRabbitPolicyStore
             });
     }
 
-    public void SetRetryPolicy(string configName, AsyncRetryPolicy retryPolicy)
+    public void SetRetryPolicy(string configName, RetryPolicy retryPolicy)
     {
         _dataDict.AddOrUpdate(configName, retryPolicy, (key, OldVal) =>
         {
@@ -63,7 +63,7 @@ public class RabbitPolicyStore : IRabbitPolicyStore
         });
     }
 
-    public virtual AsyncRetryPolicy GetRetryPolicy(string configName = null)
+    public virtual RetryPolicy GetRetryPolicy(string configName = null)
     {
         if (string.IsNullOrWhiteSpace(configName))
         {

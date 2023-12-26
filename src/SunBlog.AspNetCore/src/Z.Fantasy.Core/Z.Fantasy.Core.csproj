@@ -48,6 +48,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Z.Module\Z.Module.csproj" />
+    <ProjectReference Include="..\Z.RabbitMQ\Z.RabbitMQ.csproj" />
   </ItemGroup>
 
 </Project>
