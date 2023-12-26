@@ -1,7 +1,7 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System.Collections.Concurrent;
+using Microsoft.Extensions.Logging;
 using Polly;
 using Polly.Retry;
-using System.Collections.Concurrent;
 
 namespace Z.RabbitMQ.RabbitStore;
 
@@ -25,7 +25,6 @@ public interface IRabbitPolicyStore : IDisposable
     void SetRetryPolicy(string configName, RetryPolicy retryPolicy);
 }
 
-
 public class RabbitPolicyStore : IRabbitPolicyStore
 {
     protected readonly ILogger<IRabbitPolicyStore> _logger;
@@ -36,31 +35,36 @@ public class RabbitPolicyStore : IRabbitPolicyStore
     {
         _logger = logger;
 
-
         _dataDict = new ConcurrentDictionary<string, RetryPolicy>();
 
         _defaultRtryPolicy = Policy
             .Handle<Exception>()
-            .WaitAndRetryForever((retryAttempt) => //一直重试策略
-            {
-                // 指数退避策略
-                return TimeSpan.FromSeconds(Math.Pow(2, retryAttempt));
-            },
-            (ex, time) =>
-            {
-                _logger.LogError(
-                    $"Failed to connect to RabbitMQ! Retrying after {time.TotalSeconds} seconds。 Reason: {ex.Message} ...",
-                    ex
+            .WaitAndRetryForever(
+                (retryAttempt) => //一直重试策略
+                {
+                    // 指数退避策略
+                    return TimeSpan.FromSeconds(Math.Pow(2, retryAttempt));
+                },
+                (ex, time) =>
+                {
+                    _logger.LogError(
+                        $"Failed to connect to RabbitMQ! Retrying after {time.TotalSeconds} seconds。 Reason: {ex.Message} ...",
+                        ex
                     );
-            });
+                }
+            );
     }
 
     public void SetRetryPolicy(string configName, RetryPolicy retryPolicy)
     {
-        _dataDict.AddOrUpdate(configName, retryPolicy, (key, OldVal) =>
-        {
-            return retryPolicy;
-        });
+        _dataDict.AddOrUpdate(
+            configName,
+            retryPolicy,
+            (key, OldVal) =>
+            {
+                return retryPolicy;
+            }
+        );
     }
 
     public virtual RetryPolicy GetRetryPolicy(string configName = null)
@@ -70,7 +74,6 @@ public class RabbitPolicyStore : IRabbitPolicyStore
             return _defaultRtryPolicy;
         }
 
-
         if (!_dataDict.TryGetValue(configName, out var val))
         {
             val = _defaultRtryPolicy;
@@ -78,6 +81,7 @@ public class RabbitPolicyStore : IRabbitPolicyStore
 
         return val;
     }
+
     public void Dispose()
     {
         _dataDict.Clear();

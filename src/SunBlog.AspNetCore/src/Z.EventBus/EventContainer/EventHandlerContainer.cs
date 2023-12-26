@@ -1,5 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
+using Microsoft.Extensions.DependencyInjection;
 using Z.EventBus.Handlers;
 
 namespace Z.EventBus.EventContainer
@@ -44,8 +44,6 @@ namespace Z.EventBus.EventContainer
             }
             //Services.AddTransient(handler, handlertype);
             Services.AddTransient(handlertype, handler);
-           
-
         }
 
         public void Subscribe<TEto, THandler>()

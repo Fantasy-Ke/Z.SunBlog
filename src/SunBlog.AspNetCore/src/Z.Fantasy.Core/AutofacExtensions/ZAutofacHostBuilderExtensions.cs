@@ -13,10 +13,13 @@ public static class ZAutofacHostBuilderExtensions
     {
         var containerBuilder = new ContainerBuilder();
 
-        return hostBuilder.ConfigureServices((_, services) =>
-            {
-                services.AddObjectAccessor(containerBuilder);
-            })
+        return hostBuilder
+            .ConfigureServices(
+                (_, services) =>
+                {
+                    services.AddObjectAccessor(containerBuilder);
+                }
+            )
             .UseServiceProviderFactory(new ZAutofacServiceProviderFactory(containerBuilder))
             .ConfigureContainer<ContainerBuilder>(builder =>
             {

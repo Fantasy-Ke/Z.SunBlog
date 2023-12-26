@@ -5,7 +5,6 @@ using RabbitMQ.Client.Events;
 
 namespace Z.RabbitMQ;
 
-
 /// <summary>
 /// 消费者初始化接口
 /// </summary>
@@ -17,6 +16,7 @@ public interface IRabbitConsumerInitializer
     /// <param name="channel"></param>
     void Init(RabbitSubscribeDef rabbitSubscribeDef);
 }
+
 /// <summary>
 /// 消费者基础接口
 /// </summary>
@@ -79,7 +79,12 @@ public abstract class RabbitConsumer<T> : IRabbitConsumer<T>
     /// </summary>
     /// <param name="queueName"></param>
     /// <param name="channel"></param>
-    private void CreateQueue(string sourceQueueName, string queueName, IModel channel, int xMaxPriority = 0)
+    private void CreateQueue(
+        string sourceQueueName,
+        string queueName,
+        IModel channel,
+        int xMaxPriority = 0
+    )
     {
         //死信交换机
         var dlxexChange = RabbitConsts.DLXQueuePrefix + sourceQueueName;
@@ -91,18 +96,21 @@ public abstract class RabbitConsumer<T> : IRabbitConsumer<T>
         //定义一个Fanout类型交换机
         channel.ExchangeDeclare(queueName, ExchangeType.Fanout, false, false, null);
         // 定义队列参数
-        var args = new Dictionary<string, object> {
+        var args = new Dictionary<string, object>
+        {
             { "x-max-priority", xMaxPriority }, // 定义消息最大优先级 设置为0则代表不使用消息优先级
-            { "x-dead-letter-exchange",dlxexChange}, //设置当前队列的DLX(死信交换机)
-            { "x-dead-letter-routing-key",dlxQueueName}, //设置DLX的路由key，DLX会根据该值去找到死信消息存放的队列
+            { "x-dead-letter-exchange", dlxexChange }, //设置当前队列的DLX(死信交换机)
+            { "x-dead-letter-routing-key", dlxQueueName }, //设置DLX的路由key，DLX会根据该值去找到死信消息存放的队列
             //{ "x-message-ttl",5000} //设置队列的消息过期时间
         };
         // 定义队列
-        channel.QueueDeclare(queue: queueName,
-                  durable: true,
-                  exclusive: false,
-                  autoDelete: false,
-                  arguments: args);
+        channel.QueueDeclare(
+            queue: queueName,
+            durable: true,
+            exclusive: false,
+            autoDelete: false,
+            arguments: args
+        );
 
         channel.QueueBind(queueName, exchangeName, queueName, null);
 
@@ -117,7 +125,9 @@ public abstract class RabbitConsumer<T> : IRabbitConsumer<T>
         {
             try
             {
-                _logger.LogInformation(exchangeName + "处理了该消息，消息优先级为：" + ea.BasicProperties.Priority);
+                _logger.LogInformation(
+                    exchangeName + "处理了该消息，消息优先级为：" + ea.BasicProperties.Priority
+                );
                 // 数据反序列化为T
                 var body = ea.Body.ToArray();
                 var eventArgs = _serializer.BytesToMessage<T>(body);
@@ -133,9 +143,19 @@ public abstract class RabbitConsumer<T> : IRabbitConsumer<T>
                 _logger.LogError("【异常消息】：" + ex.Message);
 
                 // 创建死信交换机
-                channel.ExchangeDeclare(dlxexChange, type: ExchangeType.Direct, durable: true, autoDelete: false);
+                channel.ExchangeDeclare(
+                    dlxexChange,
+                    type: ExchangeType.Direct,
+                    durable: true,
+                    autoDelete: false
+                );
                 // 创建死信队列
-                channel.QueueDeclare(dlxQueueName, durable: true, exclusive: false, autoDelete: false);
+                channel.QueueDeclare(
+                    dlxQueueName,
+                    durable: true,
+                    exclusive: false,
+                    autoDelete: false
+                );
                 // 死信队列绑定死信交换机
                 channel.QueueBind(dlxQueueName, dlxexChange, routingKey: dlxQueueName);
 
@@ -146,9 +166,7 @@ public abstract class RabbitConsumer<T> : IRabbitConsumer<T>
         };
 
         // 启动消费者 消费者和channel绑定，并指定要处理哪个队列 关闭自动确认
-        channel.BasicConsume(queue: queueName,
-                 autoAck: false,
-                 consumer: consumer);
+        channel.BasicConsume(queue: queueName, autoAck: false, consumer: consumer);
     }
 
     /// <summary>
@@ -161,9 +179,19 @@ public abstract class RabbitConsumer<T> : IRabbitConsumer<T>
         // 死信交换机名称
         var dlxexChange = dlxQueueName;
         // 创建死信交换机
-        channel.ExchangeDeclare(dlxexChange, type: ExchangeType.Direct, durable: true, autoDelete: false);
+        channel.ExchangeDeclare(
+            dlxexChange,
+            type: ExchangeType.Direct,
+            durable: true,
+            autoDelete: false
+        );
         // 定义死信队列
-        channel.QueueDeclare(queue: dlxQueueName, durable: true, exclusive: false, autoDelete: false);
+        channel.QueueDeclare(
+            queue: dlxQueueName,
+            durable: true,
+            exclusive: false,
+            autoDelete: false
+        );
 
         channel.QueueBind(dlxQueueName, dlxexChange, routingKey: dlxQueueName);
 
@@ -178,7 +206,9 @@ public abstract class RabbitConsumer<T> : IRabbitConsumer<T>
         {
             try
             {
-                _logger.LogInformation(dlxexChange + "处理了该消息，消息优先级为：" + ea.BasicProperties.Priority);
+                _logger.LogInformation(
+                    dlxexChange + "处理了该消息，消息优先级为：" + ea.BasicProperties.Priority
+                );
                 // 数据反序列化为T
                 var body = ea.Body.ToArray();
                 var eventArgs = _serializer.BytesToMessage<T>(body);
@@ -197,8 +227,6 @@ public abstract class RabbitConsumer<T> : IRabbitConsumer<T>
             }
         };
 
-        channel.BasicConsume(queue: dlxQueueName,
-                 autoAck: false,
-                 consumer: consumer);
+        channel.BasicConsume(queue: dlxQueueName, autoAck: false, consumer: consumer);
     }
 }

@@ -14,12 +14,21 @@ namespace Z.Fantasy.Core.AutofacExtensions.Builder;
 
 public static class ZRegistrationBuilderExtensions
 {
-    public static IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> ConfigureZConventions<TLimit, TActivatorData, TRegistrationStyle>(
-            this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registrationBuilder,
-            IModuleContainer moduleContainer, ServiceRegistrationActionList registrationActionList)
+    public static IRegistrationBuilder<
+        TLimit,
+        TActivatorData,
+        TRegistrationStyle
+    > ConfigureZConventions<TLimit, TActivatorData, TRegistrationStyle>(
+        this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registrationBuilder,
+        IModuleContainer moduleContainer,
+        ServiceRegistrationActionList registrationActionList
+    )
         where TActivatorData : ReflectionActivatorData
     {
-        var serviceType = registrationBuilder.RegistrationData.Services.OfType<IServiceWithType>().FirstOrDefault()?.ServiceType;
+        var serviceType = registrationBuilder
+            .RegistrationData.Services.OfType<IServiceWithType>()
+            .FirstOrDefault()
+            ?.ServiceType;
         if (serviceType == null)
         {
             return registrationBuilder;
@@ -31,8 +40,15 @@ public static class ZRegistrationBuilderExtensions
             return registrationBuilder;
         }
 
-        registrationBuilder = registrationBuilder.EnablePropertyInjection(moduleContainer, implementationType);
-        registrationBuilder = registrationBuilder.InvokeRegistrationActions(registrationActionList, serviceType, implementationType);
+        registrationBuilder = registrationBuilder.EnablePropertyInjection(
+            moduleContainer,
+            implementationType
+        );
+        registrationBuilder = registrationBuilder.InvokeRegistrationActions(
+            registrationActionList,
+            serviceType,
+            implementationType
+        );
 
         return registrationBuilder;
     }
@@ -47,28 +63,44 @@ public static class ZRegistrationBuilderExtensions
     /// <param name="moduleContainer"></param>
     /// <param name="implementationType"></param>
     /// <returns></returns>
-    private static IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> EnablePropertyInjection<TLimit, TActivatorData, TRegistrationStyle>(
-            this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registrationBuilder,
-            IModuleContainer moduleContainer,
-            Type implementationType)
+    private static IRegistrationBuilder<
+        TLimit,
+        TActivatorData,
+        TRegistrationStyle
+    > EnablePropertyInjection<TLimit, TActivatorData, TRegistrationStyle>(
+        this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registrationBuilder,
+        IModuleContainer moduleContainer,
+        Type implementationType
+    )
         where TActivatorData : ReflectionActivatorData
     {
         // Enable Property Injection only for types in an assembly containing an AbpModule and without a DisablePropertyInjection attribute on class or properties.
-        if (moduleContainer.Modules.Any(m => m.AllAssemblies.Contains(implementationType.Assembly)) &&
-            implementationType.GetCustomAttributes(typeof(DisablePropertyInjectionAttribute), true).IsNullOrEmpty())
+        if (
+            moduleContainer.Modules.Any(m => m.AllAssemblies.Contains(implementationType.Assembly))
+            && implementationType
+                .GetCustomAttributes(typeof(DisablePropertyInjectionAttribute), true)
+                .IsNullOrEmpty()
+        )
         {
-            registrationBuilder = registrationBuilder.PropertiesAutowired(new ZPropertySelector(false));
+            registrationBuilder = registrationBuilder.PropertiesAutowired(
+                new ZPropertySelector(false)
+            );
         }
 
         return registrationBuilder;
     }
 
-    private static IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> InvokeRegistrationActions<TLimit, TActivatorData, TRegistrationStyle>(
-    this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registrationBuilder,
-    ServiceRegistrationActionList registrationActionList,
-    Type serviceType,
-    Type implementationType)
-    where TActivatorData : ReflectionActivatorData
+    private static IRegistrationBuilder<
+        TLimit,
+        TActivatorData,
+        TRegistrationStyle
+    > InvokeRegistrationActions<TLimit, TActivatorData, TRegistrationStyle>(
+        this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registrationBuilder,
+        ServiceRegistrationActionList registrationActionList,
+        Type serviceType,
+        Type implementationType
+    )
+        where TActivatorData : ReflectionActivatorData
     {
         var serviceRegistredArgs = new OnServiceRegistredContext(serviceType, implementationType);
 
@@ -89,12 +121,16 @@ public static class ZRegistrationBuilderExtensions
         return registrationBuilder;
     }
 
-
-    private static IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> AddInterceptors<TLimit, TActivatorData, TRegistrationStyle>(
-            this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registrationBuilder,
-            ServiceRegistrationActionList serviceRegistrationActionList,
-            Type serviceType,
-            IEnumerable<Type> interceptors)
+    private static IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> AddInterceptors<
+        TLimit,
+        TActivatorData,
+        TRegistrationStyle
+    >(
+        this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registrationBuilder,
+        ServiceRegistrationActionList serviceRegistrationActionList,
+        Type serviceType,
+        IEnumerable<Type> interceptors
+    )
         where TActivatorData : ReflectionActivatorData
     {
         if (serviceType.IsInterface)
@@ -107,7 +143,10 @@ public static class ZRegistrationBuilderExtensions
             {
                 return registrationBuilder;
             }
-           (registrationBuilder as IRegistrationBuilder<TLimit, ConcreteReflectionActivatorData, TRegistrationStyle>)?.EnableClassInterceptors();
+            (
+                registrationBuilder
+                as IRegistrationBuilder<TLimit, ConcreteReflectionActivatorData, TRegistrationStyle>
+            )?.EnableClassInterceptors();
         }
 
         foreach (var interceptor in interceptors)

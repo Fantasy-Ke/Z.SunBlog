@@ -16,10 +16,12 @@ public class RabbitMQConnectionLoadBalancing
     /// 队列名称
     /// </summary>
     public string QueueName { get; set; }
+
     /// <summary>
     /// 当前负载均衡的索引
     /// </summary>
     protected int _currentIndex;
+
     /// <summary>
     /// 所有的负载均衡配置
     /// </summary>
@@ -29,6 +31,7 @@ public class RabbitMQConnectionLoadBalancing
     /// 最大数量
     /// </summary>
     public virtual int MaxSize { get; set; }
+
     /// <summary>
     /// 是否已初始化成功
     /// </summary>
@@ -93,18 +96,12 @@ public class RabbitMQConnectionLoadBalancing
         ServerConfigs = new ServerConfig[MaxSize];
         for (var i = 0; i < MaxSize; i++)
         {
-            ServerConfigs[i] = new ServerConfig()
-            {
-                Weight = 1,
-                Name = $"{QueueName}_{i}"
-            };
+            ServerConfigs[i] = new ServerConfig() { Weight = 1, Name = $"{QueueName}_{i}" };
         }
         Initialized = true;
     }
     #endregion
-
 }
-
 
 /// <summary>
 /// 负载的配置

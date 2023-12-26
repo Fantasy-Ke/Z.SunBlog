@@ -30,11 +30,13 @@ public class MsgPackTransmit : IMsgPackTransmit
         if (isInit)
         {
             StaticCompositeResolver.Instance.Register(
-              NativeDateTimeResolver.Instance,
-              StandardResolverAllowPrivate.Instance,
-              ContractlessStandardResolver.Instance
+                NativeDateTimeResolver.Instance,
+                StandardResolverAllowPrivate.Instance,
+                ContractlessStandardResolver.Instance
             );
-            _serializerOptions = MessagePackSerializerOptions.Standard.WithResolver(StaticCompositeResolver.Instance);
+            _serializerOptions = MessagePackSerializerOptions.Standard.WithResolver(
+                StaticCompositeResolver.Instance
+            );
 
             isInit = false;
         }
@@ -44,10 +46,12 @@ public class MsgPackTransmit : IMsgPackTransmit
     {
         return MessageToBytes(typeof(T), message);
     }
+
     public byte[] MessageToBytes(Type type, object message)
     {
         return MessagePackSerializer.Serialize(type, message, _serializerOptions);
     }
+
     public T BytesToMessage<T>(byte[] bytes)
     {
         return (T)MessagePackSerializer.Deserialize(typeof(T), bytes, _serializerOptions);

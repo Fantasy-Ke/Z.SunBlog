@@ -1,18 +1,25 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.Collections.Concurrent;
+using Microsoft.Extensions.DependencyInjection;
 using RabbitMQ.Client;
-using System.Collections.Concurrent;
 using Z.RabbitMQ.RabbitStore;
 
 namespace Z.RabbitMQ.Manager;
 
-public class RabbitEventManager:IRabbitEventManager
+public class RabbitEventManager : IRabbitEventManager
 {
     protected readonly ConcurrentDictionary<IConnection, string> _connectionShutdownDict;
     protected readonly IServiceProvider _serviceProvider;
     protected readonly IRabbitConnectionStore _rabbitConnectionStore;
     protected readonly IRabbitPolicyStore _rabbitPolicyStore;
     protected readonly IMsgPackTransmit _msgPackTransmit;
-    public RabbitEventManager(ConcurrentDictionary<IConnection, string> connectionShutdownDict, IServiceProvider serviceProvider, IRabbitConnectionStore rabbitConnectionStore, IRabbitPolicyStore rabbitPolicyStore, IMsgPackTransmit msgPackTransmit)
+
+    public RabbitEventManager(
+        ConcurrentDictionary<IConnection, string> connectionShutdownDict,
+        IServiceProvider serviceProvider,
+        IRabbitConnectionStore rabbitConnectionStore,
+        IRabbitPolicyStore rabbitPolicyStore,
+        IMsgPackTransmit msgPackTransmit
+    )
     {
         _connectionShutdownDict = connectionShutdownDict;
         _serviceProvider = serviceProvider;
@@ -23,8 +30,14 @@ public class RabbitEventManager:IRabbitEventManager
 
     #region 发布
 
-    public void Publish<TRabbitConsumer, TEventData>
-        (string queueName, TEventData eventData, string configName = "", int priority = 0, int queueCount = 1, int xMaxPriority = 0)
+    public void Publish<TRabbitConsumer, TEventData>(
+        string queueName,
+        TEventData eventData,
+        string configName = "",
+        int priority = 0,
+        int queueCount = 1,
+        int xMaxPriority = 0
+    )
         where TRabbitConsumer : IRabbitConsumer<TEventData>, IRabbitConsumerInitializer
     {
         configName = GetConfigName(configName);
@@ -79,7 +92,6 @@ public class RabbitEventManager:IRabbitEventManager
         }
 
         Publish(channel, queueName, buffer, priority);
-
     }
 
     #region 内部方法
@@ -88,7 +100,12 @@ public class RabbitEventManager:IRabbitEventManager
     /// </summary>
     /// <param name="queueName"></param>
     /// <param name="channel"></param>
-    private void CreateQueue(string sourceQueueName, string queueName, IModel channel, int xMaxPriority = 0)
+    private void CreateQueue(
+        string sourceQueueName,
+        string queueName,
+        IModel channel,
+        int xMaxPriority = 0
+    )
     {
         //死信交换机
         var dlxexChange = RabbitConsts.DLXQueuePrefix + sourceQueueName;
@@ -100,34 +117,40 @@ public class RabbitEventManager:IRabbitEventManager
         //定义一个Fanout类型交换机
         channel.ExchangeDeclare(exchangeName, ExchangeType.Fanout, false, false, null);
         // 定义队列参数
-        var args = new Dictionary<string, object> {
+        var args = new Dictionary<string, object>
+        {
             { "x-max-priority", xMaxPriority }, // 定义消息最大优先级 设置为0则代表不使用消息优先级
-            { "x-dead-letter-exchange",dlxexChange}, //设置当前队列的DLX(死信交换机)
-            { "x-dead-letter-routing-key",dlxQueueName}, //设置DLX的路由key，DLX会根据该值去找到死信消息存放的队列
+            { "x-dead-letter-exchange", dlxexChange }, //设置当前队列的DLX(死信交换机)
+            { "x-dead-letter-routing-key", dlxQueueName }, //设置DLX的路由key，DLX会根据该值去找到死信消息存放的队列
             //{ "x-message-ttl",5000} //设置队列的消息过期时间
         };
         // 定义队列
-        channel.QueueDeclare(queue: queueName,
-                  durable: true,
-                  exclusive: false,
-                  autoDelete: false,
-                  arguments: args);
+        channel.QueueDeclare(
+            queue: queueName,
+            durable: true,
+            exclusive: false,
+            autoDelete: false,
+            arguments: args
+        );
 
         channel.QueueBind(queueName, exchangeName, queueName, null);
 
         // 设置公平调度
         channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
     }
+
     protected virtual void Publish(IModel channel, string queueName, byte[] body, int priority)
     {
         var exchangeName = queueName;
 
         //正常交换机通讯
-        channel.ExchangeDeclare(exchange: exchangeName,
+        channel.ExchangeDeclare(
+            exchange: exchangeName,
             type: ExchangeType.Fanout,
             durable: false,
             autoDelete: false,
-            arguments: null);
+            arguments: null
+        );
 
         var properties = channel.CreateBasicProperties();
         properties.Persistent = true;
@@ -138,7 +161,8 @@ public class RabbitEventManager:IRabbitEventManager
             exchange: exchangeName,
             routingKey: queueName,
             basicProperties: properties,
-            body: body);
+            body: body
+        );
     }
     #endregion
 
@@ -146,9 +170,14 @@ public class RabbitEventManager:IRabbitEventManager
 
     #region 订阅
     /// <inheritdoc/>
-    public void Subscribe<T>(string queueName, string configName = "", int queueCount = 1,
-        int xMaxPriority = 0, bool isDLX = false)
-          where T : IRabbitConsumerInitializer
+    public void Subscribe<T>(
+        string queueName,
+        string configName = "",
+        int queueCount = 1,
+        int xMaxPriority = 0,
+        bool isDLX = false
+    )
+        where T : IRabbitConsumerInitializer
     {
         var retryPolicy = _rabbitPolicyStore.GetRetryPolicy(configName);
 
@@ -163,7 +192,7 @@ public class RabbitEventManager:IRabbitEventManager
         };
 
         // 订阅失败重试
-        retryPolicy.Execute( () =>
+        retryPolicy.Execute(() =>
         {
             if (subscribeDef.IsLoadBalancing)
             {
@@ -171,10 +200,9 @@ public class RabbitEventManager:IRabbitEventManager
             }
             // 订阅
             InnerSubscribe(subscribeDef);
-
         });
-
     }
+
     /// <inheritdoc/>
     public void SubscribeDLX<T>(string queueName, string configName = "")
         where T : IRabbitConsumerInitializer
@@ -182,6 +210,7 @@ public class RabbitEventManager:IRabbitEventManager
         var dlxQueueName = RabbitConsts.DLXQueuePrefix + queueName;
         Subscribe<T>(configName, dlxQueueName, isDLX: true);
     }
+
     /// <inheritdoc/>
     public void UnSubscribe<T>(string queueName, string configName = "")
         where T : IRabbitConsumerInitializer
@@ -190,7 +219,6 @@ public class RabbitEventManager:IRabbitEventManager
         var connection = _rabbitConnectionStore.GetConnection(configName);
 
         var dict = _rabbitConnectionStore.GetOrAddQueueSubscribeDef(connection);
-
 
         if (!dict.TryRemove(queueName, out var subscribeDef))
         {
@@ -225,17 +253,26 @@ public class RabbitEventManager:IRabbitEventManager
     /// <param name="rabbitSubscribeDef"></param>
     /// <param name="createNewChannel"></param>
     /// <returns></returns>
-    protected virtual void InnerSubscribe(RabbitSubscribeDef rabbitSubscribeDef, bool createNewChannel = false)
+    protected virtual void InnerSubscribe(
+        RabbitSubscribeDef rabbitSubscribeDef,
+        bool createNewChannel = false
+    )
     {
         // 获取连接，这里永远都是最新的
         var connection = _rabbitConnectionStore.GetConnection(rabbitSubscribeDef.ConfigName);
 
         // 获取订阅通道
-        var channel = _rabbitConnectionStore.GetChannel(connection, rabbitSubscribeDef.QueueName, createNewChannel);
+        var channel = _rabbitConnectionStore.GetChannel(
+            connection,
+            rabbitSubscribeDef.QueueName,
+            createNewChannel
+        );
         rabbitSubscribeDef.Channel = channel;
 
         // 获取消费者实例,并初始化
-        var instance = _serviceProvider.GetRequiredService(rabbitSubscribeDef.RabbitConsumerInitializerType) as IRabbitConsumerInitializer;
+        var instance =
+            _serviceProvider.GetRequiredService(rabbitSubscribeDef.RabbitConsumerInitializerType)
+            as IRabbitConsumerInitializer;
         instance.Init(rabbitSubscribeDef);
 
         // 注册连接断开事件
@@ -247,9 +284,11 @@ public class RabbitEventManager:IRabbitEventManager
     /// </summary>
     /// <param name="connection"></param>
     /// <param name="rabbitSubscribeDef"></param>
-    protected virtual void RegisterConnectionShutdown(IConnection connection, RabbitSubscribeDef rabbitSubscribeDef)
+    protected virtual void RegisterConnectionShutdown(
+        IConnection connection,
+        RabbitSubscribeDef rabbitSubscribeDef
+    )
     {
-
         // 添加连接对应的初始化器字典
         _rabbitConnectionStore.GetOrAddQueueSubscribeDef(connection, rabbitSubscribeDef);
 
@@ -267,11 +306,13 @@ public class RabbitEventManager:IRabbitEventManager
         {
             // 移除现有连接关联的数据
             _connectionShutdownDict.TryRemove(connection, out var configName);
-            var rabbitConsumerInitializerDict = _rabbitConnectionStore.RemoveAndGetIConnection(connection);
+            var rabbitConsumerInitializerDict = _rabbitConnectionStore.RemoveAndGetIConnection(
+                connection
+            );
 
             // 断开连接重试
             var retryPolicy = _rabbitPolicyStore.GetRetryPolicy(configName);
-            retryPolicy.Execute(action:  () =>
+            retryPolicy.Execute(action: () =>
             {
                 // 创建新连接
                 var connectionNew = _rabbitConnectionStore.GetConnection(configName, true);
