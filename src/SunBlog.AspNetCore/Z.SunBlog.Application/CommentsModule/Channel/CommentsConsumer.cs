@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Z.Module.DependencyInjection;
 using Z.RabbitMQ;
 using Z.SunBlog.Core.CommentsModule;
@@ -17,20 +19,23 @@ namespace Z.SunBlog.Application.CommentsModule.Channel
     public class CommentsConsumer : RabbitConsumer<Comments>, ITransientDependency
     {
         private readonly ICommentsManager _commentsManager;
+        private readonly ILogger<CommentsConsumer> _logger;
         /// <summary>
         /// 
         /// </summary>
         /// <param name="serviceProvider"></param>
-        /// <param name="logger"></param>
+        /// <param name="loggerComments"></param>
         /// <param name="commentsManager"></param>
         public CommentsConsumer(
             IServiceProvider serviceProvider,
-            ILogger<RabbitConsumer<Comments>> logger
+            ILogger<RabbitConsumer<Comments>> loggerComments
 ,
-            ICommentsManager commentsManager)
-            : base(serviceProvider, logger)
+            ICommentsManager commentsManager,
+            ILogger<CommentsConsumer> logger)
+            : base(serviceProvider, loggerComments)
         {
             _commentsManager = commentsManager;
+            _logger = logger;
         }
 
         /// <summary>
@@ -39,6 +44,7 @@ namespace Z.SunBlog.Application.CommentsModule.Channel
         /// <param name="eventArgs"></param>
         public override void Exec(Comments eventArgs)
         {
+            _logger.LogWarning($"传递实体数据{JsonConvert.SerializeObject(eventArgs)}");
             _commentsManager.CreateAsync(eventArgs).GetAwaiter();
         }
     }

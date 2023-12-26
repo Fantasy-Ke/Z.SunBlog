@@ -67,7 +67,7 @@ namespace Z.SunBlog.Application.CommentsModule.BlogClient
             comments.IP = _httpContextAccessor.HttpContext.GetRemoteIp();
             comments.Geolocation = address;
             _rabbitEventManager.Publish<CommentsConsumer, Comments>("comment", comments);
-            await _commentsManager.CreateAsync(comments);
+            //await _commentsManager.CreateAsync(comments);
         }
 
 

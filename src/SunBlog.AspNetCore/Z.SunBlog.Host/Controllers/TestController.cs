@@ -20,6 +20,9 @@ using Z.Fantasy.Core.HangFire.BackgroundJobs.Abstractions;
 using Z.SunBlog.Core.jobs.TestJob;
 using Hangfire;
 using Z.SunBlog.Application.HangfireJob.RequestLog;
+using Z.SunBlog.Application.CommentsModule.Channel;
+using Z.SunBlog.Core.CommentsModule;
+using Z.RabbitMQ.Manager;
 
 namespace Z.SunBlog.Host.Controllers
 {
@@ -35,9 +38,10 @@ namespace Z.SunBlog.Host.Controllers
         private readonly IUserAppService _userAppService;
         private ICacheManager _cacheManager;
         private readonly ILocalEventBus _localEvent;
+        private readonly IRabbitEventManager _rabbitEventManager;
 
         private readonly IBackgroundJobManager backgroundJobManager;
-        public TestController(IJwtTokenProvider jwtTokenProvider, IUserSession userSession, IUserAppService userAppService, ICacheManager cacheManager, ILocalEventBus localEvent, IBackgroundJobManager backgroundJobManager)
+        public TestController(IJwtTokenProvider jwtTokenProvider, IUserSession userSession, IUserAppService userAppService, ICacheManager cacheManager, ILocalEventBus localEvent, IBackgroundJobManager backgroundJobManager, IRabbitEventManager rabbitEventManager)
         {
             _jwtTokenProvider = jwtTokenProvider;
             _userSession = userSession;
@@ -45,6 +49,7 @@ namespace Z.SunBlog.Host.Controllers
             _cacheManager = cacheManager;
             _localEvent = localEvent;
             this.backgroundJobManager = backgroundJobManager;
+            _rabbitEventManager = rabbitEventManager;
         }
 
 
@@ -221,6 +226,16 @@ namespace Z.SunBlog.Host.Controllers
         public async Task TestJobs3()
         {
             await backgroundJobManager.AddOrUpdateScheduleAsync(new RequestLogJob());
+        }
+
+        /// <summary>
+        /// 消费队列
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public void RabbitSubscribe()
+        {
+            _rabbitEventManager.Subscribe<CommentsConsumer>("comment");
         }
     }
 }
