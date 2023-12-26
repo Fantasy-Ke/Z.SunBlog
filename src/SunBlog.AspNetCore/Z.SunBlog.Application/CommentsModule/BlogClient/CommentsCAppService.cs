@@ -1,11 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Internal;
 using System.Linq.Dynamic.Core;
 using Z.Fantasy.Core.DomainServiceRegister;
 using Z.Fantasy.Core.Helper;
 using Z.Fantasy.Core.ResultResponse.Pager;
-using Z.Fantasy.Core.UserSession;
 using Z.EntityFrameworkCore.Extensions;
 using Z.SunBlog.Application.CommentsModule.BlogClient.Dto;
 using Z.SunBlog.Core.AuthAccountModule.DomainManager;
@@ -15,10 +13,10 @@ using Z.SunBlog.Core.PraiseModule;
 using Z.SunBlog.Core.PraiseModule.DomainManager;
 using Z.SunBlog.Core.SharedDto;
 using Z.Fantasy.Core.RedisModule;
-using Z.SunBlog.Core.Const;
-using Z.SunBlog.Core.Hubs;
 using Z.SunBlog.Core.MessageModule.DomainManager;
 using Z.SunBlog.Core.MessageModule.Dto;
+using Z.RabbitMQ.Manager;
+using Z.SunBlog.Application.CommentsModule.Channel;
 
 namespace Z.SunBlog.Application.CommentsModule.BlogClient
 {
@@ -33,9 +31,10 @@ namespace Z.SunBlog.Application.CommentsModule.BlogClient
         private readonly ICacheManager _cacheManager;
         private readonly IMessageManager _messageManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IRabbitEventManager _rabbitEventManager;
 
         public CommentsCAppService(
-            IServiceProvider serviceProvider, ICommentsManager commentsManager, IAuthAccountDomainManager authAccountDomainManager, IPraiseManager praiseManager, IHttpContextAccessor httpContextAccessor, ICacheManager cacheManager, IMessageManager messageManager) : base(serviceProvider)
+            IServiceProvider serviceProvider, ICommentsManager commentsManager, IAuthAccountDomainManager authAccountDomainManager, IPraiseManager praiseManager, IHttpContextAccessor httpContextAccessor, ICacheManager cacheManager, IMessageManager messageManager, IRabbitEventManager rabbitEventManager) : base(serviceProvider)
         {
             _commentsManager = commentsManager;
             _authAccountDomainManager = authAccountDomainManager;
@@ -43,6 +42,7 @@ namespace Z.SunBlog.Application.CommentsModule.BlogClient
             _httpContextAccessor = httpContextAccessor;
             _cacheManager = cacheManager;
             _messageManager = messageManager;
+            _rabbitEventManager = rabbitEventManager;
         }
 
 
@@ -66,6 +66,7 @@ namespace Z.SunBlog.Application.CommentsModule.BlogClient
             comments.AccountId = UserService.UserId;
             comments.IP = _httpContextAccessor.HttpContext.GetRemoteIp();
             comments.Geolocation = address;
+            _rabbitEventManager.Publish<CommentsConsumer, Comments>("comment", comments);
             await _commentsManager.CreateAsync(comments);
         }
 

@@ -23,29 +23,29 @@ public static class RabbitMQServiceExtensions
             var configuration = sp.GetRequiredService<IConfiguration>();
             var factory = new ConnectionFactory()
             {
-                HostName = configuration.GetSection("RabbitMQ:Connection").Value,
+                HostName = configuration.GetSection("App:RabbitMQ:Connection").Value,
                 DispatchConsumersAsync = true
             };
 
-            if (!string.IsNullOrEmpty(configuration.GetSection("RabbitMQ:UserName").Value))
+            if (!string.IsNullOrEmpty(configuration.GetSection("App:RabbitMQ:UserName").Value))
             {
-                factory.UserName = configuration.GetSection("RabbitMQ:UserName").Value;
+                factory.UserName = configuration.GetSection("App:RabbitMQ:UserName").Value;
             }
 
-            if (!string.IsNullOrEmpty(configuration.GetSection("RabbitMQ:Password").Value))
+            if (!string.IsNullOrEmpty(configuration.GetSection("App:RabbitMQ:Password").Value))
             {
-                factory.Password = configuration.GetSection("RabbitMQ:Password").Value;
+                factory.Password = configuration.GetSection("App:RabbitMQ:Password").Value;
             }
 
-            if (!string.IsNullOrEmpty(configuration.GetSection("RabbitMQ:Port").Value))
+            if (!string.IsNullOrEmpty(configuration.GetSection("App:RabbitMQ:Port").Value))
             {
-                factory.Port = configuration.GetSection("RabbitMQ:Port").Get<int>();
+                factory.Port = configuration.GetSection("App:RabbitMQ:Port").Get<int>();
             }
 
             var retryCount = 5;
-            if (!string.IsNullOrEmpty(configuration.GetSection("RabbitMQ:RetryCount").Value))
+            if (!string.IsNullOrEmpty(configuration.GetSection("App:RabbitMQ:RetryCount").Value))
             {
-                retryCount = configuration.GetSection("RabbitMQ:RetryCount").Get<int>();
+                retryCount = configuration.GetSection("App:RabbitMQ:RetryCount").Get<int>();
             }
 
             return new RabbitSettingStore(factory, logger);

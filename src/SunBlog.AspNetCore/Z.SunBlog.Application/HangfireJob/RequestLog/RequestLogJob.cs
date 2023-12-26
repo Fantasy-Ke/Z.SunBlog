@@ -8,7 +8,7 @@ using Z.Fantasy.Core.HangFire.BackgroundJobs.Abstractions;
 using Z.Fantasy.Core.UnitOfWork;
 using Z.Module.DependencyInjection;
 
-namespace Z.SunBlog.Application.HangfireWork.TestWork;
+namespace Z.SunBlog.Application.HangfireJob.RequestLog;
 
 /// <summary>
 /// 请求日志清理
@@ -43,10 +43,10 @@ public class RequestLogJob : BackgroundScheduleJobBase, ITransientDependency
         catch (Exception ex)
         {
             await unit.RollbackTransactionAsync();
-            Log.Error( $"定时清除请求日志失败{ex}");
+            Log.Error($"定时清除请求日志失败{ex}");
         }
 
         unit.Dispose();
-        
+
     }
 }

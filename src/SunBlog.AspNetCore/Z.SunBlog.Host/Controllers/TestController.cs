@@ -19,7 +19,7 @@ using Z.SunBlog.Application.MenuModule;
 using Z.Fantasy.Core.HangFire.BackgroundJobs.Abstractions;
 using Z.SunBlog.Core.jobs.TestJob;
 using Hangfire;
-using Z.SunBlog.Application.HangfireWork.TestWork;
+using Z.SunBlog.Application.HangfireJob.RequestLog;
 
 namespace Z.SunBlog.Host.Controllers
 {

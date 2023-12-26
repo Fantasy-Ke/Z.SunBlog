@@ -32,13 +32,11 @@ public interface IRabbitConsumer<T> : IRabbitConsumerInitializer
 /// <typeparam name="T"></typeparam>
 public abstract class RabbitConsumer<T> : IRabbitConsumer<T>
 {
-    private readonly IServiceProvider _serviceProvider;
     private readonly IMsgPackTransmit _serializer;
     private readonly ILogger<RabbitConsumer<T>> _logger;
 
     protected RabbitConsumer(IServiceProvider serviceProvider, ILogger<RabbitConsumer<T>> logger)
     {
-        _serviceProvider = serviceProvider;
         _serializer = serviceProvider.GetService<IMsgPackTransmit>();
         _logger = logger;
     }

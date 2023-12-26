@@ -14,14 +14,13 @@ public class RabbitEventManager : IRabbitEventManager
     protected readonly IMsgPackTransmit _msgPackTransmit;
 
     public RabbitEventManager(
-        ConcurrentDictionary<IConnection, string> connectionShutdownDict,
         IServiceProvider serviceProvider,
         IRabbitConnectionStore rabbitConnectionStore,
         IRabbitPolicyStore rabbitPolicyStore,
         IMsgPackTransmit msgPackTransmit
     )
     {
-        _connectionShutdownDict = connectionShutdownDict;
+        _connectionShutdownDict = new ConcurrentDictionary<IConnection, string>();
         _serviceProvider = serviceProvider;
         _rabbitConnectionStore = rabbitConnectionStore;
         _rabbitPolicyStore = rabbitPolicyStore;

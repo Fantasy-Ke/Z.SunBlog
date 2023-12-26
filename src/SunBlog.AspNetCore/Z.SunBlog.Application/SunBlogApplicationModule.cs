@@ -28,8 +28,8 @@ using Z.SunBlog.Core.Handlers.TestHandlers;
 using Z.Fantasy.Core.HangFire.BackgroundJobs.Abstractions;
 using Z.Module.Extensions;
 using Z.Fantasy.Core.HangFire.Builder;
-using Z.SunBlog.Application.HangfireWork.TestWork;
 using Z.SunBlog.Application.HangfireJob.ExceptionLog;
+using Z.SunBlog.Application.HangfireJob.RequestLog;
 
 namespace Z.SunBlog.Application
 {
