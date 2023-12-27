@@ -47,7 +47,7 @@ public static class RabbitMQServiceExtensions
             {
                 retryCount = configuration.GetSection("App:RabbitMQ:RetryCount").Get<int>();
             }
-
+            factory.DispatchConsumersAsync = true;
             return new RabbitSettingStore(factory, logger);
         });
         // 注册序列化传输服务

@@ -2,47 +2,27 @@
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using Z.RabbitMQ.interfaces;
 
 namespace Z.RabbitMQ;
-
-/// <summary>
-/// 消费者初始化接口
-/// </summary>
-public interface IRabbitConsumerInitializer
-{
-    /// <summary>
-    /// 初始化
-    /// </summary>
-    /// <param name="channel"></param>
-    void Init(RabbitSubscribeDef rabbitSubscribeDef);
-}
-
-/// <summary>
-/// 消费者基础接口
-/// </summary>
-/// <typeparam name="T">处理类型</typeparam>
-public interface IRabbitConsumer<T> : IRabbitConsumerInitializer
-{
-    void Exec(T eventArgs);
-}
 
 /// <summary>
 /// 消费者基类
 /// </summary>
 /// <typeparam name="T"></typeparam>
-public abstract class RabbitConsumer<T> : IRabbitConsumer<T>
+public abstract class RabbitConsumerAsync<T> : IRabbitConsumerAsync<T>
 {
     private readonly IMsgPackTransmit _serializer;
     private readonly ILogger<RabbitConsumer<T>> _logger;
 
-    protected RabbitConsumer(IServiceProvider serviceProvider, ILogger<RabbitConsumer<T>> logger)
+    protected RabbitConsumerAsync(IServiceProvider serviceProvider, ILogger<RabbitConsumer<T>> logger)
     {
         _serializer = serviceProvider.GetService<IMsgPackTransmit>();
         _logger = logger;
     }
 
     /// <inheritdoc/>
-    public virtual void Init(RabbitSubscribeDef rabbitSubscribeDef)
+    public virtual async Task Init(RabbitSubscribeDef rabbitSubscribeDef, CancellationToken cancellationToken = default)
     {
         var channel = rabbitSubscribeDef.Channel;
         // 源队列名称（非负载均衡前的）
@@ -52,17 +32,17 @@ public abstract class RabbitConsumer<T> : IRabbitConsumer<T>
         {
             foreach (var queueName in rabbitSubscribeDef.LoadBalancing.GetAll())
             {
-                CreateQueue(sourceQueueName, queueName, channel, rabbitSubscribeDef.XMaxPriority);
+                await CreateQueue(sourceQueueName, queueName, channel, rabbitSubscribeDef.XMaxPriority, cancellationToken);
             }
         }
         else
         {
             if (rabbitSubscribeDef.IsDLXQueue)
             {
-                CreateDLXQueue(sourceQueueName, channel);
+                await CreateDLXQueue(sourceQueueName, channel, cancellationToken);
                 return;
             }
-            CreateQueue(sourceQueueName, sourceQueueName, channel, rabbitSubscribeDef.XMaxPriority);
+            await CreateQueue(sourceQueueName, sourceQueueName, channel, rabbitSubscribeDef.XMaxPriority, cancellationToken);
         }
     }
 
@@ -70,18 +50,18 @@ public abstract class RabbitConsumer<T> : IRabbitConsumer<T>
     /// 消费者处理消息的内部逻辑处理
     /// </summary>
     /// <param name="eventArgs"></param>
-    public abstract void Exec(T eventArgs);
+    public abstract Task Exec(T eventArgs);
 
     /// <summary>
     /// 创建队列
     /// </summary>
     /// <param name="queueName"></param>
     /// <param name="channel"></param>
-    private void CreateQueue(
+    private async Task CreateQueue(
         string sourceQueueName,
         string queueName,
         IModel channel,
-        int xMaxPriority = 0
+        int xMaxPriority = 0, CancellationToken cancellationToken = default
     )
     {
         //死信交换机
@@ -117,9 +97,9 @@ public abstract class RabbitConsumer<T> : IRabbitConsumer<T>
 
         _logger.LogInformation($"【订阅信息】{queueName}");
 
-        var consumer = new EventingBasicConsumer(channel);
+        var consumer = new AsyncEventingBasicConsumer(channel);
 
-        consumer.Received += (model, ea) =>
+        consumer.Received += async (model, ea) =>
         {
             try
             {
@@ -131,7 +111,7 @@ public abstract class RabbitConsumer<T> : IRabbitConsumer<T>
                 var eventArgs = _serializer.BytesToMessage<T>(body);
 
                 // TODO: 实际处理逻辑
-                Exec(eventArgs);
+               await Exec(eventArgs);
 
                 // 手动消费，确认消息处理完成
                 channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
@@ -159,12 +139,13 @@ public abstract class RabbitConsumer<T> : IRabbitConsumer<T>
 
                 // 拒绝消息，将消息排入死信队列
                 channel.BasicReject(deliveryTag: ea.DeliveryTag, false);
-                throw;
+                _logger.LogError($"【存入死信队列】：{dlxQueueName},【死信交换机】{dlxexChange}");
             }
         };
 
         // 启动消费者 消费者和channel绑定，并指定要处理哪个队列 关闭自动确认
         channel.BasicConsume(queue: queueName, autoAck: false, consumer: consumer);
+        await Task.Yield();
     }
 
     /// <summary>
@@ -172,7 +153,7 @@ public abstract class RabbitConsumer<T> : IRabbitConsumer<T>
     /// </summary>
     /// <param name="dlxQueueName"></param>
     /// <param name="channel"></param>
-    private void CreateDLXQueue(string dlxQueueName, IModel channel)
+    private async Task CreateDLXQueue(string dlxQueueName, IModel channel, CancellationToken cancellationToken = default)
     {
         // 死信交换机名称
         var dlxexChange = dlxQueueName;
@@ -198,9 +179,9 @@ public abstract class RabbitConsumer<T> : IRabbitConsumer<T>
 
         _logger.LogInformation($"【订阅信息】{dlxQueueName}");
 
-        var consumer = new EventingBasicConsumer(channel);
+        var consumer = new AsyncEventingBasicConsumer(channel);
 
-        consumer.Received += (model, ea) =>
+        consumer.Received += async (model, ea) =>
         {
             try
             {
@@ -212,7 +193,7 @@ public abstract class RabbitConsumer<T> : IRabbitConsumer<T>
                 var eventArgs = _serializer.BytesToMessage<T>(body);
 
                 // 实际处理逻辑
-                Exec(eventArgs);
+                await  Exec(eventArgs);
             }
             catch (Exception ex)
             {
@@ -226,5 +207,7 @@ public abstract class RabbitConsumer<T> : IRabbitConsumer<T>
         };
 
         channel.BasicConsume(queue: dlxQueueName, autoAck: false, consumer: consumer);
+
+        await Task.Yield();
     }
 }

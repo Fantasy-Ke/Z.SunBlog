@@ -45,11 +45,6 @@ namespace Z.RabbitMQ.RabbitStore
 
         public virtual IConnectionFactory GetConnectionFactory(string configName = null)
         {
-            if (string.IsNullOrWhiteSpace(configName))
-            {
-                configName = RabbitConsts.DefaultConfigName;
-            }
-
             _dataDict.TryGetValue(configName, out var connectionFactory);
             return connectionFactory;
         }

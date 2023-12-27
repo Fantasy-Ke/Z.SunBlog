@@ -1,28 +1,29 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
-using Z.Fantasy.Core.Authorization;
-using Z.Fantasy.Core.UserSession;
-using Z.SunBlog.Application.UserModule;
-using Serilog;
-using Z.Fantasy.Core.RedisModule;
-using Z.SunBlog.Application.UserModule.Dto;
-using Z.Fantasy.Core.Exceptions;
-using Z.Fantasy.Core;
-using Z.Fantasy.Core.Helper;
-using Z.EventBus.EventBus;
-using Z.SunBlog.Core.Handlers.TestHandlers;
-using Z.Fantasy.Core.AutofacExtensions;
-using Z.SunBlog.Application.AlbumsModule.BlogServer;
-using Z.SunBlog.Application.MenuModule;
-using Z.Fantasy.Core.HangFire.BackgroundJobs.Abstractions;
-using Z.SunBlog.Core.jobs.TestJob;
+﻿using System.Security.Claims;
+using System.Xml.Linq;
 using Hangfire;
-using Z.SunBlog.Application.HangfireJob.RequestLog;
-using Z.SunBlog.Application.CommentsModule.Channel;
-using Z.SunBlog.Core.CommentsModule;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc;
+using Serilog;
+using Z.EventBus.EventBus;
+using Z.Fantasy.Core;
+using Z.Fantasy.Core.Authorization;
+using Z.Fantasy.Core.AutofacExtensions;
+using Z.Fantasy.Core.Exceptions;
+using Z.Fantasy.Core.HangFire.BackgroundJobs.Abstractions;
+using Z.Fantasy.Core.Helper;
+using Z.Fantasy.Core.RedisModule;
+using Z.Fantasy.Core.UserSession;
 using Z.RabbitMQ.Manager;
+using Z.SunBlog.Application.AlbumsModule.BlogServer;
+using Z.SunBlog.Application.CommentsModule.Channel;
+using Z.SunBlog.Application.HangfireJob.RequestLog;
+using Z.SunBlog.Application.MenuModule;
+using Z.SunBlog.Application.UserModule;
+using Z.SunBlog.Application.UserModule.Dto;
+using Z.SunBlog.Core.CommentsModule;
+using Z.SunBlog.Core.Handlers.TestHandlers;
+using Z.SunBlog.Core.jobs.TestJob;
 
 namespace Z.SunBlog.Host.Controllers
 {
@@ -41,7 +42,16 @@ namespace Z.SunBlog.Host.Controllers
         private readonly IRabbitEventManager _rabbitEventManager;
 
         private readonly IBackgroundJobManager backgroundJobManager;
-        public TestController(IJwtTokenProvider jwtTokenProvider, IUserSession userSession, IUserAppService userAppService, ICacheManager cacheManager, ILocalEventBus localEvent, IBackgroundJobManager backgroundJobManager, IRabbitEventManager rabbitEventManager)
+
+        public TestController(
+            IJwtTokenProvider jwtTokenProvider,
+            IUserSession userSession,
+            IUserAppService userAppService,
+            ICacheManager cacheManager,
+            ILocalEventBus localEvent,
+            IBackgroundJobManager backgroundJobManager,
+            IRabbitEventManager rabbitEventManager
+        )
         {
             _jwtTokenProvider = jwtTokenProvider;
             _userSession = userSession;
@@ -51,10 +61,6 @@ namespace Z.SunBlog.Host.Controllers
             this.backgroundJobManager = backgroundJobManager;
             _rabbitEventManager = rabbitEventManager;
         }
-
-
-
-
 
         /// <summary>
         /// 获取jwttoken
@@ -67,27 +73,36 @@ namespace Z.SunBlog.Host.Controllers
             if (userinfo == null)
             {
                 throw new UserFriendlyException("账号密码错误");
-
             }
             var tokenConfig = AppSettings.AppOption<JwtSettings>("App:JWtSetting");
             // 设置Token的Claims
             List<Claim> claims = new List<Claim>
             {
-               new Claim(ZClaimTypes.UserName, userinfo.UserName!), //HttpContext.User.Identity.Name
+                new Claim(ZClaimTypes.UserName, userinfo.UserName!), //HttpContext.User.Identity.Name
                 new Claim(ZClaimTypes.UserId, userinfo.Id!.ToString()),
-                new Claim(ZClaimTypes.Expiration, DateTimeOffset.Now.AddMinutes(tokenConfig.AccessTokenExpirationMinutes).ToString()),
+                new Claim(
+                    ZClaimTypes.Expiration,
+                    DateTimeOffset
+                        .Now.AddMinutes(tokenConfig.AccessTokenExpirationMinutes)
+                        .ToString()
+                ),
             };
             var token = _jwtTokenProvider.GenerateZToken(claims.ToArray());
 
-            Response.Cookies.Append("access-token", token.AccessToken, new CookieOptions()
-            {
-                Expires = DateTimeOffset.UtcNow.AddMinutes(tokenConfig.AccessTokenExpirationMinutes)
-            });
+            Response.Cookies.Append(
+                "access-token",
+                token.AccessToken,
+                new CookieOptions()
+                {
+                    Expires = DateTimeOffset.UtcNow.AddMinutes(
+                        tokenConfig.AccessTokenExpirationMinutes
+                    )
+                }
+            );
 
             Log.Logger.Information("登录成功");
             return token.AccessToken;
         }
-
 
         /// <summary>
         /// 获取jwttoken
@@ -108,7 +123,6 @@ namespace Z.SunBlog.Host.Controllers
         [HttpGet]
         public async Task<string> Logout()
         {
-
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
             return "ddd";
@@ -133,14 +147,12 @@ namespace Z.SunBlog.Host.Controllers
         [ZAuthorization]
         public async Task<List<ZUserInfoDto>> SeacthUser()
         {
-
             var user = await _userAppService.GetFrist();
 
             await _cacheManager.SetCacheAsync("user1", user);
 
             return user;
         }
-
 
         /// <summary>
         /// 获取用户
@@ -150,12 +162,10 @@ namespace Z.SunBlog.Host.Controllers
         [ZAuthorization]
         public async Task<List<ZUserInfoDto>> SeacthUserCache()
         {
-
             var user = await _cacheManager.GetCacheAsync<List<ZUserInfoDto>>("user1");
 
             return user;
         }
-
 
         /// <summary>
         /// 同步消费事件
@@ -197,7 +207,6 @@ namespace Z.SunBlog.Host.Controllers
             Log.Warning("我什么时候开始得");
         }
 
-
         /// <summary>
         /// 自己加的hangfire
         /// </summary>
@@ -213,9 +222,12 @@ namespace Z.SunBlog.Host.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public  async Task TestJobs2()
+        public async Task TestJobs2()
         {
-            await backgroundJobManager.EnqueueAsync(new TestJobDto() { Id = Guid.NewGuid() }, TimeSpan.FromSeconds(10));
+            await backgroundJobManager.EnqueueAsync(
+                new TestJobDto() { Id = Guid.NewGuid() },
+                TimeSpan.FromSeconds(10)
+            );
         }
 
         /// <summary>
@@ -229,13 +241,59 @@ namespace Z.SunBlog.Host.Controllers
         }
 
         /// <summary>
-        /// 消费队列
+        /// 消费rabbit队列
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public void RabbitSubscribe()
+        public async Task RabbitSubscribe()
         {
-            _rabbitEventManager.Subscribe<CommentsConsumer>("comment");
+           await  _rabbitEventManager.SubscribeAsync<CommentsConsumer>("comment");
+        }
+
+        /// <summary>
+        /// 推送rabbit队列
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task RabbitPublish()
+        {
+           await  _rabbitEventManager.PublishAsync<CommentsConsumer, Comments>(
+                "comment",
+                new Comments()
+                {
+                    //"moduleId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                    // "rootId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                    // "parentId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                    // "replyAccountId": "string",
+                    // "content": "fdsafd发顺丰"
+                    ModuleId = Guid.NewGuid(),
+                    RootId = Guid.NewGuid(),
+                    ParentId = Guid.NewGuid(),
+                    ReplyAccountId = Guid.NewGuid().ToString("N"),
+                    Content = $"测试消息队列 Guid：{Guid.NewGuid()}"
+                }
+            );
+        }
+
+        /// <summary>
+        /// 消费死信队列
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task RabbitSubscribeDLXAsync()
+        {
+           await  _rabbitEventManager.SubscribeDLXAsync<CommentsConsumer>("comment");
+        }
+
+
+        /// <summary>
+        /// 取消订阅
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task UnSubscribe()
+        {
+           await  _rabbitEventManager.UnSubscribeAsync<CommentsConsumer>("comment");
         }
     }
 }

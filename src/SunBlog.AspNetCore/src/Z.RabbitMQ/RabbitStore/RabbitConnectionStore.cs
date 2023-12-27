@@ -42,6 +42,15 @@ public interface IRabbitConnectionStore
     /// <param name="connection"></param>
     /// <returns></returns>
     ConcurrentDictionary<string, RabbitSubscribeDef> RemoveAndGetIConnection(IConnection connection);
+
+
+    /// <summary>
+    /// 修改或添加 指定连接中 队列与订阅者的绑定关系
+    /// </summary>
+    /// <param name="connection"></param>
+    /// <returns></returns>
+    void AddOrUpdateQueueSubscribeDef
+        (IConnection connection, RabbitSubscribeDef rabbitSubscribeDef = null);
 }
 
 
@@ -75,6 +84,11 @@ public class RabbitConnectionStore : IRabbitConnectionStore
     }
     public IConnection GetConnection(string configName, bool createNew = false)
     {
+        if (string.IsNullOrWhiteSpace(configName))
+        {
+            configName = RabbitConsts.DefaultConfigName;
+        }
+
         var connectionFactory = _rabbitSettingStore.GetConnectionFactory(configName);
 
         // 创建新的
@@ -130,6 +144,22 @@ public class RabbitConnectionStore : IRabbitConnectionStore
         }
 
         return rabbitConsumerInitializerDict;
+    }
+
+    public void AddOrUpdateQueueSubscribeDef
+        (IConnection connection, RabbitSubscribeDef rabbitSubscribeDef = null)
+    {
+       _connectionRabbitConsumerInitializerDict.TryGetValue(connection,out var rabbitConsumerInitializerDict);
+
+        rabbitConsumerInitializerDict.TryGetValue(rabbitSubscribeDef.QueueName, out var oldRabbitSubscribeDef);
+        if (oldRabbitSubscribeDef != null)
+        {
+            rabbitConsumerInitializerDict.TryUpdate(rabbitSubscribeDef.QueueName,rabbitSubscribeDef, oldRabbitSubscribeDef);
+        }
+        else
+        {
+            rabbitConsumerInitializerDict.TryAdd(rabbitSubscribeDef.QueueName, rabbitSubscribeDef);
+        }
     }
 
     public ConcurrentDictionary<string, RabbitSubscribeDef> RemoveAndGetIConnection(IConnection connection)

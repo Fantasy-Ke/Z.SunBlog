@@ -16,7 +16,7 @@ namespace Z.SunBlog.Application.CommentsModule.Channel
     /// <summary>
     /// 
     /// </summary>
-    public class CommentsConsumer : RabbitConsumer<Comments>, ITransientDependency
+    public class CommentsConsumer : RabbitConsumerAsync<Comments>, ITransientDependency
     {
         private readonly ICommentsManager _commentsManager;
         private readonly ILogger<CommentsConsumer> _logger;
@@ -42,10 +42,13 @@ namespace Z.SunBlog.Application.CommentsModule.Channel
         /// 
         /// </summary>
         /// <param name="eventArgs"></param>
-        public override void Exec(Comments eventArgs)
+        public override Task Exec(Comments eventArgs)
         {
+            throw new NotImplementedException();
             _logger.LogWarning($"传递实体数据{JsonConvert.SerializeObject(eventArgs)}");
-            _commentsManager.CreateAsync(eventArgs).GetAwaiter();
+            
+            return Task.CompletedTask;
+            //_commentsManager.CreateAsync(eventArgs).GetAwaiter();
         }
     }
 }
