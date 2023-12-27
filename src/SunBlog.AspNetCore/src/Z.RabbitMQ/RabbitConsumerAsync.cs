@@ -145,7 +145,7 @@ public abstract class RabbitConsumerAsync<T> : IRabbitConsumerAsync<T>
 
         // 启动消费者 消费者和channel绑定，并指定要处理哪个队列 关闭自动确认
         channel.BasicConsume(queue: queueName, autoAck: false, consumer: consumer);
-        await Task.Yield();
+        await Task.CompletedTask;
     }
 
     /// <summary>
@@ -208,6 +208,6 @@ public abstract class RabbitConsumerAsync<T> : IRabbitConsumerAsync<T>
 
         channel.BasicConsume(queue: dlxQueueName, autoAck: false, consumer: consumer);
 
-        await Task.Yield();
+        await Task.CompletedTask;
     }
 }

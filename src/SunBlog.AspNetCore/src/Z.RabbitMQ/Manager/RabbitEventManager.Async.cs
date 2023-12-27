@@ -71,7 +71,7 @@ public partial class RabbitEventManager : IRabbitEventManager
         if (subscribeDef.IsLoadBalancing)
         {
             Publish(channel, subscribeDef.LoadBalancing.NextKey(), buffer, priority);
-            await Task.Yield();
+            await Task.CompletedTask;
             return;
         }
 
@@ -162,7 +162,7 @@ public partial class RabbitEventManager : IRabbitEventManager
         subscribeDef.Channel.QueueDelete(queueName);
         // 释放通道
         subscribeDef.Channel?.Dispose();
-        await Task.Yield();
+        await Task.CompletedTask;
     }
 
     #region 订阅，内部函数
@@ -206,7 +206,7 @@ public partial class RabbitEventManager : IRabbitEventManager
     /// </summary>
     /// <param name="connection"></param>
     /// <param name="rabbitSubscribeDef"></param>
-    protected virtual async Task RegisterConnectionShutdownAsync(
+    protected virtual Task RegisterConnectionShutdownAsync(
         IConnection connection,
         RabbitSubscribeDef rabbitSubscribeDef,
         CancellationToken cancellationToken
@@ -218,7 +218,7 @@ public partial class RabbitEventManager : IRabbitEventManager
         // 判断是否初始化关闭事件，初始化过的话跳过执行
         if (_connectionShutdownDict.ContainsKey(connection))
         {
-            return;
+            return Task.CompletedTask;
         }
 
         // 加入连接断开字典
@@ -247,7 +247,7 @@ public partial class RabbitEventManager : IRabbitEventManager
                 }
             });
         };
-        await Task.Yield();
+        return Task.CompletedTask;
     }
 
     #endregion
