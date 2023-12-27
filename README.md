@@ -30,9 +30,11 @@
 - SignalR实时通信
     - 前端的实时通知推送
     - Redis使用无序列表缓存存储ConnectionId
+- RabbitMQ封装事件发布订阅🪇
+    - 负载均衡
+    - 存储链接，队列配置使用内存存储
 - 授权管理(部分)
 - MongoDb(待实现)
-- RabbitMQ(待实现)
 
 | Build | NuGet |
 |---|--|
