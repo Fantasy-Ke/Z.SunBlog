@@ -167,6 +167,8 @@ namespace Z.SunBlog.Host.Controllers
             return user;
         }
 
+        #region EventBus
+
         /// <summary>
         /// 同步消费事件
         /// </summary>
@@ -207,6 +209,10 @@ namespace Z.SunBlog.Host.Controllers
             Log.Warning("我什么时候开始得");
         }
 
+        #endregion
+
+        #region Hangfire
+
         /// <summary>
         /// 自己加的hangfire
         /// </summary>
@@ -240,16 +246,10 @@ namespace Z.SunBlog.Host.Controllers
             await backgroundJobManager.AddOrUpdateScheduleAsync(new RequestLogJob());
         }
 
-        /// <summary>
-        /// 消费rabbit队列
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        public async Task RabbitSubscribe()
-        {
-           await  _rabbitEventManager.SubscribeAsync<CommentsConsumer>("comment");
-        }
+        #endregion
 
+        #region rabbitMQ
+        
         /// <summary>
         /// 推送rabbit队列
         /// </summary>
@@ -257,23 +257,34 @@ namespace Z.SunBlog.Host.Controllers
         [HttpGet]
         public async Task RabbitPublish()
         {
-           await  _rabbitEventManager.PublishAsync<CommentsConsumer, Comments>(
-                "comment",
-                new Comments()
-                {
-                    //"moduleId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                    // "rootId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                    // "parentId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                    // "replyAccountId": "string",
-                    // "content": "fdsafd发顺丰"
-                    ModuleId = Guid.NewGuid(),
-                    RootId = Guid.NewGuid(),
-                    ParentId = Guid.NewGuid(),
-                    ReplyAccountId = Guid.NewGuid().ToString("N"),
-                    Content = $"测试消息队列 Guid：{Guid.NewGuid()}"
-                }
-            );
+            await _rabbitEventManager.PublishAsync<CommentsConsumer, Comments>(
+                 "comment",
+                 new Comments()
+                 {
+                     //"moduleId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                     // "rootId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                     // "parentId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                     // "replyAccountId": "string",
+                     // "content": "fdsafd发顺丰"
+                     ModuleId = Guid.NewGuid(),
+                     RootId = Guid.NewGuid(),
+                     ParentId = Guid.NewGuid(),
+                     ReplyAccountId = Guid.NewGuid().ToString("N"),
+                     Content = $"测试消息队列 Guid：{Guid.NewGuid()}"
+                 }
+             );
         }
+
+        /// <summary>
+        /// 订阅rabbit队列
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task RabbitSubscribe()
+        {
+            await _rabbitEventManager.SubscribeAsync<CommentsConsumer>("comment");
+        }
+
 
         /// <summary>
         /// 消费死信队列
@@ -282,7 +293,7 @@ namespace Z.SunBlog.Host.Controllers
         [HttpGet]
         public async Task RabbitSubscribeDLXAsync()
         {
-           await  _rabbitEventManager.SubscribeDLXAsync<CommentsConsumer>("comment");
+            await _rabbitEventManager.SubscribeDLXAsync<CommentsConsumer>("comment");
         }
 
 
@@ -291,9 +302,10 @@ namespace Z.SunBlog.Host.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task UnSubscribe()
+        public async Task RabbitUnSubscribe()
         {
-           await  _rabbitEventManager.UnSubscribeAsync<CommentsConsumer>("comment");
+            await _rabbitEventManager.UnSubscribeAsync<CommentsConsumer>("comment");
         }
+        #endregion
     }
 }
