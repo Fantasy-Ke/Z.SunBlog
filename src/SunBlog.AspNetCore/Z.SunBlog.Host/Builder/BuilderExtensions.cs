@@ -53,7 +53,7 @@ namespace Z.SunBlog.Host.Builder
             // 注入自动事务中间件
             services.AddUnitOfWorkMiddleware();
             services.ServicesJwtToken();
-            services.AddRabbitMQService();
+            services.ServiceRabbitMQ();
             services.ServicesCaptcha();
         }
 

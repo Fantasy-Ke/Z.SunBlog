@@ -13,7 +13,10 @@ public static class RabbitMQServiceExtensions
     /// 添加RabbitMq服务注册
     /// </summary>
     /// <param name="services"></param>
-    public static IServiceCollection AddRabbitMQService(this IServiceCollection services)
+    public static IServiceCollection ServiceRabbitMQ(
+        this IServiceCollection services,
+        Action<ConnectionFactory> factoryAction = null
+    )
     {
         services.AddSingleton<IRabbitConnectionStore, RabbitConnectionStore>();
         services.AddSingleton<IRabbitPolicyStore, RabbitPolicyStore>();
@@ -48,6 +51,7 @@ public static class RabbitMQServiceExtensions
                 retryCount = configuration.GetSection("App:RabbitMQ:RetryCount").Get<int>();
             }
             factory.DispatchConsumersAsync = true;
+            factoryAction?.Invoke(factory);
             return new RabbitSettingStore(factory, logger);
         });
         // 注册序列化传输服务
