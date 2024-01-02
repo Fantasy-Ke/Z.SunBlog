@@ -2839,6 +2839,132 @@ export class CustomConfigsServiceProxy {
     }
 }
 
+export class ExceptionlogsServiceProxy {
+    protected instance: AxiosInstance;
+    protected baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(baseUrl?: string, instance?: AxiosInstance) {
+
+        this.instance = instance || axios.create();
+
+        this.baseUrl = baseUrl ?? "";
+
+    }
+
+    /**
+     * 删除
+     * @param id (optional) 
+     * @return Success
+     */
+    delete(id: string | undefined, cancelToken?: CancelToken): Promise<ZEngineResponse<void>> {
+        let url_ = this.baseUrl + "/api/Exceptionlogs/Delete?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "Id=" + encodeURIComponent("" + id) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: AxiosRequestConfig = {
+            method: "DELETE",
+            url: url_,
+            headers: {
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processDelete(_response);
+        });
+    }
+
+    protected processDelete(response: AxiosResponse): Promise<ZEngineResponse<void>> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<ZEngineResponse<void>>(_responseText);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<ZEngineResponse<void>>(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    getPage(body: ExceptionlogQueryInput | undefined, cancelToken?: CancelToken): Promise<ZEngineResponse<ExceptionlogOutputPageResult>> {
+        let url_ = this.baseUrl + "/api/Exceptionlogs/GetPage";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: AxiosRequestConfig = {
+            data: content_,
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "text/plain"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processGetPage(_response);
+        });
+    }
+
+    protected processGetPage(response: AxiosResponse): Promise<ZEngineResponse<ExceptionlogOutputPageResult>> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let result200Data: any = null;
+            let resultData200  = _responseText.result;
+            result200 = ExceptionlogOutputPageResult.fromJS(resultData200);
+            result200Data = ZEngineResponse.fromJS(_responseText);
+            result200Data.result = result200;
+            return Promise.resolve<ZEngineResponse<ExceptionlogOutputPageResult>>(result200Data);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<ZEngineResponse<ExceptionlogOutputPageResult>>(null as any);
+    }
+}
+
 export class FilesServiceProxy {
     protected instance: AxiosInstance;
     protected baseUrl: string;
@@ -4658,6 +4784,132 @@ export class PictureSsServiceProxy {
     }
 }
 
+export class RequestLogsServiceProxy {
+    protected instance: AxiosInstance;
+    protected baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(baseUrl?: string, instance?: AxiosInstance) {
+
+        this.instance = instance || axios.create();
+
+        this.baseUrl = baseUrl ?? "";
+
+    }
+
+    /**
+     * 删除
+     * @param id (optional) 
+     * @return Success
+     */
+    delete(id: string | undefined, cancelToken?: CancelToken): Promise<ZEngineResponse<void>> {
+        let url_ = this.baseUrl + "/api/RequestLogs/Delete?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "Id=" + encodeURIComponent("" + id) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: AxiosRequestConfig = {
+            method: "DELETE",
+            url: url_,
+            headers: {
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processDelete(_response);
+        });
+    }
+
+    protected processDelete(response: AxiosResponse): Promise<ZEngineResponse<void>> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<ZEngineResponse<void>>(_responseText);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<ZEngineResponse<void>>(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    getPage(body: RequestLogQueryInput | undefined, cancelToken?: CancelToken): Promise<ZEngineResponse<RequestLogOutputPageResult>> {
+        let url_ = this.baseUrl + "/api/RequestLogs/GetPage";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: AxiosRequestConfig = {
+            data: content_,
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "text/plain"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processGetPage(_response);
+        });
+    }
+
+    protected processGetPage(response: AxiosResponse): Promise<ZEngineResponse<RequestLogOutputPageResult>> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let result200Data: any = null;
+            let resultData200  = _responseText.result;
+            result200 = RequestLogOutputPageResult.fromJS(resultData200);
+            result200Data = ZEngineResponse.fromJS(_responseText);
+            result200Data.result = result200;
+            return Promise.resolve<ZEngineResponse<RequestLogOutputPageResult>>(result200Data);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<ZEngineResponse<RequestLogOutputPageResult>>(null as any);
+    }
+}
+
 export class RoleSyssServiceProxy {
     protected instance: AxiosInstance;
     protected baseUrl: string;
@@ -5975,6 +6227,198 @@ export class TestServiceProxy {
     }
 
     /**
+     * 推送rabbit队列
+     * @return Success
+     */
+    rabbitPublish( cancelToken?: CancelToken): Promise<ZEngineResponse<void>> {
+        let url_ = this.baseUrl + "/api/Test/RabbitPublish";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: AxiosRequestConfig = {
+            method: "GET",
+            url: url_,
+            headers: {
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processRabbitPublish(_response);
+        });
+    }
+
+    protected processRabbitPublish(response: AxiosResponse): Promise<ZEngineResponse<void>> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<ZEngineResponse<void>>(_responseText);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<ZEngineResponse<void>>(null as any);
+    }
+
+    /**
+     * 订阅rabbit队列
+     * @return Success
+     */
+    rabbitSubscribe( cancelToken?: CancelToken): Promise<ZEngineResponse<void>> {
+        let url_ = this.baseUrl + "/api/Test/RabbitSubscribe";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: AxiosRequestConfig = {
+            method: "GET",
+            url: url_,
+            headers: {
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processRabbitSubscribe(_response);
+        });
+    }
+
+    protected processRabbitSubscribe(response: AxiosResponse): Promise<ZEngineResponse<void>> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<ZEngineResponse<void>>(_responseText);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<ZEngineResponse<void>>(null as any);
+    }
+
+    /**
+     * 消费死信队列
+     * @return Success
+     */
+    rabbitSubscribeDLX( cancelToken?: CancelToken): Promise<ZEngineResponse<void>> {
+        let url_ = this.baseUrl + "/api/Test/RabbitSubscribeDLX";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: AxiosRequestConfig = {
+            method: "GET",
+            url: url_,
+            headers: {
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processRabbitSubscribeDLX(_response);
+        });
+    }
+
+    protected processRabbitSubscribeDLX(response: AxiosResponse): Promise<ZEngineResponse<void>> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<ZEngineResponse<void>>(_responseText);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<ZEngineResponse<void>>(null as any);
+    }
+
+    /**
+     * 取消订阅
+     * @return Success
+     */
+    rabbitUnSubscribe( cancelToken?: CancelToken): Promise<ZEngineResponse<void>> {
+        let url_ = this.baseUrl + "/api/Test/RabbitUnSubscribe";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: AxiosRequestConfig = {
+            method: "GET",
+            url: url_,
+            headers: {
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processRabbitUnSubscribe(_response);
+        });
+    }
+
+    protected processRabbitUnSubscribe(response: AxiosResponse): Promise<ZEngineResponse<void>> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<ZEngineResponse<void>>(_responseText);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<ZEngineResponse<void>>(null as any);
+    }
+
+    /**
      * 获取用户
      * @return Success
      */
@@ -6112,6 +6556,150 @@ export class TestServiceProxy {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
         return Promise.resolve<ZEngineResponse<ZUserInfoDto[]>>(null as any);
+    }
+
+    /**
+     * 自己加的hangfire
+     * @return Success
+     */
+    testJobs1( cancelToken?: CancelToken): Promise<ZEngineResponse<void>> {
+        let url_ = this.baseUrl + "/api/Test/TestJobs1";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: AxiosRequestConfig = {
+            method: "GET",
+            url: url_,
+            headers: {
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processTestJobs1(_response);
+        });
+    }
+
+    protected processTestJobs1(response: AxiosResponse): Promise<ZEngineResponse<void>> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<ZEngineResponse<void>>(_responseText);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<ZEngineResponse<void>>(null as any);
+    }
+
+    /**
+     * 延迟任务
+     * @return Success
+     */
+    testJobs2( cancelToken?: CancelToken): Promise<ZEngineResponse<void>> {
+        let url_ = this.baseUrl + "/api/Test/TestJobs2";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: AxiosRequestConfig = {
+            method: "GET",
+            url: url_,
+            headers: {
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processTestJobs2(_response);
+        });
+    }
+
+    protected processTestJobs2(response: AxiosResponse): Promise<ZEngineResponse<void>> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<ZEngineResponse<void>>(_responseText);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<ZEngineResponse<void>>(null as any);
+    }
+
+    /**
+     * 延迟任务
+     * @return Success
+     */
+    testJobs3( cancelToken?: CancelToken): Promise<ZEngineResponse<void>> {
+        let url_ = this.baseUrl + "/api/Test/TestJobs3";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: AxiosRequestConfig = {
+            method: "GET",
+            url: url_,
+            headers: {
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processTestJobs3(_response);
+        });
+    }
+
+    protected processTestJobs3(response: AxiosResponse): Promise<ZEngineResponse<void>> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<ZEngineResponse<void>>(_responseText);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<ZEngineResponse<void>>(null as any);
     }
 }
 
@@ -10999,6 +11587,235 @@ export interface ICustomConfigSetJsonInput {
     json: string;
 }
 
+export class ExceptionlogOutput implements IExceptionlogOutput {
+    id: string;
+    /** 请求URI */
+    requestUri: string | undefined;
+    /** 客户端IP */
+    clientIP: string | undefined;
+    /** 异常信息 */
+    message: string | undefined;
+    /** 异常来源 */
+    source: string | undefined;
+    /** 异常堆栈信息 */
+    stackTrace: string | undefined;
+    /** 异常类型 */
+    type: string | undefined;
+    /** 操作人id */
+    operatorId: string | undefined;
+    /** 操作人 */
+    operatorName: string | undefined;
+    /** 用户代理（主要指浏览器） */
+    userAgent: string | undefined;
+    /** 操作系统 */
+    userOS: string | undefined;
+    /** 创建时间 */
+    creationTime: moment.Moment | undefined;
+
+    constructor(data?: IExceptionlogOutput) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.requestUri = _data["requestUri"];
+            this.clientIP = _data["clientIP"];
+            this.message = _data["message"];
+            this.source = _data["source"];
+            this.stackTrace = _data["stackTrace"];
+            this.type = _data["type"];
+            this.operatorId = _data["operatorId"];
+            this.operatorName = _data["operatorName"];
+            this.userAgent = _data["userAgent"];
+            this.userOS = _data["userOS"];
+            this.creationTime = _data["creationTime"] ? moment(_data["creationTime"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): ExceptionlogOutput {
+        data = typeof data === 'object' ? data : {};
+        let result = new ExceptionlogOutput();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["requestUri"] = this.requestUri;
+        data["clientIP"] = this.clientIP;
+        data["message"] = this.message;
+        data["source"] = this.source;
+        data["stackTrace"] = this.stackTrace;
+        data["type"] = this.type;
+        data["operatorId"] = this.operatorId;
+        data["operatorName"] = this.operatorName;
+        data["userAgent"] = this.userAgent;
+        data["userOS"] = this.userOS;
+        data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : <any>undefined;
+        return data;
+    }
+
+    clone(): ExceptionlogOutput {
+        const json = this.toJSON();
+        let result = new ExceptionlogOutput();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IExceptionlogOutput {
+    id: string;
+    /** 请求URI */
+    requestUri: string | undefined;
+    /** 客户端IP */
+    clientIP: string | undefined;
+    /** 异常信息 */
+    message: string | undefined;
+    /** 异常来源 */
+    source: string | undefined;
+    /** 异常堆栈信息 */
+    stackTrace: string | undefined;
+    /** 异常类型 */
+    type: string | undefined;
+    /** 操作人id */
+    operatorId: string | undefined;
+    /** 操作人 */
+    operatorName: string | undefined;
+    /** 用户代理（主要指浏览器） */
+    userAgent: string | undefined;
+    /** 操作系统 */
+    userOS: string | undefined;
+    /** 创建时间 */
+    creationTime: moment.Moment | undefined;
+}
+
+export class ExceptionlogOutputPageResult implements IExceptionlogOutputPageResult {
+    pageNo: number;
+    pageSize: number;
+    pages: number;
+    total: number;
+    rows: ExceptionlogOutput[] | undefined;
+
+    constructor(data?: IExceptionlogOutputPageResult) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.pageNo = _data["pageNo"];
+            this.pageSize = _data["pageSize"];
+            this.pages = _data["pages"];
+            this.total = _data["total"];
+            if (Array.isArray(_data["rows"])) {
+                this.rows = [] as any;
+                for (let item of _data["rows"])
+                    this.rows.push(ExceptionlogOutput.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): ExceptionlogOutputPageResult {
+        data = typeof data === 'object' ? data : {};
+        let result = new ExceptionlogOutputPageResult();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["pageNo"] = this.pageNo;
+        data["pageSize"] = this.pageSize;
+        data["pages"] = this.pages;
+        data["total"] = this.total;
+        if (Array.isArray(this.rows)) {
+            data["rows"] = [];
+            for (let item of this.rows)
+                data["rows"].push(item.toJSON());
+        }
+        return data;
+    }
+
+    clone(): ExceptionlogOutputPageResult {
+        const json = this.toJSON();
+        let result = new ExceptionlogOutputPageResult();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IExceptionlogOutputPageResult {
+    pageNo: number;
+    pageSize: number;
+    pages: number;
+    total: number;
+    rows: ExceptionlogOutput[] | undefined;
+}
+
+export class ExceptionlogQueryInput implements IExceptionlogQueryInput {
+    pageNo: number;
+    pageSize: number;
+    /** 关键词 */
+    name: string | undefined;
+
+    constructor(data?: IExceptionlogQueryInput) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.pageNo = _data["pageNo"];
+            this.pageSize = _data["pageSize"];
+            this.name = _data["name"];
+        }
+    }
+
+    static fromJS(data: any): ExceptionlogQueryInput {
+        data = typeof data === 'object' ? data : {};
+        let result = new ExceptionlogQueryInput();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["pageNo"] = this.pageNo;
+        data["pageSize"] = this.pageSize;
+        data["name"] = this.name;
+        return data;
+    }
+
+    clone(): ExceptionlogQueryInput {
+        const json = this.toJSON();
+        let result = new ExceptionlogQueryInput();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IExceptionlogQueryInput {
+    pageNo: number;
+    pageSize: number;
+    /** 关键词 */
+    name: string | undefined;
+}
+
 export class FriendLinkOutput implements IFriendLinkOutput {
     /** 友链ID */
     id: string;
@@ -12517,6 +13334,235 @@ export interface IReplyOutputPageResult {
     pages: number;
     total: number;
     rows: ReplyOutput[] | undefined;
+}
+
+export class RequestLogOutput implements IRequestLogOutput {
+    id: string;
+    /** 请求URI */
+    requestUri: string | undefined;
+    /** 请求方式 */
+    requestType: string | undefined;
+    /** 请求数据 */
+    requestData: string | undefined;
+    /** 响应数据 */
+    responseData: string | undefined;
+    /** 用户ID */
+    userId: string | undefined;
+    /** 用户姓名 */
+    userName: string | undefined;
+    /** 访问ip */
+    clientIP: string | undefined;
+    /** 用户代理（主要指浏览器） */
+    userAgent: string | undefined;
+    /** 操作系统 */
+    userOS: string | undefined;
+    /** 耗时 */
+    spendTime: string | undefined;
+    /** 创建时间 */
+    creationTime: moment.Moment | undefined;
+
+    constructor(data?: IRequestLogOutput) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.requestUri = _data["requestUri"];
+            this.requestType = _data["requestType"];
+            this.requestData = _data["requestData"];
+            this.responseData = _data["responseData"];
+            this.userId = _data["userId"];
+            this.userName = _data["userName"];
+            this.clientIP = _data["clientIP"];
+            this.userAgent = _data["userAgent"];
+            this.userOS = _data["userOS"];
+            this.spendTime = _data["spendTime"];
+            this.creationTime = _data["creationTime"] ? moment(_data["creationTime"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): RequestLogOutput {
+        data = typeof data === 'object' ? data : {};
+        let result = new RequestLogOutput();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["requestUri"] = this.requestUri;
+        data["requestType"] = this.requestType;
+        data["requestData"] = this.requestData;
+        data["responseData"] = this.responseData;
+        data["userId"] = this.userId;
+        data["userName"] = this.userName;
+        data["clientIP"] = this.clientIP;
+        data["userAgent"] = this.userAgent;
+        data["userOS"] = this.userOS;
+        data["spendTime"] = this.spendTime;
+        data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : <any>undefined;
+        return data;
+    }
+
+    clone(): RequestLogOutput {
+        const json = this.toJSON();
+        let result = new RequestLogOutput();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IRequestLogOutput {
+    id: string;
+    /** 请求URI */
+    requestUri: string | undefined;
+    /** 请求方式 */
+    requestType: string | undefined;
+    /** 请求数据 */
+    requestData: string | undefined;
+    /** 响应数据 */
+    responseData: string | undefined;
+    /** 用户ID */
+    userId: string | undefined;
+    /** 用户姓名 */
+    userName: string | undefined;
+    /** 访问ip */
+    clientIP: string | undefined;
+    /** 用户代理（主要指浏览器） */
+    userAgent: string | undefined;
+    /** 操作系统 */
+    userOS: string | undefined;
+    /** 耗时 */
+    spendTime: string | undefined;
+    /** 创建时间 */
+    creationTime: moment.Moment | undefined;
+}
+
+export class RequestLogOutputPageResult implements IRequestLogOutputPageResult {
+    pageNo: number;
+    pageSize: number;
+    pages: number;
+    total: number;
+    rows: RequestLogOutput[] | undefined;
+
+    constructor(data?: IRequestLogOutputPageResult) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.pageNo = _data["pageNo"];
+            this.pageSize = _data["pageSize"];
+            this.pages = _data["pages"];
+            this.total = _data["total"];
+            if (Array.isArray(_data["rows"])) {
+                this.rows = [] as any;
+                for (let item of _data["rows"])
+                    this.rows.push(RequestLogOutput.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): RequestLogOutputPageResult {
+        data = typeof data === 'object' ? data : {};
+        let result = new RequestLogOutputPageResult();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["pageNo"] = this.pageNo;
+        data["pageSize"] = this.pageSize;
+        data["pages"] = this.pages;
+        data["total"] = this.total;
+        if (Array.isArray(this.rows)) {
+            data["rows"] = [];
+            for (let item of this.rows)
+                data["rows"].push(item.toJSON());
+        }
+        return data;
+    }
+
+    clone(): RequestLogOutputPageResult {
+        const json = this.toJSON();
+        let result = new RequestLogOutputPageResult();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IRequestLogOutputPageResult {
+    pageNo: number;
+    pageSize: number;
+    pages: number;
+    total: number;
+    rows: RequestLogOutput[] | undefined;
+}
+
+export class RequestLogQueryInput implements IRequestLogQueryInput {
+    pageNo: number;
+    pageSize: number;
+    /** 关键词 */
+    name: string | undefined;
+
+    constructor(data?: IRequestLogQueryInput) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.pageNo = _data["pageNo"];
+            this.pageSize = _data["pageSize"];
+            this.name = _data["name"];
+        }
+    }
+
+    static fromJS(data: any): RequestLogQueryInput {
+        data = typeof data === 'object' ? data : {};
+        let result = new RequestLogQueryInput();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["pageNo"] = this.pageNo;
+        data["pageSize"] = this.pageSize;
+        data["name"] = this.name;
+        return data;
+    }
+
+    clone(): RequestLogQueryInput {
+        const json = this.toJSON();
+        let result = new RequestLogQueryInput();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IRequestLogQueryInput {
+    pageNo: number;
+    pageSize: number;
+    /** 关键词 */
+    name: string | undefined;
 }
 
 export class ResetPasswordInput implements IResetPasswordInput {
