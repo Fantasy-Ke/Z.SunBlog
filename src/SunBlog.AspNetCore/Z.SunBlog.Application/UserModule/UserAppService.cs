@@ -76,7 +76,7 @@ namespace Z.SunBlog.Application.UserModule
         public async Task<ZUserInfoOutput> CurrentUserInfo()
         {
             var userId = UserService.UserId;
-            if (!userId.IsNullWhiteSpace()) return null;
+            if (userId.IsNullWhiteSpace()) return null;
             return await _userDomainManager.QueryAsNoTracking.Where(x => x.Id == userId)
                   .Select(x => new ZUserInfoOutput
                   {
