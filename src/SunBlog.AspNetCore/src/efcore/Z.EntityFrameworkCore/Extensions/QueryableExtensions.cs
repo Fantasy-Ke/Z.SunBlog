@@ -63,6 +63,18 @@ public static class QueryableExtensions
         return !condition ? query : (TQueryable)query.Where<T>(predicate);
     }
 
+    public static IQueryable<T> Count<T>(this IQueryable<T> queryable, out long count)
+    {
+        count = queryable.Count();
+        return queryable;
+    }
+
+    public static IQueryable<T> Page<T>(this IQueryable<T> queryable, int pageNumber, int pageSize)
+    {
+        queryable.Skip(Math.Max(0, pageNumber - 1) * pageSize).Take(pageSize);
+        return queryable;
+    }
+
     /// <summary>
     /// 分页拓展
     /// </summary>
@@ -71,7 +83,7 @@ public static class QueryableExtensions
     /// <returns></returns>
     public static async Task<PageResult<T>> ToPagedListAsync<T>(this IQueryable<T> queryable, IPagination input)
     {
-        var items =await  queryable.Skip((input.PageNo - 1) * input.PageSize).Take(input.PageSize).ToListAsync();
+        var items =await queryable.Skip((input.PageNo - 1) * input.PageSize).Take(input.PageSize).ToListAsync();
         var totalCount = await queryable.CountAsync();
         var totalPages = (int)Math.Ceiling(totalCount / (double)input.PageSize);
         return new PageResult<T>()
