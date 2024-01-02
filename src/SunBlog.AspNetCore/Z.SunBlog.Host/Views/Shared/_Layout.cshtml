@@ -14,10 +14,8 @@
     @await RenderSectionAsync("Scripts", required: false)
 </head>
 <body>
-    <el-container class="el-container">
-        <el-header></el-header>
-        <el-main class="el-main"> @RenderBody()</el-main>
-        <el-footer></el-footer>
-    </el-container>
+    <div class="common-layout">
+        <el-main class="el-main" style="padding-top: 10%;"> @RenderBody()</el-main>
+    </div>
 </body>
 </html>

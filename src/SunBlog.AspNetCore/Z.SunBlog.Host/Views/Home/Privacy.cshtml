@@ -1,6 +1,42 @@
 ﻿@{
-    ViewData["Title"] = "Privacy Policy";
+    ViewData["Title"] = "主页路由";
 }
-<h1>@ViewData["Title"]</h1>
+<div class="login-box">
+    <h2 class="display-2">@ViewData["Title"]</h2>
 
-<p>Use this page to detail your site's privacy policy.</p>
+    <div style="margin-top:20px;">
+        <button type="button" id="hangifre-btn" class="btn btn-outline-primary  btn-lg">Hangfire</button>
+        <button type="button" id="swagger-btn" class="btn btn-outline-success  btn-lg">Swagger</button>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        // 当表单提交时
+        $('#hangifre-btn').click(function (event) {
+            event.preventDefault(); // 防止页面刷新
+            window.location.href = '/hangfire';
+        });
+        $('#swagger-btn').click(function (event) {
+            event.preventDefault(); // 防止页面刷新
+            window.location.href = '/swagger';
+        });
+    });
+
+</script>
+<style>
+    .login-box {
+        /* background-color: #fff; */
+        background-color: rgba(255,255,255,0.4);
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+        margin: 0px auto;
+        padding: 20px;
+        text-align: center;
+        width: 400px;
+    }
+
+        .login-box h2 {
+            margin: 0 0 20px;
+        }
+</style>

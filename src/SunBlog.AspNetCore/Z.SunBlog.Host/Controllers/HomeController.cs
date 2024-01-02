@@ -32,6 +32,10 @@ namespace Z.SunBlog.Host.Controllers
             _logger.LogInformation("正在加载首页......");
             return View();
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Privacy()
         {
             return View();

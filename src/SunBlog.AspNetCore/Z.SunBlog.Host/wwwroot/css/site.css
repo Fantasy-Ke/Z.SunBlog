@@ -15,16 +15,22 @@ html {
 
 body {
     /*margin-bottom: 60px;*/
-    background-image: url(http://img.likebizhi.com/uploads/likebizhi/up/2022/09/9ed6211113c692334ed8d98d36e2236d477.jpg);
-    background-repeat: repeat;
-    background-position: left center;
+    height: 100vh;
 }
 
 .el-main {
-    margin-top:10%;
+    /*margin-top:10%;*/
     color: #333;
     text-align: center;
+    background-image: url(http://img.likebizhi.com/uploads/likebizhi/up/2022/04/ae8704514fb8a49fcc10a99cc2ded852823.jpg);
+    background-repeat: no-repeat;
+    height: 100%;
+    background-size: 100% 100%;
+    height: 100%;
 }
 .el-container {
-    
+    height:100%;
+}
+.common-layout {
+    height: 100%;
 }
