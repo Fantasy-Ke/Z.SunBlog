@@ -1,18 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Z.EntityFrameworkCore.Extensions;
 using Z.Fantasy.Core.DomainServiceRegister;
 using Z.Fantasy.Core.ResultResponse.Pager;
-using Z.SunBlog.Application.LogsModule.ExceptionlogServer.Dto;
 using Z.SunBlog.Application.LogsModule.RequestLogServer.Dto;
-using Z.SunBlog.Application.MenuModule;
-using Z.SunBlog.Core.LogsModule.ExceptionlogManager;
 using Z.SunBlog.Core.LogsModule.RequestLogManager;
+using Z.SunBlog.Core.SharedDto;
 
 namespace Z.SunBlog.Application.LogsModule.RequestLogServer
 {
@@ -35,9 +28,10 @@ namespace Z.SunBlog.Application.LogsModule.RequestLogServer
         public async Task<PageResult<RequestLogOutput>> GetPage([FromBody] RequestLogQueryInput input)
         {
             var reqloglist = await _requestLogManager.QueryAsNoTracking
-                .WhereIf(!string.IsNullOrWhiteSpace(input.name), x => x.RequestUri.Contains(input.name))
-                .WhereIf(!string.IsNullOrWhiteSpace(input.name), x => x.RequestType.Contains(input.name))
-                .WhereIf(!string.IsNullOrWhiteSpace(input.name), x => x.ResponseData.Contains(input.name))
+                .WhereIf(!string.IsNullOrWhiteSpace(input.name), 
+                x => x.RequestUri.Contains(input.name) || 
+                x.RequestType.Contains(input.name) || 
+                x.ResponseData.Contains(input.name))
                 .OrderByDescending(x => x.CreationTime)
                 .Count(out var totalCount)
                 .Page(input.PageNo,input.PageSize)
@@ -53,6 +47,17 @@ namespace Z.SunBlog.Application.LogsModule.RequestLogServer
                 Total = (int)totalCount,
                 Pages = totalPages,
             };
+        }
+
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        [HttpDelete]
+        public async Task DeleteAsync(KeyDto dto)
+        {
+            await _requestLogManager.DeleteAsync(dto.Id);
         }
     }
 }

@@ -17,10 +17,10 @@ public class RequestLogOutput
     /// 请求数据
     /// </summary>
     public string RequestData { get; set; }
-    ///// <summary>
-    ///// 响应数据
-    ///// </summary>
-    //public string ResponseData { get; set; }
+    /// <summary>
+    /// 响应数据
+    /// </summary>
+    public string ResponseData { get; set; }
     /// <summary>
     /// 用户ID
     /// </summary>

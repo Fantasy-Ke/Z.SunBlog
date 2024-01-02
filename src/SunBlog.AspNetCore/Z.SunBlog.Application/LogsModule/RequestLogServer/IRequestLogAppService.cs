@@ -1,12 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Z.Fantasy.Core.DomainServiceRegister;
 using Z.Fantasy.Core.ResultResponse.Pager;
 using Z.SunBlog.Application.LogsModule.RequestLogServer.Dto;
+using Z.SunBlog.Core.SharedDto;
 
 namespace Z.SunBlog.Application.LogsModule.RequestLogServer
 {
@@ -16,5 +12,7 @@ namespace Z.SunBlog.Application.LogsModule.RequestLogServer
     public interface IRequestLogAppService : IApplicationService
     {
         Task<PageResult<RequestLogOutput>> GetPage([FromBody] RequestLogQueryInput input);
+
+        Task DeleteAsync(KeyDto dto);
     }
 }
