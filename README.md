@@ -42,7 +42,9 @@
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![](https://github.com/Fantasy-Ke/Z.SunBlog/workflows/build_deploy_action/badge.svg)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[![](https://img.shields.io/badge/Z.EventBus-1.0.1-orange.svg)](https://www.nuget.org/packages/Z.EventBus)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![](https://github.com/Fantasy-Ke/Z.SunBlog/workflows/build_deploy_action/badge.svg)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[![](https://img.shields.io/badge/Z.RabbitMQ-1.0.0-red.svg)](https://www.nuget.org/packages/Z.RabbitMQ)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 
-![image](https://github.com/Fantasy-Ke/Z.SunBlog/assets/85232349/e6dce492-c4c5-4501-a888-af823b4e406a)
+![image](https://github.com/Fantasy-Ke/Z.SunBlog/assets/85232349/02a8f744-221e-4985-a2e6-5e6862555677)
+![image](https://github.com/Fantasy-Ke/Z.SunBlog/assets/85232349/eaab01c9-76f5-469d-b43c-c54b8ef09003)
+
 
 
 ### 🎨模块化类库，参照AbpVnext实现，现已正常使用
