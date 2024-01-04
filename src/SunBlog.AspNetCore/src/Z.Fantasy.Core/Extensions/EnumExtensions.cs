@@ -1,10 +1,12 @@
-﻿using System;
+﻿using Castle.Core.Internal;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Z.Fantasy.Core.Attributes;
 
 namespace Z.Fantasy.Core.Extensions;
 
@@ -38,5 +40,32 @@ public static class EnumExtensions
     {
         var attribute = enumValue.GetAttributeOfType<DisplayAttribute>();
         return attribute == null ? enumValue.ToString() : attribute.Name;
+    }
+
+    public static string ToNameValue(this Enum value)
+    {
+        if (value == null || string.IsNullOrEmpty(value.ToString()))
+        {
+            return null;
+        }
+
+        MemberInfo memberInfo = value.GetType().GetMember(value.ToString()).FirstOrDefault();
+        if (memberInfo != null)
+        {
+            return memberInfo.ToNameValue();
+        }
+
+        return value.ToString();
+    }
+
+    public static string ToNameValue(this MemberInfo member)
+    {
+        EnumNameAttribute attribute = member.GetAttribute<EnumNameAttribute>();
+        if (attribute == null)
+        {
+            return member.Name;
+        }
+
+        return attribute.NameValue;
     }
 }

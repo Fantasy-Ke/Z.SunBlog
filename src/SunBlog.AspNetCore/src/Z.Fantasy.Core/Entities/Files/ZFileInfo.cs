@@ -1,12 +1,17 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using System.ComponentModel.DataAnnotations;
+using System.Net.NetworkInformation;
 using Z.Fantasy.Core.Entities.Auditing;
+using Z.Fantasy.Core.Entities.Enum;
 using Z.Fantasy.Core.Extensions;
 
 namespace Z.Fantasy.Core.Entities.Files
 {
     public class ZFileInfo : FullAuditedEntity<Guid>
     {
+
+        public FileType _fileType;
+
         #region 计算code长度
 
         /// <summary>
@@ -57,6 +62,27 @@ namespace Z.Fantasy.Core.Entities.Files
         /// 文件大小，字节
         /// </summary>
         public string FileSize { get; set; }
+
+        /// <summary>
+        /// 文件类型
+        /// </summary>
+        public FileType FileType
+        {
+            get
+            {
+                return _fileType;
+            }
+            set
+            {
+                _fileType = value;
+                FileTypeString = _fileType.ToNameValue();
+            }
+        }
+
+        /// <summary>
+        /// 文件类型名称
+        /// </summary>
+        public string FileTypeString { get; set; }
 
         /// <summary>
         /// 编码  (记录文件的层次结构关系)
