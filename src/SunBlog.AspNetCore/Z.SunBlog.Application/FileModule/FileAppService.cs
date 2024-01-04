@@ -1,23 +1,14 @@
-﻿
-using Azure.Core;
-using Cuemon.Messaging;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis;
 using Microsoft.Extensions.Options;
-using System.Web;
 using Z.Fantasy.Core;
-using Z.Fantasy.Core.Attributes;
 using Z.Fantasy.Core.DomainServiceRegister;
-using Z.Fantasy.Core.Entities.Files;
-using Z.Fantasy.Core.Entities.Repositories;
 using Z.Fantasy.Core.Minio;
-using Z.EventBus.EventBus;
 using Z.Module.DependencyInjection;
 using Z.SunBlog.Application.FileModule.Dto;
 using Z.SunBlog.Core.Const;
-using Z.SunBlog.Core.Handlers.FileHandlers;
+using Z.SunBlog.Core.FileModule.FileManager;
 using Z.SunBlog.Core.MinioFileModule.DomainManager;
 
 namespace Z.SunBlog.Application.FileModule;
@@ -31,27 +22,24 @@ public interface IFileAppService : IApplicationService, ITransientDependency
 
 public class FileAppService : ApplicationService, IFileAppService
 {
-    private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IWebHostEnvironment _webHostEnvironment;
     private readonly IMinioFileManager _minioFileManager;
-    private readonly IBasicRepository<ZFileInfo> _fileRepository;
-    private readonly ILocalEventBus _localEvent;
     private readonly MinioConfig _minioOptions;
+    private readonly IFileInfoManager _fileInfoManager;
 
-    public FileAppService(IServiceProvider serviceProvider,
-        IHttpContextAccessor httpContextAccessor,
+    public FileAppService(
+        IServiceProvider serviceProvider,
         IWebHostEnvironment webHostEnvironment,
         IMinioFileManager minioFileManager,
-         IOptions<MinioConfig> minioOptions,
-         IBasicRepository<ZFileInfo> fileRepository,
-         ILocalEventBus localEvent) : base(serviceProvider)
+        IOptions<MinioConfig> minioOptions
+,
+        IFileInfoManager fileInfoManager)
+        : base(serviceProvider)
     {
-        _httpContextAccessor = httpContextAccessor;
         _webHostEnvironment = webHostEnvironment;
         _minioFileManager = minioFileManager;
         _minioOptions = minioOptions.Value;
-        _fileRepository = fileRepository;
-        _localEvent = localEvent;
+        _fileInfoManager = fileInfoManager;
     }
 
     /// <summary>
@@ -65,67 +53,19 @@ public class FileAppService : ApplicationService, IFileAppService
         {
             throw new Exception("请上传文件");
         }
-        string extension = Path.GetExtension(file.FileName);
-        if (string.IsNullOrWhiteSpace(extension))
-        {
-            throw new Exception("无效文件");
-        }
         //文件路径
-
-        var minioname = $"{ZSunBlogConst.MinioAvatar}_{Guid.NewGuid().ToString("N")}{extension}";
-        // 文件完整名称
-        var now = DateTime.Today;
-        string filePath = $"/{now.Year}/{now.Month:D2}-{now.Day:D2}/";
-        var fileUrl = $"{filePath}{minioname}";
-        var request = _httpContextAccessor.HttpContext!.Request;
-        var fileinfo = new ZFileInfo()
-        {
-            FileName = file.FileName,
-            ContentType = file.ContentType,
-            FilePath = string.Concat(_minioOptions.DefaultBucket!.TrimEnd('/'), filePath),
-            FileSize = file.Length.ToString(),
-            FileExt = extension,
-            FileDisplayName = file.FileName.Replace(extension, ""),
-            Code = ZFileInfo.CreateCode(1)
-        };
-
-        if (!_minioOptions.Enable)
-        {
-            filePath = string.Concat(_minioOptions.DefaultBucket!.TrimEnd('/'), filePath);
-            var webrootpath = _webHostEnvironment.WebRootPath;
-            string s = Path.Combine(webrootpath, filePath);
-            if (!Directory.Exists(s))
-            {
-                Directory.CreateDirectory(s);
-            }
-            await _fileRepository.InsertAsync(fileinfo);
-            var stream = System.IO.File.Create($"{s}{minioname}");
-            await file.CopyToAsync(stream);
-            await stream.DisposeAsync();
-            fileUrl = string.Concat(_minioOptions.DefaultBucket.TrimEnd('/'), fileUrl);
-            string url = $"{request.Scheme}://{request.Host.Value}/{fileUrl}";
-            return new List<UploadFileOutput>()
-            {
-                new()
-                {
-                    Name = minioname,
-                    Url = url
-                }
-            };
-        }
-        await _fileRepository.InsertAsync(fileinfo);
-        await _localEvent.PushAsync(new FileEventDto(file.OpenReadStream(), fileUrl, file.ContentType));
+        var minioname = $"{ZSunBlogConst.MinioAvatar}_{Guid.NewGuid().ToString("N")}/{file.FileName}";
+        var url = await _fileInfoManager.UploadFileAsync(file, minioname);
         //await _minioFileManager.UploadMinio(file.OpenReadStream(), fileUrl, file.ContentType);
         return new List<UploadFileOutput>()
         {
             new()
             {
                 Name = minioname,
-                Url = $"{request.Scheme}://{_minioOptions.Host!.TrimEnd('/')}/{string.Concat(_minioOptions.DefaultBucket!.TrimEnd('/'), fileUrl)}"
+                Url = url
             }
         };
     }
-
 
     /// <summary>
     /// 获取文件
