@@ -9,7 +9,7 @@
 - EF Core 7 适配SqlServer和Mysql🎏
   - 仓储
   - 简单工作单元
-- 模块化处理
+- 模块化处理😇
 - 简单EventBus 基于Channels 
     - 中间件接口请求日志使用`队列事件发布订阅`和`工作单元`写入数据库
 - Autofac依赖注入，AOP注册处理
@@ -27,14 +27,16 @@
 - HangFire 后台任务使用🎢
     - job类继承`BackgroundJob`和`AsyncBackgroundJob`实现接口`Execute`和`ExecuteAsync`(模仿abp vNext 实现的BackgroundJob，简化版👽)
     - 注入`IBackgroundJobManager`调用接口。实现传参队列和延迟队列 任务
-- SignalR实时通信
+- SignalR实时通信🚋
     - 前端的实时通知推送
-    - Redis使用无序列表缓存存储ConnectionId
+    - Redis 无序列表缓存
 - RabbitMQ封装事件发布订阅🪇
     - 负载均衡
     - 存储链接，队列配置使用内存存储
+    - Polly(指数退避策略   重试)
 - 授权管理(部分)
-- MongoDb(待实现)
+- Ocelot  Gateway、Polly(熔断降级) (待实现)⛑️
+- MongoDb(待实现) \(￣︶￣*\))
 
 | Build | NuGet |
 |---|--|
