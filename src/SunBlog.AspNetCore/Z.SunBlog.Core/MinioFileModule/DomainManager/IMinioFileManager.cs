@@ -17,6 +17,16 @@ namespace Z.SunBlog.Core.MinioFileModule.DomainManager
 
 
         /// <summary>
+        /// 删除文件
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <param name="file"></param>
+        /// <param name="contentType"></param>
+        /// <returns></returns>
+        Task DeleteMinioFileAsync(RemoveObjectInput input);
+
+
+        /// <summary>
         /// 获取文件
         /// </summary>
         /// <param name="filename"></param>

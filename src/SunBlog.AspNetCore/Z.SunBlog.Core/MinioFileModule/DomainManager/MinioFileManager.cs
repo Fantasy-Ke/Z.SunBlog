@@ -14,6 +14,11 @@ namespace Z.SunBlog.Core.MinioFileModule.DomainManager
             _minioOptions = minioOptions.Value;
         }
 
+        public async Task DeleteMinioFileAsync(RemoveObjectInput input)
+        {
+            await _minioService.RemoveObjectAsync(input);
+        }
+
         public async Task<ObjectOutPut> GetFile(string fileUrl)
         {
             var obj = new GetObjectInput()

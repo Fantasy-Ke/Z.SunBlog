@@ -54,9 +54,9 @@ public class FileAppService : ApplicationService, IFileAppService
         IServiceProvider serviceProvider,
         IWebHostEnvironment webHostEnvironment,
         IMinioFileManager minioFileManager,
-        IOptions<MinioConfig> minioOptions
-,
-        IFileInfoManager fileInfoManager)
+        IOptions<MinioConfig> minioOptions,
+        IFileInfoManager fileInfoManager
+    )
         : base(serviceProvider)
     {
         _webHostEnvironment = webHostEnvironment;
@@ -77,16 +77,13 @@ public class FileAppService : ApplicationService, IFileAppService
             throw new Exception("请上传文件");
         }
         //文件路径
-        var minioname = $"{ZSunBlogConst.MinioAvatar}_{Guid.NewGuid().ToString("N")}/{file.FileName}";
+        var minioname =
+            $"{ZSunBlogConst.MinioAvatar}_{Guid.NewGuid().ToString("N")}/{file.FileName}";
         var url = await _fileInfoManager.UploadFileAsync(file, minioname);
         //await _minioFileManager.UploadMinio(file.OpenReadStream(), fileUrl, file.ContentType);
         return new List<UploadFileOutput>()
         {
-            new()
-            {
-                Name = minioname,
-                Url = url
-            }
+            new() { Name = minioname, Url = url }
         };
     }
 
@@ -116,17 +113,17 @@ public class FileAppService : ApplicationService, IFileAppService
     public async Task<PageResult<FileInfoOutput>> GetPage([FromBody] FileInfoQueryInput input)
     {
         var filelist = await _fileInfoManager
-                .QueryAsNoTracking.WhereIf(
-                    !string.IsNullOrWhiteSpace(input.name),
-                    x =>
-                        x.FileDisplayName.Contains(input.name)
-                        || x.FileName.Contains(input.name)
-                        || x.FilePath.Contains(input.name)
-                )
-                .OrderByDescending(x => x.CreationTime)
-                .Count(out var totalCount)
-                .Page(input.PageNo, input.PageSize)
-                .ToListAsync();
+            .QueryAsNoTracking.WhereIf(
+                !string.IsNullOrWhiteSpace(input.name),
+                x =>
+                    x.FileDisplayName.Contains(input.name)
+                    || x.FileName.Contains(input.name)
+                    || x.FilePath.Contains(input.name)
+            )
+            .OrderByDescending(x => x.CreationTime)
+            .Count(out var totalCount)
+            .Page(input.PageNo, input.PageSize)
+            .ToListAsync();
 
         var totalPages = (int)Math.Ceiling(totalCount / (double)input.PageSize);
         return new PageResult<FileInfoOutput>()
@@ -147,6 +144,14 @@ public class FileAppService : ApplicationService, IFileAppService
     [HttpPost]
     public async Task DeleteAsync(KeyDto dto)
     {
-       await _fileInfoManager.DeleteAsync(dto.Id);
+        var entity = await _fileInfoManager.FindByIdAsync(dto.Id);
+        await _fileInfoManager.DeleteAsync(entity);
+        await _minioFileManager.DeleteMinioFileAsync(
+            new RemoveObjectInput
+            {
+                BucketName = _minioOptions.DefaultBucket,
+                ObjectName = entity.FilePath.Replace(_minioOptions.DefaultBucket, string.Empty)
+    }
+        );
     }
 }
