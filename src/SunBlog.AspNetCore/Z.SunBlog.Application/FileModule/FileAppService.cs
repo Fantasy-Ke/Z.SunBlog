@@ -10,7 +10,6 @@ using Z.Fantasy.Core.Minio;
 using Z.Fantasy.Core.ResultResponse.Pager;
 using Z.Module.DependencyInjection;
 using Z.SunBlog.Application.FileModule.Dto;
-using Z.SunBlog.Application.LogsModule.ExceptionlogServer.Dto;
 using Z.SunBlog.Core.Const;
 using Z.SunBlog.Core.FileModule.FileManager;
 using Z.SunBlog.Core.MinioFileModule.DomainManager;

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Z.EventBus.EventBus;
 using Z.Fantasy.Core.DomainServiceRegister.Domain;
@@ -56,6 +57,8 @@ namespace Z.SunBlog.Core.FileModule.FileManager
                 FileDisplayName = file.FileName.Replace(extension, ""),
                 Code = ZFileInfo.CreateCode(1)
             };
+
+            fileinfo.Code = await GetNextChildCodeAsync(fileinfo.ParentId);
 
             if (!_minioOptions.Enable)
             {
@@ -115,6 +118,39 @@ namespace Z.SunBlog.Core.FileModule.FileManager
                 default:
                     return $"/File{filePath}"; // 替换成实际的目录路径
             }
+        }
+
+        protected virtual async Task<string> GetNextChildCodeAsync(Guid? parentId)
+        {
+            var lastChild = await GetLastChildOrNullAsync(parentId);
+            if (lastChild == null)
+            {
+                var parentCode = parentId != null ? await GetCodeAsync(parentId.Value) : null;
+                return ZFileInfo.AppendCode(parentCode, ZFileInfo.CreateCode(1));
+            }
+
+            return ZFileInfo.CalculateNextCode(lastChild.Code);
+        }
+
+        /// <summary>
+        ///     获取子集信息，可能为null
+        /// </summary>
+        /// <param name="parentId"> </param>
+        /// <returns> </returns>
+        protected virtual async Task<ZFileInfo> GetLastChildOrNullAsync(Guid? parentId)
+        {
+            return await QueryAsNoTracking.Where(x => x.ParentId == parentId)
+                .OrderBy(s => s.Code).LastOrDefaultAsync();
+        }
+
+        /// <summary>
+        ///     获取Code码
+        /// </summary>
+        /// <param name="id"> </param>
+        /// <returns> </returns>
+        protected virtual async Task<string> GetCodeAsync(Guid id)
+        {
+            return (await FindByIdAsync(id)).Code;
         }
     }
 }

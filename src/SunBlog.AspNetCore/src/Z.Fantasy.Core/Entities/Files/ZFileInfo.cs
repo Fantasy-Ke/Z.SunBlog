@@ -1,6 +1,5 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using System.ComponentModel.DataAnnotations;
-using System.Net.NetworkInformation;
 using Z.Fantasy.Core.Entities.Auditing;
 using Z.Fantasy.Core.Entities.Enum;
 using Z.Fantasy.Core.Extensions;

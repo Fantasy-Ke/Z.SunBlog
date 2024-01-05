@@ -1,12 +1,5 @@
-﻿using AutoMapper;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using Serilog;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Z.Fantasy.Core.Minio;
 using Z.EventBus.Handlers;
 using Z.Module.DependencyInjection;
