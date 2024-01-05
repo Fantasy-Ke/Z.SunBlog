@@ -2979,6 +2979,59 @@ export class FilesServiceProxy {
     }
 
     /**
+     * 删除
+     * @param body (optional) 
+     * @return Success
+     */
+    delete(body: KeyDto | undefined, cancelToken?: CancelToken): Promise<ZEngineResponse<void>> {
+        let url_ = this.baseUrl + "/api/Files/Delete";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: AxiosRequestConfig = {
+            data: content_,
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processDelete(_response);
+        });
+    }
+
+    protected processDelete(response: AxiosResponse): Promise<ZEngineResponse<void>> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<ZEngineResponse<void>>(_responseText);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<ZEngineResponse<void>>(null as any);
+    }
+
+    /**
      * 获取文件
      * @param fileUrl (optional) 
      * @return Success
@@ -3029,6 +3082,65 @@ export class FilesServiceProxy {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
         return Promise.resolve<ZEngineResponse<void>>(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    getPage(body: FileInfoQueryInput | undefined, cancelToken?: CancelToken): Promise<ZEngineResponse<FileInfoOutputPageResult>> {
+        let url_ = this.baseUrl + "/api/Files/GetPage";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: AxiosRequestConfig = {
+            data: content_,
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "text/plain"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processGetPage(_response);
+        });
+    }
+
+    protected processGetPage(response: AxiosResponse): Promise<ZEngineResponse<FileInfoOutputPageResult>> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let result200Data: any = null;
+            let resultData200  = _responseText.result;
+            result200 = FileInfoOutputPageResult.fromJS(resultData200);
+            result200Data = ZEngineResponse.fromJS(_responseText);
+            result200Data.result = result200;
+            return Promise.resolve<ZEngineResponse<FileInfoOutputPageResult>>(result200Data);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<ZEngineResponse<FileInfoOutputPageResult>>(null as any);
     }
 
     /**
@@ -11814,6 +11926,253 @@ export interface IExceptionlogQueryInput {
     pageSize: number;
     /** 关键词 */
     name: string | undefined;
+}
+
+export class FileInfoOutput implements IFileInfoOutput {
+    id: string;
+    /** 父级Id */
+    parentId: string | undefined;
+    /** 文件显示名称，例如文件名为  open.jpg，显示名称为： open_编码规则 */
+    fileDisplayName: string | undefined;
+    /** 文件原始名称 */
+    fileName: string | undefined;
+    /** 文件扩展名 */
+    fileExt: string | undefined;
+    /** 文件类型 */
+    contentType: string | undefined;
+    /** 文件路径 */
+    filePath: string | undefined;
+    /** 文件大小，字节 */
+    fileSize: string | undefined;
+    fileType: FileType;
+    /** 文件类型名称 */
+    fileTypeString: string | undefined;
+    /** 编码  (记录文件的层次结构关系)
+Example: "00001.00042.00005". 这是租户的唯一代码。 当然可以进行修改 */
+    code: string | undefined;
+    /** 是否是文件夹 */
+    readonly isFolder: boolean;
+    /** Ip 地址 */
+    fileIpAddress: string | undefined;
+    /** 创建时间 */
+    creationTime: moment.Moment | undefined;
+
+    constructor(data?: IFileInfoOutput) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.parentId = _data["parentId"];
+            this.fileDisplayName = _data["fileDisplayName"];
+            this.fileName = _data["fileName"];
+            this.fileExt = _data["fileExt"];
+            this.contentType = _data["contentType"];
+            this.filePath = _data["filePath"];
+            this.fileSize = _data["fileSize"];
+            this.fileType = _data["fileType"];
+            this.fileTypeString = _data["fileTypeString"];
+            this.code = _data["code"];
+            (<any>this).isFolder = _data["isFolder"];
+            this.fileIpAddress = _data["fileIpAddress"];
+            this.creationTime = _data["creationTime"] ? moment(_data["creationTime"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): FileInfoOutput {
+        data = typeof data === 'object' ? data : {};
+        let result = new FileInfoOutput();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["parentId"] = this.parentId;
+        data["fileDisplayName"] = this.fileDisplayName;
+        data["fileName"] = this.fileName;
+        data["fileExt"] = this.fileExt;
+        data["contentType"] = this.contentType;
+        data["filePath"] = this.filePath;
+        data["fileSize"] = this.fileSize;
+        data["fileType"] = this.fileType;
+        data["fileTypeString"] = this.fileTypeString;
+        data["code"] = this.code;
+        data["isFolder"] = this.isFolder;
+        data["fileIpAddress"] = this.fileIpAddress;
+        data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : <any>undefined;
+        return data;
+    }
+
+    clone(): FileInfoOutput {
+        const json = this.toJSON();
+        let result = new FileInfoOutput();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IFileInfoOutput {
+    id: string;
+    /** 父级Id */
+    parentId: string | undefined;
+    /** 文件显示名称，例如文件名为  open.jpg，显示名称为： open_编码规则 */
+    fileDisplayName: string | undefined;
+    /** 文件原始名称 */
+    fileName: string | undefined;
+    /** 文件扩展名 */
+    fileExt: string | undefined;
+    /** 文件类型 */
+    contentType: string | undefined;
+    /** 文件路径 */
+    filePath: string | undefined;
+    /** 文件大小，字节 */
+    fileSize: string | undefined;
+    fileType: FileType;
+    /** 文件类型名称 */
+    fileTypeString: string | undefined;
+    /** 编码  (记录文件的层次结构关系)
+Example: "00001.00042.00005". 这是租户的唯一代码。 当然可以进行修改 */
+    code: string | undefined;
+    /** 是否是文件夹 */
+    isFolder: boolean;
+    /** Ip 地址 */
+    fileIpAddress: string | undefined;
+    /** 创建时间 */
+    creationTime: moment.Moment | undefined;
+}
+
+export class FileInfoOutputPageResult implements IFileInfoOutputPageResult {
+    pageNo: number;
+    pageSize: number;
+    pages: number;
+    total: number;
+    rows: FileInfoOutput[] | undefined;
+
+    constructor(data?: IFileInfoOutputPageResult) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.pageNo = _data["pageNo"];
+            this.pageSize = _data["pageSize"];
+            this.pages = _data["pages"];
+            this.total = _data["total"];
+            if (Array.isArray(_data["rows"])) {
+                this.rows = [] as any;
+                for (let item of _data["rows"])
+                    this.rows.push(FileInfoOutput.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): FileInfoOutputPageResult {
+        data = typeof data === 'object' ? data : {};
+        let result = new FileInfoOutputPageResult();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["pageNo"] = this.pageNo;
+        data["pageSize"] = this.pageSize;
+        data["pages"] = this.pages;
+        data["total"] = this.total;
+        if (Array.isArray(this.rows)) {
+            data["rows"] = [];
+            for (let item of this.rows)
+                data["rows"].push(item.toJSON());
+        }
+        return data;
+    }
+
+    clone(): FileInfoOutputPageResult {
+        const json = this.toJSON();
+        let result = new FileInfoOutputPageResult();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IFileInfoOutputPageResult {
+    pageNo: number;
+    pageSize: number;
+    pages: number;
+    total: number;
+    rows: FileInfoOutput[] | undefined;
+}
+
+export class FileInfoQueryInput implements IFileInfoQueryInput {
+    pageNo: number;
+    pageSize: number;
+    /** 关键词 */
+    name: string | undefined;
+
+    constructor(data?: IFileInfoQueryInput) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.pageNo = _data["pageNo"];
+            this.pageSize = _data["pageSize"];
+            this.name = _data["name"];
+        }
+    }
+
+    static fromJS(data: any): FileInfoQueryInput {
+        data = typeof data === 'object' ? data : {};
+        let result = new FileInfoQueryInput();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["pageNo"] = this.pageNo;
+        data["pageSize"] = this.pageSize;
+        data["name"] = this.name;
+        return data;
+    }
+
+    clone(): FileInfoQueryInput {
+        const json = this.toJSON();
+        let result = new FileInfoQueryInput();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IFileInfoQueryInput {
+    pageNo: number;
+    pageSize: number;
+    /** 关键词 */
+    name: string | undefined;
+}
+
+export enum FileType {
+    _0 = 0,
+    _1 = 1,
+    _2 = 2,
 }
 
 export class FriendLinkOutput implements IFriendLinkOutput {

@@ -1,8 +1,9 @@
 <template>
 	<div class="layout-footer pb15">
 		<div class="layout-footer-warp">
-			<div>vue-next-admin，Made by lyt with ❤️</div>
-			<div class="mt5">深圳市 xxx 公司版权所有</div>
+			<div> SunBlog Admin❤️</div>
+			<div class="mt5">广州市 广州市天河区天河路1号</div>
+			<div class="mt5">Copyright © 2021-2022 SunBlog Admin. All Rights Reserved.</div>
 		</div>
 	</div>
 </template>

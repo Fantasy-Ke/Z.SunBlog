@@ -28,7 +28,7 @@ const state = reactive({
 	newsList: [
 		{
 			label: '关于版本发布的通知',
-			value: 'vue-next-admin，基于 vue3 + CompositionAPI + typescript + vite + element plus，正式发布时间：2021年02月28日！',
+			value: 'SunBlog Admin，基于 vue3 + CompositionAPI + typescript + vite + element plus，正式发布时间：2021年02月28日！',
 			time: '2020-12-08',
 		},
 		{
