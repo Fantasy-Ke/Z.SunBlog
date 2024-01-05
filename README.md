@@ -223,7 +223,7 @@
 
 **项目用 Vue3 + TypeScript + Vite4 + Vuex4 + Vue-Router4 + element-plus ！**
 
-![image](https://github.com/Fantasy-Ke/Z.SunBlog/assets/85232349/27f8a9c9-9dbc-4294-bd79-25605afc8ae5)
+![image](https://github.com/Fantasy-Ke/Z.SunBlog/assets/85232349/01b8f982-6fa0-4cf9-9d8d-33e2a35a295f)
 
 
 ### 🙄环境
