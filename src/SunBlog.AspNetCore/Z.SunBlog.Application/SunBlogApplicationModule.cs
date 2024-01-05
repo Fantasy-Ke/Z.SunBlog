@@ -32,6 +32,7 @@ using Z.SunBlog.Application.HangfireJob.ExceptionLog;
 using Z.SunBlog.Application.HangfireJob.RequestLog;
 using Z.SunBlog.Application.LogsModule.RequestLogServer.MapperConfig;
 using Z.SunBlog.Application.LogsModule.ExceptionlogServer.MapperConfig;
+using Z.SunBlog.Application.FileModule.MapperConfig;
 
 namespace Z.SunBlog.Application
 {
@@ -112,6 +113,7 @@ namespace Z.SunBlog.Application
                     CustomConfigAutoMapper.CreateMappings(ctx.MapperConfiguration);
                     RequestLogAutoMapper.CreateMappings(ctx.MapperConfiguration);
                     ExceptionlogAutoMapper.CreateMappings(ctx.MapperConfiguration);
+                    FileInfoAutoMapper.CreateMappings(ctx.MapperConfiguration);
 
                 });
             });
