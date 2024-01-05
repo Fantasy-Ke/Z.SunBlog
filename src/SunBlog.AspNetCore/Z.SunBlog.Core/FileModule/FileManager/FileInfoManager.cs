@@ -3,11 +3,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Z.EventBus.EventBus;
 using Z.Fantasy.Core.DomainServiceRegister.Domain;
-using Z.Fantasy.Core.Entities.EntityLog;
 using Z.Fantasy.Core.Entities.Enum;
 using Z.Fantasy.Core.Entities.Files;
 using Z.Fantasy.Core.Minio;
-using Z.SunBlog.Core.Const;
 using Z.SunBlog.Core.Handlers.FileHandlers;
 
 namespace Z.SunBlog.Core.FileModule.FileManager
@@ -51,7 +49,7 @@ namespace Z.SunBlog.Core.FileModule.FileManager
             {
                 FileName = file.FileName,
                 ContentType = file.ContentType,
-                FilePath = string.Concat(_minioOptions.DefaultBucket!.TrimEnd('/'), filePath),
+                FilePath = string.Concat(_minioOptions.DefaultBucket!.TrimEnd('/'), fileUrl),
                 FileSize = file.Length.ToString(),
                 FileExt = extension,
                 FileType = GetFileTypeFromContentType(file.ContentType),
@@ -68,6 +66,7 @@ namespace Z.SunBlog.Core.FileModule.FileManager
                 {
                     Directory.CreateDirectory(s);
                 }
+                fileinfo.FileIpAddress = $"{request.Scheme}://{request.Host.Value}";
                 await CreateAsync(fileinfo);
                 var stream = System.IO.File.Create($"{s}{minioName}");
                 await file.CopyToAsync(stream);
@@ -76,6 +75,7 @@ namespace Z.SunBlog.Core.FileModule.FileManager
                 string url = $"{request.Scheme}://{request.Host.Value}/{fileUrl}";
                 return url;
             }
+            fileinfo.FileIpAddress = $"{request.Scheme}://{_minioOptions.Host!.TrimEnd('/')}";
             await CreateAsync(fileinfo);
             await _localEvent.PushAsync(
                 new FileEventDto(file.OpenReadStream(), fileUrl, file.ContentType)

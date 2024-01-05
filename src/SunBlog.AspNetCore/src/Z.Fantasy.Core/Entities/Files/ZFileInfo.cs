@@ -99,6 +99,11 @@ namespace Z.Fantasy.Core.Entities.Files
         public bool IsFolder { get; private set; }
 
         /// <summary>
+        /// Ip 地址
+        /// </summary>
+        public string FileIpAddress { get; set; }
+
+        /// <summary>
         /// 将子代码附加到父代码。 例如:如果parentCode = "00001"，则childCode = "00042"，然后返回"00001.00042"。
         /// </summary>
         /// <param name="parentCode"> 父类的代码。 如果父节点是根节点，则可以为空或空。 </param>
