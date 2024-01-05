@@ -98,8 +98,6 @@ const state = reactive({
 
 // 打开弹窗
 const openDialog = async (row: CreateOrUpdateTagInput | null) => {
-	console.log(row);
-
 	state.dialog.isShowDialog = true;
 	state.dialog.loading = true;
 	if (row != null) {

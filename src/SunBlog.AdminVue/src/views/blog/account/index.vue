@@ -88,7 +88,6 @@ const onChange = async (id: string) => {
 };
 
 const getTableList = (params: any) => {
-	console.log(params);
 	let newParams = JSON.parse(JSON.stringify(params)) as AuthAccountPageQueryInput;
 	return _authsService.getList(newParams);
 };

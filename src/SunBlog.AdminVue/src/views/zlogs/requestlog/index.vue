@@ -102,7 +102,6 @@ const dataCallBack = (data) => {
 };
 
 const getTableList = async (params: any) => {
-    console.log(params);
     let newParams = JSON.parse(JSON.stringify(params));
     return await _requestLogsService.getPage(newParams);
 };

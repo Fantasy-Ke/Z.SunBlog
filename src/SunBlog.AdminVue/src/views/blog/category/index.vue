@@ -73,7 +73,6 @@ const dataCallBack = (data) => {
 			res.creationTime = moment(res.creationTime).format('YYYY-MM-DD');
 		}
 	});
-	console.log(data);
 
 	return data;
 };

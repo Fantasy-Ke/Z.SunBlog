@@ -124,7 +124,6 @@ const onDelete = async (id: string) => {
 };
 
 const onOpenCategory = async (row: FileInfoOutput) => {
-  console.log(row);
   if(row.fileType === FileType._2){
     location.href = `${row.fileIpAddress}/${row.filePath}`;
     return;

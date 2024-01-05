@@ -153,8 +153,6 @@ const onSignIn = async () => {
 				.signIn(state.ruleForm)
 				.then(async (res) => {
 					if (res.statusCode === 200) {
-						console.log(2);
-
 						await storeUser.setToken(res.result);
 						if (!themeConfig.value.isRequestRoutes) {
 							// 前端路由
@@ -179,8 +177,6 @@ const onSignIn = async () => {
 };
 // 登录成功后的跳转
 const signInSuccess = (isNoPower: boolean | undefined) => {
-	console.log(33333);
-
 	if (isNoPower) {
 		ElMessage.warning('抱歉，您没有登录权限');
 		Session.clear();

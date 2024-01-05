@@ -5,6 +5,7 @@ import { computed, inject } from 'vue';
 import { AuthsServiceProxy, UsersServiceProxy, ZFantasyToken } from '@/shared/service-proxies';
 import apiHttpClient from '@/utils/http';
 import { StoreKey, useUserStore } from './user';
+import { log } from 'console';
 const _usersCService = new UsersServiceProxy(inject('$baseurl'), apiHttpClient as any);
 const _authService = new AuthsServiceProxy(inject('$baseurl'), apiHttpClient as any);
 
@@ -26,7 +27,6 @@ export const useUserInfo = defineStore(StoreKey.UserInfo, () => {
   const clearToken = async () => {
     await _authService.zSignOut(userStore?.zToken?.accessToken);
     userStore.$reset();
-
   };
   /**
    * 获取当前用户基本信息
