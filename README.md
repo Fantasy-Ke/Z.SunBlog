@@ -1,6 +1,6 @@
 # 🧨Z.SunBlog
 
-#### 该项目已通过阿里云仓库、GithubAction持续集成与部署（[Fantasy-Ke -Z.SunBlog.Blog](http://123.56.30.198:5100/)）
+#### 该项目已通过阿里云仓库、GithubAction持续集成与部署（[Fantasy-Ke -Z.SunBlog.Blog](http://47.96.234.210:5100/)）
 
 ## 🎃.NET 8 后端框架
 ### 👕SunBlog.AspNetCore/src 后端自己搭建的框架
