@@ -36,11 +36,15 @@ services:
     image: registry.cn-hangzhou.aliyuncs.com/learn-zhou/zhou-learn:vueblog
     networks:
       - fantasy_net
+    depends_on:
+      - hostbolg
     volumes:
       - vueblog_assets:/usr/share/nginx/html/assets
 
   adminvue:
     image: registry.cn-hangzhou.aliyuncs.com/learn-zhou/zhou-learn:adminvue
+    depends_on:
+      - hostbolg
     networks:
       - fantasy_net
     volumes:
@@ -48,6 +52,8 @@ services:
 
   nginx:
     image: nginx:1.16.1
+    depends_on:
+      - hostbolg
     ports:
       - "5100:5100"
       - "5200:5200"
