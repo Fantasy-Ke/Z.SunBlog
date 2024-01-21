@@ -26,7 +26,7 @@ namespace Z.SunBlog.Host.Controllers
             }
             else
             {
-                ViewBag.Url = "http://8.134.249.130:5155";
+                ViewBag.Url = "http://47.96.234.210:5155";
             }
             
             _logger.LogInformation("正在加载首页......");

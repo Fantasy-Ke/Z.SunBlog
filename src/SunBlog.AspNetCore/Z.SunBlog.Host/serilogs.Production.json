@@ -46,7 +46,7 @@
       {
         "Name": "Seq",
         "Args": {
-          "serverUrl": "http://8.134.249.130:5341/", // 日志中心收集器的链接地址
+          "serverUrl": "http://47.96.234.210:5341/", // 日志中心收集器的链接地址
           "restrictedToMinimumLevel": "Verbose", //日志等级
           "apiKey": "b8ueTcbAyumLam5hfuUu", //密钥key
           "queueSizeLimit": 100000, //最大删除值
