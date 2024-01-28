@@ -6,4 +6,4 @@ if  docker-compose -p sunblog ps > /dev/null 2>&1; then
     echo "compose sunblog removed."
     sleep 10
 fi
-sudo docker compose -f docker-compose.yml -p sunblog pull && docker compose -f docker-compose.yml -p sunblog up -d
+docker compose -f docker-compose.yml -p sunblog pull && docker compose -f docker-compose.yml -p sunblog up -d

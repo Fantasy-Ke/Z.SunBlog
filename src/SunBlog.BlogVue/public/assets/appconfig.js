@@ -1,4 +1,4 @@
 window.configs = {
-  remoteServiceBaseUrl: "http://47.96.234.210:5155",
+  remoteServiceBaseUrl: "http://localhost:5155",
   port:5100
 }
