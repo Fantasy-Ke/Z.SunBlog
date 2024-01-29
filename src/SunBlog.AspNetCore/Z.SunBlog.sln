@@ -31,12 +31,29 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Z.EntityFrameworkCore.Mysql
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "resource", "resource", "{4870B662-8143-4576-B85E-4E76E6FEE85F}"
 	ProjectSection(SolutionItems) = preProject
+		..\..\build_sunblog_imgs.ps1 = ..\..\build_sunblog_imgs.ps1
+		..\..\push_sunblog_imgs.ps1 = ..\..\push_sunblog_imgs.ps1
 		..\..\README.md = ..\..\README.md
+		..\..\推送sunblog镜像到registry.bat = ..\..\推送sunblog镜像到registry.bat
+		..\..\编译sunblog镜像.bat = ..\..\编译sunblog镜像.bat
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Z.EventBus", "src\Z.EventBus\Z.EventBus.csproj", "{FC78A233-9E97-4978-A9C1-805E2BF4521C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Z.RabbitMQ", "src\Z.RabbitMQ\Z.RabbitMQ.csproj", "{A7D9D178-09E6-4048-B091-1863C94548D2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Z.RabbitMQ", "src\Z.RabbitMQ\Z.RabbitMQ.csproj", "{A7D9D178-09E6-4048-B091-1863C94548D2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docker", "docker", "{66F52170-A6BE-469A-A9C2-98FE4794A445}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\docker\docker-compose.yml = ..\..\docker\docker-compose.yml
+		..\..\docker\run.sh = ..\..\docker\run.sh
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "env", "env", "{5853C0F2-B521-4690-9BB6-04D4C0C63284}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nginx", "nginx", "{48456EF7-F464-4C69-B825-16D2BB3501D4}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\docker\env\nginx\nginx.conf = ..\..\docker\env\nginx\nginx.conf
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -110,6 +127,8 @@ Global
 		{90DF7A42-9EAE-446C-97AF-BC7FFFC1C60E} = {56C84CD2-97DD-415B-B416-DB982F3D5806}
 		{FC78A233-9E97-4978-A9C1-805E2BF4521C} = {A19668E2-3307-47C9-9B91-25BF5A1E9CA0}
 		{A7D9D178-09E6-4048-B091-1863C94548D2} = {A19668E2-3307-47C9-9B91-25BF5A1E9CA0}
+		{5853C0F2-B521-4690-9BB6-04D4C0C63284} = {66F52170-A6BE-469A-A9C2-98FE4794A445}
+		{48456EF7-F464-4C69-B825-16D2BB3501D4} = {5853C0F2-B521-4690-9BB6-04D4C0C63284}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A207D693-0213-440B-A29C-4C44FED78AEB}
