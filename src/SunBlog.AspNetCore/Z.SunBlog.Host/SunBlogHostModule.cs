@@ -19,9 +19,15 @@ namespace Z.SunBlog.Host;
 /// </summary>
 [DependOn(typeof(SunBlogApplicationModule),
     typeof(SunBlogEntityFrameworkCoreModule))]
-public class SunBlogHostModule : ZModule
+public abstract class SunBlogHostModule : ZModule
 {
+    /// <summary>
+    /// 
+    /// </summary>
     protected IHostEnvironment env { get; private set; }
+    /// <summary>
+    /// 
+    /// </summary>
     protected IConfiguration configuration { get; private set; }
 
     /// <summary>
