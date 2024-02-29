@@ -19,7 +19,7 @@ namespace Z.SunBlog.Host;
 /// </summary>
 [DependOn(typeof(SunBlogApplicationModule),
     typeof(SunBlogEntityFrameworkCoreModule))]
-public abstract class SunBlogHostModule : ZModule
+public class SunBlogHostModule : ZModule
 {
     /// <summary>
     /// 
